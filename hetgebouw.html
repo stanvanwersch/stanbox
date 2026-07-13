@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verduurzamingstool</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --cream:#faf9f7;--white:#fff;--border:#e8e4de;--border2:#d4cfc8;
+  --text:#1c1a17;--text2:#5a5650;--text3:#9c9690;
+  --accent:#e07a2f;--as:rgba(224,122,47,.09);--ab:rgba(224,122,47,.22);
+  --blue:#1d5fa8;--bs:rgba(29,95,168,.07);--bb:rgba(29,95,168,.18);
+  --green:#1a6e3c;--gs:rgba(26,110,60,.08);--gb:rgba(26,110,60,.18);
+  --red:#b91c1c;--rs:rgba(185,28,28,.08);--rb:rgba(185,28,28,.2);
+  --amber:#b45309;--ms:rgba(180,83,9,.08);--mb:rgba(180,83,9,.2);
+  --sans:'Poppins',system-ui,sans-serif;--r:5px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--sans);background:var(--cream);color:var(--text);font-size:14px;line-height:1.7;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:32px;height:51px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.logo-name{font-size:13px;font-weight:600;line-height:1.3;}
+.logo-sub{font-size:11px;color:var(--text3);font-weight:300;}
+
+/* ── STEP BAR ── */
+.stepbar{background:var(--white);border-bottom:2px solid var(--border);padding:0 28px;display:flex;align-items:stretch;height:52px;}
+.step{display:flex;align-items:center;gap:10px;padding:0 20px 0 0;position:relative;cursor:default;opacity:.45;transition:opacity .2s;}
+.step.done{opacity:.7;cursor:pointer;}
+.step.active{opacity:1;}
+.step-num{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0;transition:all .2s;}
+.step.active .step-num{background:var(--accent);border-color:var(--accent);color:#fff;}
+.step.done .step-num{background:var(--green);border-color:var(--green);color:#fff;}
+.step-label{font-size:12px;font-weight:500;white-space:nowrap;}
+.step.active .step-label{color:var(--accent);font-weight:600;}
+.step.done .step-label{color:var(--green);}
+.step-sub{font-size:10px;color:var(--text3);}
+.step-arrow{color:var(--border2);font-size:16px;padding:0 4px 0 20px;display:flex;align-items:center;align-self:center;}
+.step-bar-inner{display:flex;align-items:center;}
+
+/* ── SHELL ── */
+.shell{max-width:1100px;margin:0 auto;padding:28px 24px 100px;}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--ab);}
+h1{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:5px;}
+h1 em{font-style:italic;font-weight:300;color:var(--text2);}
+.lead{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:22px;}
+h2{font-size:13px;font-weight:600;margin:22px 0 10px;padding-bottom:7px;border-bottom:1.5px solid var(--border);}
+h2 .n{font-size:10px;font-weight:700;color:var(--accent);background:var(--as);border:1px solid var(--ab);padding:1px 6px;border-radius:3px;margin-right:4px;}
+.section{display:none;}
+.section.active{display:block;}
+
+/* ── FORMS ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:20px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
+input,select{background:var(--cream);border:1px solid var(--border2);border-radius:var(--r);padding:7px 10px;font-family:var(--sans);font-size:13px;color:var(--text);outline:none;width:100%;}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--as);}
+.hint{font-size:11px;color:var(--text3);margin-top:2px;}
+.btn-row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;align-items:center;}
+.btn{font-family:var(--sans);font-size:13px;font-weight:600;border-radius:var(--r);padding:9px 22px;cursor:pointer;border:none;transition:background .15s;}
+.btn-accent{background:var(--accent);color:#fff;}.btn-accent:hover{background:#c96a1e;}
+.btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:#135430;}
+.btn-ghost{background:var(--white);color:var(--text2);border:1px solid var(--border2);padding:8px 16px;font-size:12px;}.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── GEBOUW SUMMARY BAR ── */
+.gsbar{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:11px 16px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.gs-item{display:flex;flex-direction:column;gap:1px;}
+.gs-lbl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.gs-val{font-size:12px;font-weight:600;}
+.gs-div{width:1px;height:26px;background:var(--border);}
+
+/* ── MAATREGELEN LAYOUT ── */
+.ml{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:start;}
+
+/* ── CATEGORY SIDEBAR ── */
+.catpanel{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:sticky;top:120px;}
+.catlbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:10px 14px 3px;}
+.catitem{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;border-left:3px solid transparent;transition:all .1s;}
+.catitem:hover{background:var(--as);color:var(--accent);}
+.catitem.active{background:var(--as);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
+.catcount{margin-left:auto;font-size:10px;font-weight:700;background:var(--gs);color:var(--green);border:1px solid var(--gb);padding:1px 6px;border-radius:20px;display:none;}
+.catcount.vis{display:inline;}
+.catsep{height:1px;background:var(--border);margin:4px 10px;}
+.catfoot{padding:10px 10px;}
+.catfoot .btn-green{width:100%;font-size:12px;padding:8px 0;text-align:center;}
+
+/* ── MEASURE CARDS ── */
+.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;}
+.mcard.sel{border-color:var(--green);box-shadow:0 0 0 1px var(--gb);}
+.mhdr{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;}
+.mhdr:hover{background:#f8f6f3;}
+.mcheck{width:18px;height:18px;flex-shrink:0;border:1.5px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;transition:all .15s;pointer-events:none;}
+.mcheck.on{background:var(--green);border-color:var(--green);}
+.mcheck svg{display:none;}
+.mcheck.on svg{display:block;}
+.mname{font-size:12px;font-weight:500;flex:1;line-height:1.4;pointer-events:none;}
+.mbadges{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0;pointer-events:none;}
+.mb{font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;}
+.mb-i{background:var(--as);color:var(--accent);border:1px solid var(--ab);}
+.mb-g{background:var(--ms);color:var(--amber);border:1px solid var(--mb);}
+.mb-e{background:var(--bs);color:var(--blue);border:1px solid var(--bb);}
+.mdetail{background:#faf9f7;border-top:1px solid var(--border);padding:12px 14px;display:none;}
+.mdetail.open{display:block;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.df{display:flex;flex-direction:column;gap:3px;}
+.df label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);}
+.df input{font-size:12px;padding:5px 8px;width:100%;}
+.dv{font-size:13px;font-weight:600;color:var(--text);}
+.dnote{font-size:11px;color:var(--text3);margin-top:8px;font-style:italic;line-height:1.5;}
+.msec h3{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+
+/* ── KPI ── */
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;}
+.kpi-lbl{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
+.kpi-val{font-size:22px;font-weight:700;letter-spacing:-.5px;line-height:1.1;}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.ka{border-left:3px solid var(--accent);}
+.kb{border-left:3px solid var(--blue);}
+.kg{border-left:3px solid var(--green);}
+.km{border-left:3px solid var(--amber);}
+
+/* ── RESULTATEN ── */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.cc{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.cch{padding:9px 13px;border-bottom:1px solid var(--border);background:var(--cream);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);}
+.ccb{padding:14px;}
+.twrap{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px;}
+.th{padding:9px 14px;background:var(--cream);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);display:flex;gap:8px;align-items:center;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{padding:7px 13px;background:var(--cream);border-bottom:1px solid var(--border);text-align:left;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);}
+th.r,td.r{text-align:right;}
+td{padding:7px 13px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--as);}
+tr.tot td{background:var(--gs);font-weight:600;border-top:2px solid var(--gb);}
+.chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+.cg{background:var(--gs);color:var(--green);border:1px solid var(--gb);}
+.cm{background:var(--ms);color:var(--amber);border:1px solid var(--mb);}
+.cr{background:var(--rs);color:var(--red);border:1px solid var(--rb);}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.bar-lbl{font-size:11px;color:var(--text2);width:170px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-track{flex:1;background:var(--border);border-radius:2px;height:14px;overflow:hidden;}
+.bar-fill{height:14px;border-radius:2px;background:var(--green);display:flex;align-items:center;justify-content:flex-end;padding-right:4px;}
+.bar-fill span{font-size:9px;font-weight:700;color:#fff;}
+.bar-val{font-size:11px;font-weight:600;width:70px;text-align:right;flex-shrink:0;}
+.tabrow{display:flex;border-bottom:2px solid var(--border);margin-bottom:16px;}
+.tab{padding:8px 18px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.tab:hover{color:var(--accent);}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+.tabpane{display:none;}
+.tabpane.active{display:block;}
+.ainfo{border-radius:var(--r);padding:10px 14px;font-size:12px;margin-bottom:12px;background:var(--bs);border:1px solid var(--bb);color:var(--blue);}
+.badge{font-size:11px;font-weight:500;color:var(--text3);background:var(--cream);border:1px solid var(--border);padding:1px 8px;border-radius:20px;}
+/* ── TEKENTOOL ── */
+.tl-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;align-items:start;}
+.tl-canvaswrap{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;}
+.tl-toolbar{display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--cream);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.tb{font-family:var(--sans);font-size:11px;font-weight:500;padding:4px 11px;border-radius:3px;border:1px solid var(--border2);background:#fff;cursor:pointer;color:var(--text2);white-space:nowrap;transition:background .1s,color .1s;}
+.tb:hover{border-color:var(--accent);color:var(--accent);}
+.tb.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+.tb.red{border-color:#e55;color:#c33;}.tb.red:hover{background:#c33;color:#fff;}
+.tl-sep{width:1px;height:16px;background:var(--border);margin:0 2px;flex-shrink:0;}
+.tl-scale-row{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#f0ece6;border-bottom:1px solid var(--border);font-size:11px;color:var(--text2);}
+.tl-scale-row input{width:56px;padding:3px 6px;font-size:12px;font-weight:600;}
+.tl-scale-row label{font-weight:600;color:var(--text);}
+.tl-measure-btn{font-family:var(--sans);font-size:11px;padding:3px 10px;border-radius:3px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;font-weight:500;}
+.tl-measure-btn:hover{background:var(--accent);color:#fff;}
+#tlCanvas{display:block;cursor:crosshair;touch-action:none;}
+.tl-status{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,0.92);border-top:1px solid var(--border);padding:5px 12px;font-size:11px;color:var(--text2);pointer-events:none;}
+.tl-sidebar{display:flex;flex-direction:column;gap:10px;}
+.sc{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.sc-h{padding:7px 11px;background:var(--cream);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text2);}
+.sc-b{padding:10px 11px;}
+/* Type buttons */
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:2px;}
+.typebtn{font-family:var(--sans);font-size:11px;font-weight:600;padding:7px 5px;border-radius:3px;border:1.5px solid transparent;cursor:pointer;text-align:center;line-height:1.3;transition:all .1s;}
+.typebtn.on{border-width:2px;}
+.tp-gevel{background:#e8f4fd;color:#1d5fa8;border-color:#b5d4f4;}.tp-gevel.on{background:#1d5fa8;color:#fff;border-color:#1d5fa8;}
+.tp-dak{background:#fef3e2;color:#b45309;border-color:#fbd38d;}.tp-dak.on{background:#b45309;color:#fff;}
+.tp-vloer{background:#ede8ff;color:#6d3cb5;border-color:#c4b5fd;}.tp-vloer.on{background:#6d3cb5;color:#fff;}
+.tp-beglazing{background:#e0f7fa;color:#00696f;border-color:#67e8f9;}.tp-beglazing.on{background:#00696f;color:#fff;}
+.tp-deur{background:#fce4ec;color:#ad1457;border-color:#f9a8d4;}.tp-deur.on{background:#ad1457;color:#fff;}
+.tp-overig{background:#f1f1f1;color:#555;border-color:#ccc;}.tp-overig.on{background:#555;color:#fff;}
+/* m² input */
+.m2-row{display:flex;align-items:center;gap:6px;margin-top:8px;}
+.m2-row input{flex:1;padding:5px 8px;font-size:12px;}
+.m2-row span{font-size:11px;color:var(--text2);white-space:nowrap;}
+.m2-auto{font-size:10px;color:var(--green);font-style:italic;margin-top:3px;}
+/* Polygoon lijst */
+.plist{display:flex;flex-direction:column;gap:3px;max-height:220px;overflow-y:auto;}
+.pitem{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:3px;font-size:11px;border:1px solid var(--border);cursor:pointer;}
+.pitem:hover{background:#f7f4f0;}
+.pitem.sel{border-color:var(--accent);background:#fff8f3;}
+.pi-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+.pi-name{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pi-m2{font-size:10px;color:var(--text2);font-weight:600;flex-shrink:0;}
+.pi-del{font-size:12px;color:var(--text3);cursor:pointer;padding:0 2px;flex-shrink:0;}
+.pi-del:hover{color:var(--red);}
+/* Totalen */
+.tot-list{display:flex;flex-direction:column;gap:4px;}
+.tot-item{display:flex;justify-content:space-between;align-items:center;padding:4px 7px;border-radius:3px;font-size:12px;}
+.tot-v{font-weight:700;}
+.tl-empty{font-size:11px;color:var(--text3);font-style:italic;}
+/* Auto-ingevulde velden vanuit tekening */
+input.from-tekening{border-color:var(--green)!important;background:var(--gs)!important;}
+input.from-tekening:focus{border-color:var(--green)!important;box-shadow:0 0 0 2px var(--gb)!important;}
+/* Schil-opp badge in maatregelen categorie */
+.cat-opp{font-size:10px;font-weight:600;color:var(--green);background:var(--gs);border:1px solid var(--gb);padding:1px 7px;border-radius:20px;margin-left:4px;display:none;}
+.cat-opp.vis{display:inline;}
+/* Schil-opp banner in maatregelen detail */
+.opp-banner{background:var(--gs);border:1px solid var(--gb);border-radius:3px;padding:5px 10px;font-size:11px;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.opp-banner strong{font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg width="32" height="51" viewBox="0 0 291 465" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M137.511 290.684C212.699 290.684 273.652 229.731 273.652 154.542C273.652 79.3532 212.699 18.4005 137.511 18.4005C62.3217 18.4005 1.36914 79.3532 1.36914 154.542C1.36914 229.731 62.3217 290.684 137.511 290.684Z" fill="black" stroke="black" stroke-width="2.73816" stroke-linejoin="round"/>
+        <path d="M153.228 273.652C228.416 273.652 289.369 212.699 289.369 137.511C289.369 62.3217 228.416 1.36908 153.228 1.36908C78.0387 1.36908 17.0861 62.3217 17.0861 137.511C17.0861 212.699 78.0387 273.652 153.228 273.652Z" fill="#AAA9A7" stroke="black" stroke-width="2.73816" stroke-linejoin="round"/>
+        <path d="M153.228 246.271C131.717 246.271 110.689 239.892 92.8039 227.941C74.9184 215.991 60.9784 199.004 52.7466 179.131C44.5149 159.258 42.3611 137.39 46.5576 116.293C50.7541 95.1953 61.1125 75.8161 76.3229 60.6058C91.5332 45.3955 110.912 35.0371 132.01 30.8406C153.107 26.644 174.975 28.7978 194.848 37.0296C214.721 45.2614 231.707 59.2014 243.658 77.0868C255.609 94.9723 261.988 116 261.988 137.511C261.951 166.344 250.481 193.987 230.092 214.375C209.704 234.764 182.061 246.234 153.228 246.271Z" fill="#FEFAEE" stroke="black" stroke-width="2.73816" stroke-linejoin="round"/>
+        <path d="M103.886 152.762C103.886 144.774 100.713 137.113 95.064 131.464C89.4154 125.816 81.7543 122.642 73.766 122.642C81.7543 122.642 89.4154 119.469 95.064 113.821C100.713 108.172 103.886 100.511 103.886 92.5227C103.886 100.511 107.059 108.172 112.708 113.821C118.356 119.469 126.017 122.642 134.006 122.642C126.017 122.642 118.356 125.816 112.708 131.464C107.059 137.113 103.886 144.774 103.886 152.762Z" fill="#FFCC5F" stroke="black" stroke-width="2.73816" stroke-linejoin="round"/>
+        <path d="M272.967 438.681L233.948 453.604L173.709 292.628C167.055 275.322 206.074 260.345 212.728 277.65L272.967 438.681Z" fill="#AAA9A7" stroke="black" stroke-width="2.73816" stroke-linejoin="round"/>
+        <path d="M257.674 457.325C268.445 453.187 275.268 444.865 272.914 438.739C270.559 432.612 259.92 431.001 249.149 435.14C238.379 439.279 231.556 447.6 233.91 453.726C236.264 459.853 246.904 461.464 257.674 457.325Z" fill="#AAA9A7" stroke="black" stroke-width="2.73816" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">Verduurzamingstool</div>
+      <div class="logo-sub">Energiemaatregelen voor gebouwen</div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP BAR -->
+<div class="stepbar">
+  <div class="step-bar-inner">
+    <div class="step active" id="step1" data-goto="1">
+      <div class="step-num">1</div>
+      <div><div class="step-label">Gebouw tekenen</div><div class="step-sub">Vlakken &amp; oppervlakten</div></div>
+    </div>
+    <div class="step-arrow">›</div>
+    <div class="step" id="step2" data-goto="2">
+      <div class="step-num">2</div>
+      <div><div class="step-label">Gebouwinvoer</div><div class="step-sub">Verbruik &amp; installaties</div></div>
+    </div>
+    <div class="step-arrow">›</div>
+    <div class="step" id="step3" data-goto="3">
+      <div class="step-num">3</div>
+      <div><div class="step-label">Maatregelen kiezen</div><div class="step-sub">Per onderdeel selecteren</div></div>
+    </div>
+    <div class="step-arrow">›</div>
+    <div class="step" id="step4" data-goto="4">
+      <div class="step-num">4</div>
+      <div><div class="step-label">Resultaat</div><div class="step-sub">Impact &amp; berekeningen</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+<!-- ══ STAP 0: TEKENTOOL ══ -->
+<div class="section active" id="sec0">
+  <div class="eyebrow">Stap 1</div>
+  <h1>Gebouw <em>intekenen</em></h1>
+  <p class="lead">Teken de vlakken van uw gebouw. Stel eerst de schaal in, teken daarna polygonen door te klikken en sluit ze door op het startpunt te klikken. Klik op een bestaand vlak om het te labelen.</p>
+
+  <div class="tl-layout">
+    <!-- Canvas area -->
+    <div class="tl-canvaswrap">
+      <!-- Toolbar -->
+      <div class="tl-toolbar">
+        <button class="tb on" data-mode="draw">✏️ Tekenen</button>
+        <button class="tb" data-mode="select">↖ Selecteren</button>
+        <button class="tb" data-mode="pan">✋ Schuiven</button>
+        <div class="tl-sep"></div>
+        <button class="tb" id="tlUndo">↩ Ongedaan</button>
+        <button class="tb" id="tlEsc">✕ Annuleer vlak</button>
+        <div class="tl-sep"></div>
+        <button class="tb" id="tlGrid">Raster</button>
+        <button class="tb red" id="tlClear">Alles wissen</button>
+        <div class="tl-sep"></div>
+        <!-- Upload -->
+        <label class="tb" id="tlUploadLabel" style="cursor:pointer" title="Upload een bouwtekening als onderlaag">
+          📂 Tekening laden
+          <input type="file" id="tlUploadInput" accept="image/*,.pdf" style="display:none">
+        </label>
+        <button class="tb" id="tlRemoveImg" style="display:none" title="Achtergrond verwijderen">✕ Tekening</button>
+      </div>
+      <!-- Scale bar + opacity -->
+      <div class="tl-scale-row">
+        <label>Schaal:</label>
+        <input type="number" id="scaleInput" value="20" min="1" max="500" step="1">
+        <span>pixels = 1 m</span>
+        <div class="tl-sep" style="margin:0 6px"></div>
+        <button class="tl-measure-btn" id="tlMeasureBtn">📏 Meet twee punten</button>
+        <span id="tlMeasureHint" style="font-size:10px;color:var(--text3);margin-left:6px"></span>
+        <!-- Opacity slider, only visible when image loaded -->
+        <div id="tlOpacityWrap" style="display:none;margin-left:auto;display:none;align-items:center;gap:6px;font-size:11px;color:var(--text2);">
+          <span>Doorzichtigheid:</span>
+          <input type="range" id="tlOpacity" min="5" max="100" value="40" style="width:80px;accent-color:var(--accent)">
+          <span id="tlOpacityVal">40%</span>
+        </div>
+      </div>
+      <!-- Canvas -->
+      <canvas id="tlCanvas"></canvas>
+      <div class="tl-status" id="tlStatus">Klik om het eerste punt te plaatsen</div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="tl-sidebar">
+      <!-- Type -->
+      <div class="sc">
+        <div class="sc-h">Vlaktype</div>
+        <div class="sc-b">
+          <div class="type-grid">
+            <button class="typebtn tp-gevel on" data-type="gevel">🧱 Gevel</button>
+            <button class="typebtn tp-dak"      data-type="dak">🏠 Dak</button>
+            <button class="typebtn tp-vloer"    data-type="vloer">⬛ Vloer</button>
+            <button class="typebtn tp-beglazing" data-type="beglazing">🪟 Beglazing</button>
+            <button class="typebtn tp-deur"     data-type="deur">🚪 Deur</button>
+            <button class="typebtn tp-overig"   data-type="overig">📦 Overig</button>
+          </div>
+          <div class="m2-row">
+            <input type="number" id="tlM2" placeholder="Oppervlakte" min="0" step="0.5">
+            <span>m²</span>
+          </div>
+          <div class="m2-auto" id="tlM2Auto"></div>
+        </div>
+      </div>
+
+      <!-- Polygoon lijst -->
+      <div class="sc">
+        <div class="sc-h">Getekende vlakken</div>
+        <div class="sc-b" style="padding:6px 8px">
+          <div class="plist" id="tlPolyList"><div class="tl-empty">Nog geen vlakken</div></div>
+        </div>
+      </div>
+
+      <!-- Totalen -->
+      <div class="sc">
+        <div class="sc-h">Totaaloppervlakten</div>
+        <div class="sc-b" style="padding:8px 11px">
+          <div class="tot-list" id="tlTotals"><div class="tl-empty">Voeg vlakken toe</div></div>
+        </div>
+      </div>
+
+      <button class="btn btn-accent" id="btnNaarGebouw" style="width:100%">Verder naar gebouwinvoer →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STAP 2 ══ -->
+<div class="section" id="sec1">
+  <div class="eyebrow">Stap 2</div>
+  <h1>Gebouw <em>invoeren</em></h1>
+  <p class="lead">Vul de basisgegevens in. Op basis hiervan worden de verduurzamingsmaatregelen en hun impact berekend.</p>
+  <!-- Banner: waarden uit tekening -->
+  <div id="tekenBanner" style="display:none;background:var(--gs);border:1px solid var(--gb);border-radius:var(--r);padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--green);">
+    <strong>Overgenomen uit Stap 1 (Gebouw tekenen):</strong> <span id="tekenBannerTekst"></span>
+    — velden hieronder zijn automatisch ingevuld.
+  </div>
+  <div class="card">
+    <h2><span class="n">A</span>Gebouwinformatie</h2>
+    <div class="grid3">
+      <div class="fg"><label>Bouwjaar</label><input type="number" id="bouwjaar" value="1988" min="1900" max="2024"></div>
+      <div class="fg"><label>Functie</label><select id="functie"><option>Overig</option><option>Kantoor</option><option>Onderwijs</option><option>Zorg</option><option>Sport</option><option>Horeca</option><option>Retail</option><option>Industrie</option></select></div>
+      <div class="fg"><label>Vloeroppervlak (m²)</label><input type="number" id="vloeropp" value="1720" min="1"></div>
+      <div class="fg"><label>Dakoppervlak PV-geschikt (m²)</label><input type="number" id="dakopp" value="500" min="0"><span class="hint">Excl. schaduw, dakramen, N-gericht</span></div>
+      <div class="fg"><label>Branduren per week</label><input type="number" id="branduren" value="30" min="0" max="168"></div>
+      <div class="fg"><label>Gekoeld oppervlak (m²)</label><input type="number" id="koelopp" value="0" min="0"></div>
+    </div>
+    <h2 style="margin-top:20px"><span class="n">B</span>Verbruiksgegevens</h2>
+    <div class="grid3">
+      <div class="fg"><label>Elektriciteitsverbruik (kWh/j)</label><input type="number" id="elecVerbruik" value="22766" min="0"></div>
+      <div class="fg"><label>Gasverbruik (m³/j)</label><input type="number" id="gasVerbruik" value="7000" min="0"></div>
+      <div class="fg"><label>Bestaande opwekking (kWh/j)</label><input type="number" id="elecOpwek" value="0" min="0"><span class="hint">Bestaande zonnepanelen</span></div>
+    </div>
+    <h2 style="margin-top:20px"><span class="n">C</span>Huidige installaties</h2>
+    <div class="grid3">
+      <div class="fg"><label>Verwarming</label><select id="verwarmingType"><option>Gasgestookt</option><option>Elektrisch</option><option>Warmtepomp</option><option>Stadsverwarming</option><option>WKO</option></select></div>
+      <div class="fg"><label>Tapwaterverwarming</label><select id="tapwaterType"><option>Gasgestookt</option><option>Elektrisch</option><option>Warmtepompboiler</option><option>Zonneboiler</option></select></div>
+      <div class="fg"><label>Ventilatie</label><select id="ventilatieType"><option>Mechanisch zonder regeling</option><option>Vraaggestuurd</option><option>Natuurlijk</option><option>WTW</option></select></div>
+      <div class="fg"><label>Elektriciteitsaansluiting</label><select id="aansluiting"><option>Kleinverbruik</option><option>1x25A</option><option>3x25A</option><option>3x63A</option><option>Grootverbruik</option></select></div>
+      <div class="fg"><label>BTW</label><select id="btwType"><option>Exclusief</option><option>Inclusief (21%)</option></select></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-accent" id="btnNaarMaatregelen">Maatregelen kiezen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STAP 3 ══ -->
+<div class="section" id="sec2">
+  <div class="eyebrow">Stap 3</div>
+  <h1>Verduurzamings<em>maatregelen</em></h1>
+  <p class="lead">Klik op een maatregel om die te selecteren en vul de hoeveelheid in. Gebruik de categorieën links om te navigeren.</p>
+  <div class="gsbar" id="gsbar2"></div>
+  <div class="ml">
+    <div class="catpanel" id="catpanel">
+      <div class="catlbl">Gebouwschil</div>
+      <div class="catitem active" data-cat="dak">🏠 Dak<span class="catcount" id="cnt-dak"></span><span class="cat-opp" id="opp-dak"></span></div>
+      <div class="catitem" data-cat="gevel">🧱 Gevel<span class="catcount" id="cnt-gevel"></span><span class="cat-opp" id="opp-gevel"></span></div>
+      <div class="catitem" data-cat="vloer">⬛ Vloer<span class="catcount" id="cnt-vloer"></span><span class="cat-opp" id="opp-vloer"></span></div>
+      <div class="catitem" data-cat="kozijnen">🪟 Kozijnen<span class="catcount" id="cnt-kozijnen"></span><span class="cat-opp" id="opp-kozijnen"></span></div>
+      <div class="catitem" data-cat="kierdichting">💨 Kierdichting<span class="catcount" id="cnt-kierdichting"></span></div>
+      <div class="catsep"></div>
+      <div class="catlbl">Installaties</div>
+      <div class="catitem" data-cat="verwarmen">🔥 Verwarmen<span class="catcount" id="cnt-verwarmen"></span></div>
+      <div class="catitem" data-cat="tapwater">🚿 Warm tapwater<span class="catcount" id="cnt-tapwater"></span></div>
+      <div class="catitem" data-cat="ventilatie">🌀 Ventilatie<span class="catcount" id="cnt-ventilatie"></span></div>
+      <div class="catitem" data-cat="verlichting">💡 Verlichting<span class="catcount" id="cnt-verlichting"></span></div>
+      <div class="catitem" data-cat="koelen">❄️ Koelen<span class="catcount" id="cnt-koelen"></span></div>
+      <div class="catitem" data-cat="overig">📦 Overig<span class="catcount" id="cnt-overig"></span></div>
+      <div class="catsep"></div>
+      <div class="catlbl">Opwek</div>
+      <div class="catitem" data-cat="opwek">☀️ Zonne-energie<span class="catcount" id="cnt-opwek"></span></div>
+      <div class="catsep"></div>
+      <div class="catfoot"><button class="btn btn-green" id="btnNaarResultaten">Bekijk resultaten →</button></div>
+    </div>
+    <div id="mpanel"></div>
+  </div>
+</div>
+
+<!-- ══ STAP 4 ══ -->
+<div class="section" id="sec3">
+  <div class="eyebrow">Stap 4</div>
+  <h1>Impact <em>overzicht</em></h1>
+  <p class="lead">De berekende impact van alle geselecteerde maatregelen.</p>
+  <div class="gsbar" id="gsbar3"></div>
+  <div class="kgrid">
+    <div class="kpi ka"><div class="kpi-lbl">Totaalinvestering</div><div class="kpi-val" id="kI">—</div><div class="kpi-sub">excl. BTW</div></div>
+    <div class="kpi km"><div class="kpi-lbl">Gasbesparing</div><div class="kpi-val" id="kG">—</div><div class="kpi-sub">m³/jaar</div></div>
+    <div class="kpi kb"><div class="kpi-lbl">Elektrabesparing</div><div class="kpi-val" id="kE">—</div><div class="kpi-sub">kWh/jaar netto</div></div>
+    <div class="kpi kg"><div class="kpi-lbl">Gem. terugverdientijd</div><div class="kpi-val" id="kT">—</div><div class="kpi-sub">jaar (gewogen)</div></div>
+  </div>
+  <div class="tabrow" id="tabrow">
+    <div class="tab active" data-tab="overzicht">Overzicht</div>
+    <div class="tab" data-tab="berekeningen">Berekeningen</div>
+    <div class="tab" data-tab="grafieken">Grafieken</div>
+  </div>
+  <div class="tabpane active" id="pane-overzicht">
+    <div class="rgrid">
+      <div class="cc"><div class="cch">Energiebesparing per categorie</div><div class="ccb" id="energiebars"></div></div>
+      <div class="cc"><div class="cch">Investeringen per categorie</div><div class="ccb"><div style="position:relative;height:210px"><canvas id="cInvest" role="img" aria-label="Investering per categorie"></canvas></div></div></div>
+    </div>
+    <div class="twrap">
+      <div class="th">Geselecteerde maatregelen</div>
+      <table><thead><tr><th>Maatregel</th><th>Categorie</th><th class="r">Investering</th><th class="r">Gas m³/j</th><th class="r">Elektra kWh/j</th><th class="r">TVT</th></tr></thead>
+      <tbody id="tbody"></tbody></table>
+    </div>
+  </div>
+  <div class="tabpane" id="pane-berekeningen">
+    <div class="ainfo">Gedetailleerde berekeningen per maatregel — elke rekenregel inzichtelijk.</div>
+    <div id="berekenPanel"></div>
+  </div>
+  <div class="tabpane" id="pane-grafieken">
+    <div class="rgrid">
+      <div class="cc"><div class="cch">Gasreductie per maatregel (m³/j)</div><div class="ccb"><div style="position:relative;height:240px"><canvas id="cGas" role="img" aria-label="Gas per maatregel"></canvas></div></div></div>
+      <div class="cc"><div class="cch">Terugverdientijden (jaar)</div><div class="ccb"><div style="position:relative;height:240px"><canvas id="cTVT" role="img" aria-label="Terugverdientijden"></canvas></div></div></div>
+    </div>
+    <div class="cc" style="margin-bottom:20px"><div class="cch">Cumulatieve besparing vs. investering — 25 jaar</div><div class="ccb"><div style="position:relative;height:260px"><canvas id="cCum" role="img" aria-label="Cumulatief"></canvas></div></div></div>
+  </div>
+  <div class="btn-row" style="margin-top:20px">
+    <button class="btn btn-ghost" id="btnTerug2">← Maatregelen</button>
+    <button class="btn btn-ghost" id="btnTerug1">← Gebouw</button>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+// ── CONSTANTS ──
+const GP=1.45, EP=0.32;
+const CAT={dak:'Dak',gevel:'Gevel',vloer:'Vloer',kozijnen:'Kozijnen',kierdichting:'Kierdichting',verwarmen:'Verwarmen',tapwater:'Warm tapwater',ventilatie:'Ventilatie',verlichting:'Verlichting',koelen:'Koelen',overig:'Overig',opwek:'Opwek'};
+
+const M={
+  dak:[
+    {id:'dak1',n:'Hellend dak binnenzijde isoleren (Rc=3,7 m²K/W)',i:82.59,u:'m²',g:null,e:null,rc:3.7},
+    {id:'dak2',n:'Hellend dak binnenzijde isoleren (Rc=6,8 m²K/W)',i:101.16,u:'m²',g:null,e:null,rc:6.8},
+    {id:'dak3',n:'Hellend dak buitenzijde isoleren (Rc=6,3 m²K/W)',i:163.49,u:'m²',g:null,e:null,rc:6.3},
+    {id:'dak4',n:'Plat dak isoleren buitenzijde – op huidige dakbedekking',i:122.27,u:'m²',g:null,e:null,rc:6.3},
+    {id:'dak5',n:'Plat dak isoleren buitenzijde – bij vervangen dakbedekking',i:181.05,u:'m²',g:null,e:null,rc:6.3},
+    {id:'dak6',n:'Groen dak aanleggen',i:72.5,u:'m²',g:0.35,e:0,rc:null},
+    {id:'dak7',n:'Zoldervloer isoleren',i:55,u:'m²',g:null,e:null,rc:3.7},
+  ],
+  gevel:[
+    {id:'gev1',n:'Spouwmuurisolatie (Rc=1,4 m²K/W)',i:63.83,u:'m²',g:null,e:null,rc:1.4},
+    {id:'gev2',n:'Spouwmuurisolatie zonder steiger (Rc=1,4 m²K/W)',i:39.20,u:'m²',g:null,e:null,rc:1.4},
+    {id:'gev3',n:'Gevel binnenzijde isoleren – voorzetwand (Rc=3,7)',i:104.24,u:'m²',g:null,e:null,rc:3.7},
+    {id:'gev4',n:'Gevel buitenzijde isoleren (Rc=3,7 m²K/W)',i:212.36,u:'m²',g:null,e:null,rc:3.7},
+    {id:'gev5',n:'Isolerende gevelpanelen (Rc=3,7 m²K/W)',i:51.58,u:'m²',g:null,e:null,rc:3.7},
+  ],
+  vloer:[
+    {id:'vlo1',n:'Vloer onderzijde isoleren vanuit kruipruimte (Rc=3,7)',i:39.98,u:'m²',g:null,e:null,rc:3.7},
+    {id:'vlo2',n:'Bodemisolatie in de kruipruimte (Rc=3,7 m²K/W)',i:71.52,u:'m²',g:null,e:null,rc:3.7},
+  ],
+  kozijnen:[
+    {id:'koz1',n:'HR++ glas in bestaande kozijnen',i:190.94,u:'m²',g:null,e:null,rc:0.833},
+    {id:'koz2',n:'HR++ glas incl. aluminium kozijnen',i:648.95,u:'m²',g:null,e:null,rc:0.833},
+    {id:'koz3',n:'HR+++ glas incl. aluminium kozijnen',i:736.26,u:'m²',g:null,e:null,rc:1.111},
+    {id:'koz4',n:'HR+++ glas incl. houten kozijnen',i:632.78,u:'m²',g:null,e:null,rc:1.111},
+    {id:'koz5',n:'Isolatiefolie op enkel glas',i:150,u:'m²',g:null,e:null,rc:0.303},
+    {id:'koz6',n:'Isolatiefolie op dubbel glas',i:150,u:'m²',g:null,e:null,rc:0.625},
+    {id:'koz7',n:'Voorzetramen voor het dubbel glas',i:180,u:'m²',g:null,e:null,rc:0.730},
+    {id:'koz8',n:'Deur vervangen door isolerende houten deur',i:1661.38,u:'stuk',g:null,e:null,rc:0.455},
+  ],
+  kierdichting:[
+    {id:'kier1',n:'Kieren en/of naden dichten',i:22.67,u:'m',g:4.4,e:0,rc:null},
+    {id:'kier2',n:'Deurdrangers installeren',i:72.54,u:'stuk',g:0,e:0,rc:null},
+  ],
+  verwarmen:[
+    {id:'vwrm1',n:'Hybride warmtepomp op huidig systeem',i:865,u:'kW',g:2450,e:-5390,rc:null},
+    {id:'vwrm2',n:'Warmtepomp lucht-water incl. LT radiatoren',i:1554.41,u:'kW',g:4900,e:-10780,rc:null},
+    {id:'vwrm3',n:'Warmtepomp bodemlussen (gesloten bron)',i:3045.47,u:'kW',g:4900,e:-8703,rc:null},
+    {id:'vwrm4',n:'Warmtepomp open bron (WKO)',i:3550.28,u:'kW',g:4900,e:-8703,rc:null},
+    {id:'vwrm5',n:'Lucht-lucht warmtepomp (airco)',i:916.67,u:'kW',g:4900,e:-13677,rc:null},
+    {id:'vwrm6',n:'Leidingen isoleren in onverwarmde ruimtes',i:20.72,u:'m',g:4,e:0,rc:null},
+    {id:'vwrm7',n:'Appendages isoleren in onverwarmde ruimtes',i:61,u:'stuk',g:21,e:0,rc:null},
+    {id:'vwrm8',n:'Radiatorfolie aanbrengen',i:4.13,u:'m²',g:10,e:0,rc:null},
+    {id:'vwrm9',n:'Energiezuinige circulatiepomp',i:1.37,u:'W',g:0,e:8,rc:null},
+    {id:'vwrm10',n:'Infraroodpanelen als hoofdverwarming',i:309.62,u:'stuk',g:4900,e:-47868,rc:null},
+  ],
+  tapwater:[
+    {id:'tap1',n:'Elektrische boiler 80 liter',i:1442.21,u:'stuk',g:2100,e:-20514.9,rc:null},
+    {id:'tap2',n:'Elektrische boiler 200 liter',i:2049.70,u:'stuk',g:2100,e:-20514.9,rc:null},
+    {id:'tap3',n:'Elektrische boiler 300 liter',i:2414.21,u:'stuk',g:2100,e:-20514.9,rc:null},
+    {id:'tap4',n:'Elektrische boiler 500 liter',i:3143.21,u:'stuk',g:2100,e:-20514.9,rc:null},
+    {id:'tap5',n:'Warmtepompboiler',i:7661.16,u:'stuk',g:2100,e:-8205.96,rc:null},
+    {id:'tap6',n:'Zonneboiler op plat dak',i:41.63,u:'liter',g:6.3,e:0,rc:null},
+    {id:'tap7',n:'Zonneboiler op hellend dak',i:27.47,u:'liter',g:6.3,e:0,rc:null},
+    {id:'tap8',n:'Tapwater voorverwarmen met warmtepomp',i:0,u:'stuk',g:1370,e:-3014,rc:null},
+    {id:'tap9',n:'Waterbesparende douchekoppen',i:115.86,u:'stuk',g:31,e:0,rc:null},
+    {id:'tap10',n:'Tijdschakelaar circulatiepomp tapwater',i:130,u:'stuk',g:210,e:0,rc:null},
+  ],
+  ventilatie:[
+    {id:'vent1',n:'Warmteterugwinning (WTW) installeren',i:19352.81,u:'stuk',g:630,e:0,rc:null},
+    {id:'vent2',n:'Vraaggestuurde ventilatie installeren',i:8000,u:'stuk',g:315,e:0,rc:null},
+    {id:'vent3',n:'Dakventilator → gelijkstroommodel',i:2050,u:'stuk',g:0,e:1200,rc:null},
+    {id:'vent4',n:'Kleine ventilator → gelijkstroommodel',i:416,u:'stuk',g:0,e:416,rc:null},
+    {id:'vent5',n:'Ventilatiekanalen isoleren',i:40,u:'m',g:31,e:0,rc:null},
+    {id:'vent6',n:'Mechanische afzuiging installeren',i:8000,u:'stuk',g:0,e:0,rc:null},
+  ],
+  verlichting:[
+    {id:'vrl1',n:'LED in bestaande armaturen',i:12.5,u:'m²',g:0,e:11.96,rc:null},
+    {id:'vrl2',n:'LED in plaats van TL5',i:12.5,u:'m²',g:0,e:10.17,rc:null},
+    {id:'vrl3',n:'TL → LED incl. armaturen (2×58W)',i:200,u:'stuk',g:0,e:134.16,rc:null},
+    {id:'vrl4',n:'TL → LED incl. armaturen (2×36W/4×18W)',i:150,u:'stuk',g:0,e:78,rc:null},
+    {id:'vrl5',n:'Aanwezigheidsdetectie toepassen',i:213.47,u:'stuk',g:0,e:124.8,rc:null},
+    {id:'vrl6',n:'LED sportveldverlichting',i:2000,u:'stuk',g:0,e:376,rc:null},
+  ],
+  koelen:[
+    {id:'koe1',n:'Buitenzonwering met lichtsensoren (gekoelde ruimte)',i:435.01,u:'m²',g:0,e:160,rc:null},
+    {id:'koe2',n:'Buitenzonwering (niet-gekoeld, comfort)',i:163.49,u:'m²',g:0,e:0,rc:null},
+    {id:'koe3',n:'Vraaggestuurde koelinstallatie',i:10000,u:'stuk',g:0,e:0,rc:null},
+    {id:'koe4',n:'Zuiniger koelingsapparaat',i:48091.5,u:'stuk',g:0,e:0,rc:null},
+  ],
+  overig:[
+    {id:'ovr1',n:'Energiezuinige koelvriescombinatie',i:1074.38,u:'stuk',g:0,e:242,rc:null},
+    {id:'ovr2',n:'Energiezuinige horecakoeling',i:1100,u:'deur',g:0,e:400,rc:null},
+    {id:'ovr3',n:'Energiezuinige diepvriezer',i:826.45,u:'stuk',g:0,e:330,rc:null},
+    {id:'ovr4',n:'Energiezuinige tafelkoelkast',i:371.90,u:'stuk',g:0,e:190,rc:null},
+  ],
+  opwek:[
+    {id:'opw1',n:'PV-panelen op plat dak',i:1339.85,u:'kWp',g:0,e:880,rc:null,pv:true},
+    {id:'opw2',n:'PV-panelen op hellend dak',i:1078.75,u:'kWp',g:0,e:880,rc:null,pv:true},
+    {id:'opw3',n:'Energie opslaan met accu',i:700,u:'kWh',g:0,e:0,rc:null},
+  ]
+};
+
+// ── STATE ──
+let gb={}, sel={}, curCat='dak', ch={};
+
+function f(n,d=0){if(n==null||isNaN(n))return'—';return n.toLocaleString('nl-NL',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function eu(n){return n==null?'—':'€\u202f'+f(n);}
+
+function getM(id){for(const l of Object.values(M)){const m=l.find(x=>x.id===id);if(m)return m;}return null;}
+function getCat(id){for(const[c,l]of Object.entries(M)){if(l.find(x=>x.id===id))return c;}return'';}
+
+// ── NAVIGATION (4 stappen: 0,1,2,3 → sec0..sec3, step1..step4) ──
+function goTo(n){
+  document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.step').forEach((s,i)=>{
+    s.classList.toggle('active',i===n);
+    s.classList.toggle('done',i<n);
+  });
+  window.scrollTo(0,0);
+}
+
+function readGb(){
+  gb={
+    bouwjaar:+document.getElementById('bouwjaar').value||1988,
+    functie:document.getElementById('functie').value,
+    vloeropp:+document.getElementById('vloeropp').value||1720,
+    dakopp:+document.getElementById('dakopp').value||500,
+    elecV:+document.getElementById('elecVerbruik').value||22766,
+    gasV:+document.getElementById('gasVerbruik').value||7000,
+    verw:document.getElementById('verwarmingType').value,
+  };
+}
+
+// ══════════════════════════════════════════════════════
+// TEKENTOOL — 2D POLYGONEN MET SCHAAL
+// ══════════════════════════════════════════════════════
+const TYPES={
+  gevel:  {label:'Gevel',     color:'#1d5fa8', fill:'rgba(29,95,168,0.15)',  stroke:'#1d5fa8'},
+  dak:    {label:'Dak',       color:'#b45309', fill:'rgba(180,83,9,0.15)',   stroke:'#b45309'},
+  vloer:  {label:'Vloer',     color:'#6d3cb5', fill:'rgba(109,60,181,0.15)', stroke:'#6d3cb5'},
+  beglazing:{label:'Beglazing',color:'#0e7490',fill:'rgba(14,116,144,0.18)', stroke:'#0e7490'},
+  deur:   {label:'Deur',      color:'#be185d', fill:'rgba(190,24,93,0.15)',  stroke:'#be185d'},
+  overig: {label:'Overig',    color:'#555',    fill:'rgba(80,80,80,0.12)',   stroke:'#888'},
+};
+
+// State
+let polys=[];        // [{id,type,pts,m2,label}]
+let wip=[];          // punten van vlak in opbouw
+let mouseXY={x:0,y:0};
+let selId=null;
+let mode='draw';     // 'draw'|'select'
+let activeType='gevel';
+let showGrid=true;
+let pxPerM=20;       // schaal: pixels per meter
+let polyCounter=0;
+let measureState=0;  // 0=off 1=pt1 2=pt2
+let measurePt1=null;
+const SNAP=12, CLOSE=14;
+let panX=0, panY=0;
+let isPanning=false, panStart=null;
+
+// ── Achtergrondafbeelding ──
+let bgImg=null;       // HTMLImageElement
+let bgOpacity=0.40;   // 0..1
+let bgX=0, bgY=0;     // positie (canvas pixels, meepannend)
+let bgScale=1;        // schaalfactor t.o.v. originele beeldgrootte
+let bgDragging=false, bgDragStart=null, bgDragOrigin=null;
+
+const tlC=document.getElementById('tlCanvas');
+const tlCtx=tlC.getContext('2d');
+
+function tlResize(){
+  tlC.width=tlC.parentElement.clientWidth;
+  tlC.height=560;
+  tlDraw();
+}
+
+// ── helpers ──
+function scrToPt(sx,sy){return{x:(sx-panX),y:(sy-panY)};}
+function ptToScr(x,y){return{sx:x+panX,sy:y+panY};}
+function snapGrid(x,y){
+  const g=pxPerM;
+  return{x:Math.round(x/g)*g, y:Math.round(y/g)*g};
+}
+function snapPts(x,y){
+  for(const p of polys){
+    for(const v of p.pts){
+      if(Math.hypot(v.x-x,v.y-y)<SNAP)return{x:v.x,y:v.y,snapped:true};
+    }
+  }
+  for(const v of wip){
+    if(Math.hypot(v.x-x,v.y-y)<SNAP)return{x:v.x,y:v.y,snapped:true};
+  }
+  return{...snapGrid(x,y),snapped:false};
+}
+function polyArea(pts){ // pixels²
+  let a=0;
+  for(let i=0;i<pts.length;i++){const j=(i+1)%pts.length;a+=pts[i].x*pts[j].y-pts[j].x*pts[i].y;}
+  return Math.abs(a)/2;
+}
+function pxAreaToM2(pxA){return Math.round(pxA/pxPerM/pxPerM*100)/100;}
+function ptInPoly(px,py,pts){
+  let inside=false;
+  for(let i=0,j=pts.length-1;i<pts.length;j=i++){
+    const xi=pts[i].x,yi=pts[i].y,xj=pts[j].x,yj=pts[j].y;
+    if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))inside=!inside;
+  }
+  return inside;
+}
+
+// ── draw ──
+function tlDraw(){
+  const W=tlC.width,H=tlC.height;
+  tlCtx.clearRect(0,0,W,H);
+  // bg
+  tlCtx.fillStyle='#f9f8f6';tlCtx.fillRect(0,0,W,H);
+
+  // Achtergrondafbeelding
+  if(bgImg){
+    tlCtx.save();
+    tlCtx.globalAlpha=bgOpacity;
+    const dw=bgImg.naturalWidth*bgScale;
+    const dh=bgImg.naturalHeight*bgScale;
+    tlCtx.drawImage(bgImg, panX+bgX, panY+bgY, dw, dh);
+    tlCtx.globalAlpha=1;
+    // Kader om de afbeelding
+    tlCtx.strokeStyle='rgba(224,122,47,0.5)';
+    tlCtx.lineWidth=1;
+    tlCtx.setLineDash([4,3]);
+    tlCtx.strokeRect(panX+bgX, panY+bgY, dw, dh);
+    tlCtx.setLineDash([]);
+    tlCtx.restore();
+  }
+
+  // grid
+  if(showGrid){
+    const g=pxPerM;
+    const ox=((panX%g)+g)%g, oy=((panY%g)+g)%g;
+    tlCtx.strokeStyle='rgba(0,0,0,0.06)';tlCtx.lineWidth=1;
+    for(let x=ox;x<W;x+=g){tlCtx.beginPath();tlCtx.moveTo(x,0);tlCtx.lineTo(x,H);tlCtx.stroke();}
+    for(let y=oy;y<H;y+=g){tlCtx.beginPath();tlCtx.moveTo(0,y);tlCtx.lineTo(W,y);tlCtx.stroke();}
+    // Major grid 5m
+    tlCtx.strokeStyle='rgba(0,0,0,0.12)';
+    const g5=g*5, ox5=((panX%(g5))+g5)%g5, oy5=((panY%(g5))+g5)%g5;
+    for(let x=ox5;x<W;x+=g5){tlCtx.beginPath();tlCtx.moveTo(x,0);tlCtx.lineTo(x,H);tlCtx.stroke();}
+    for(let y=oy5;y<H;y+=g5){tlCtx.beginPath();tlCtx.moveTo(0,y);tlCtx.lineTo(W,y);tlCtx.stroke();}
+    // Scale ruler bottom-left
+    const rulerM=5, rulerPx=rulerM*pxPerM;
+    const rx=16,ry=H-20;
+    tlCtx.strokeStyle='rgba(0,0,0,0.4)';tlCtx.lineWidth=2;
+    tlCtx.beginPath();tlCtx.moveTo(rx,ry);tlCtx.lineTo(rx+rulerPx,ry);tlCtx.stroke();
+    tlCtx.beginPath();tlCtx.moveTo(rx,ry-4);tlCtx.lineTo(rx,ry+4);tlCtx.stroke();
+    tlCtx.beginPath();tlCtx.moveTo(rx+rulerPx,ry-4);tlCtx.lineTo(rx+rulerPx,ry+4);tlCtx.stroke();
+    tlCtx.fillStyle='rgba(0,0,0,0.5)';tlCtx.font='10px Poppins,sans-serif';
+    tlCtx.textAlign='center';tlCtx.fillText(`${rulerM} m`,rx+rulerPx/2,ry-7);
+  }
+
+  // Getekende polygonen
+  polys.forEach(p=>{
+    if(p.pts.length<2)return;
+    const T=TYPES[p.type]||TYPES.overig;
+    const isSel=p.id===selId;
+    tlCtx.beginPath();
+    const s0=ptToScr(p.pts[0].x,p.pts[0].y);
+    tlCtx.moveTo(s0.sx,s0.sy);
+    p.pts.forEach(v=>{const s=ptToScr(v.x,v.y);tlCtx.lineTo(s.sx,s.sy);});
+    tlCtx.closePath();
+    tlCtx.fillStyle=T.fill;tlCtx.fill();
+    tlCtx.strokeStyle=isSel?'#e07a2f':T.stroke;
+    tlCtx.lineWidth=isSel?2.5:1.8;tlCtx.setLineDash([]);tlCtx.stroke();
+    // Vertices
+    p.pts.forEach((v,vi)=>{
+      const s=ptToScr(v.x,v.y);
+      tlCtx.beginPath();tlCtx.arc(s.sx,s.sy,3,0,Math.PI*2);
+      tlCtx.fillStyle=T.stroke;tlCtx.fill();
+    });
+    // Label
+    const cx=p.pts.reduce((a,v)=>a+v.x,0)/p.pts.length;
+    const cy=p.pts.reduce((a,v)=>a+v.y,0)/p.pts.length;
+    const sc=ptToScr(cx,cy);
+    const lbl=`${T.label}${p.m2!=null?' · '+p.m2+' m²':''}`;
+    tlCtx.font='bold 11px Poppins,sans-serif';
+    tlCtx.textAlign='center';tlCtx.textBaseline='middle';
+    const tw=tlCtx.measureText(lbl).width;
+    tlCtx.fillStyle='rgba(255,255,255,0.85)';
+    tlCtx.fillRect(sc.sx-tw/2-5,sc.sy-9,tw+10,18);
+    tlCtx.fillStyle=T.stroke;tlCtx.fillText(lbl,sc.sx,sc.sy);
+  });
+
+  // WIP polygon
+  if(wip.length>0){
+    const s0=ptToScr(wip[0].x,wip[0].y);
+    tlCtx.beginPath();tlCtx.moveTo(s0.sx,s0.sy);
+    wip.forEach(v=>{const s=ptToScr(v.x,v.y);tlCtx.lineTo(s.sx,s.sy);});
+    // preview to mouse
+    const sp=snapPts(mouseXY.x-panX,mouseXY.y-panY);
+    const sm=ptToScr(sp.x,sp.y);
+    tlCtx.lineTo(sm.sx,sm.sy);
+    tlCtx.strokeStyle='#e07a2f';tlCtx.lineWidth=1.8;tlCtx.setLineDash([5,4]);tlCtx.stroke();
+    tlCtx.setLineDash([]);
+    // start circle
+    const nearClose=wip.length>2&&Math.hypot(sp.x-wip[0].x,sp.y-wip[0].y)<CLOSE;
+    tlCtx.beginPath();tlCtx.arc(s0.sx,s0.sy,6,0,Math.PI*2);
+    tlCtx.fillStyle=nearClose?'#e07a2f':'#fff';
+    tlCtx.strokeStyle='#e07a2f';tlCtx.lineWidth=2;tlCtx.fill();tlCtx.stroke();
+    // other pts
+    wip.forEach((v,i)=>{
+      if(i===0)return;
+      const s=ptToScr(v.x,v.y);
+      tlCtx.beginPath();tlCtx.arc(s.sx,s.sy,3.5,0,Math.PI*2);
+      tlCtx.fillStyle='#e07a2f';tlCtx.fill();
+    });
+    // snap indicator
+    tlCtx.beginPath();tlCtx.arc(sm.sx,sm.sy,sp.snapped?5:3,0,Math.PI*2);
+    tlCtx.fillStyle=sp.snapped?'#e07a2f':'rgba(224,122,47,0.4)';tlCtx.fill();
+    // length preview
+    if(wip.length>=1){
+      const prev=wip[wip.length-1];
+      const dpx=Math.hypot(sp.x-prev.x,sp.y-prev.y);
+      const dm=Math.round(dpx/pxPerM*100)/100;
+      tlCtx.font='10px Poppins,sans-serif';tlCtx.fillStyle='#333';tlCtx.textAlign='center';
+      const mx=(ptToScr(prev.x,prev.y).sx+sm.sx)/2;
+      const my=(ptToScr(prev.x,prev.y).sy+sm.sy)/2-10;
+      tlCtx.fillStyle='rgba(255,255,255,0.85)';tlCtx.fillRect(mx-18,my-8,36,14);
+      tlCtx.fillStyle='#333';tlCtx.fillText(dm+'m',mx,my);
+    }
+  }
+
+  // Measure mode
+  if(measureState===2&&measurePt1){
+    const s1=ptToScr(measurePt1.x,measurePt1.y);
+    const sm=ptToScr(mouseXY.x-panX,mouseXY.y-panY);
+    tlCtx.beginPath();tlCtx.moveTo(s1.sx,s1.sy);tlCtx.lineTo(sm.sx,sm.sy);
+    tlCtx.strokeStyle='#e07a2f';tlCtx.lineWidth=1.5;tlCtx.setLineDash([4,3]);tlCtx.stroke();tlCtx.setLineDash([]);
+    const dpx=Math.hypot(mouseXY.x-panX-measurePt1.x,mouseXY.y-panY-measurePt1.y);
+    document.getElementById('tlMeasureHint').textContent=`Afstand: ${Math.round(dpx/pxPerM*10)/10} m (${Math.round(dpx)} px)`;
+  }
+}
+
+// ── mouse ──
+tlC.addEventListener('mousemove',e=>{
+  const r=tlC.getBoundingClientRect();
+  mouseXY={x:e.clientX-r.left,y:e.clientY-r.top};
+  // Pan canvas: pan-mode left-drag, or middle mouse / alt+left anywhere
+  if(isPanning&&panStart){
+    panX+=mouseXY.x-panStart.x; panY+=mouseXY.y-panStart.y;
+    panStart={...mouseXY};
+    if(mode==='pan')tlC.style.cursor='grabbing';
+  } else if(mode==='pan'){
+    tlC.style.cursor='grab';
+  }
+  // Drag background image (right mouse)
+  if(bgDragging&&bgDragStart&&bgImg){
+    bgX=bgDragOrigin.x+(mouseXY.x-bgDragStart.x);
+    bgY=bgDragOrigin.y+(mouseXY.y-bgDragStart.y);
+  }
+  tlDraw();
+});
+tlC.addEventListener('mouseleave',()=>{isPanning=false;bgDragging=false;tlDraw();});
+
+tlC.addEventListener('mousedown',e=>{
+  const r=tlC.getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  // Pan mode left-click, OR middle mouse, OR alt+left → pan canvas
+  if(e.button===0&&mode==='pan'||(e.button===1)||(e.button===0&&e.altKey)){
+    isPanning=true; panStart={x:mx,y:my}; e.preventDefault(); return;
+  }
+  // Right mouse → drag background image
+  if(e.button===2&&bgImg){
+    bgDragging=true;
+    bgDragStart={x:mx,y:my};
+    bgDragOrigin={x:bgX,y:bgY};
+    e.preventDefault(); return;
+  }
+});
+tlC.addEventListener('mouseup',e=>{
+  if(e.button===0&&mode==='pan')isPanning=false;
+  if(e.button===1||(e.button===0&&e.altKey))isPanning=false;
+  if(e.button===2)bgDragging=false;
+});
+tlC.addEventListener('contextmenu',e=>e.preventDefault());
+
+tlC.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const r=tlC.getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const factor=e.deltaY<0?1.12:0.89;
+
+  if(e.ctrlKey&&bgImg){
+    // Ctrl+scroll → schaal achtergrondafbeelding (gecentreerd op muispositie)
+    const imgAbsX=panX+bgX, imgAbsY=panY+bgY;
+    const relX=(mx-imgAbsX)/bgScale, relY=(my-imgAbsY)/bgScale;
+    bgScale=Math.min(10,Math.max(0.05,bgScale*factor));
+    bgX=mx-panX-relX*bgScale;
+    bgY=my-panY-relY*bgScale;
+  } else {
+    // Normaal scroll → zoom canvas (pan+pxPerM)
+    const newPPM=Math.min(200,Math.max(4,pxPerM*factor));
+    panX=mx-(mx-panX)*(newPPM/pxPerM);
+    panY=my-(my-panY)*(newPPM/pxPerM);
+    pxPerM=newPPM;
+    document.getElementById('scaleInput').value=Math.round(pxPerM);
+  }
+  tlDraw();
+},{passive:false});
+
+tlC.addEventListener('click',e=>{
+  if(isPanning)return;
+  if(mode==='pan')return;
+  const r=tlC.getBoundingClientRect();
+  const sx=e.clientX-r.left, sy=e.clientY-r.top;
+
+  // Measure mode
+  if(measureState===1){
+    measurePt1={x:sx-panX,y:sy-panY};
+    measureState=2;
+    document.getElementById('tlMeasureHint').textContent='Klik op eindpunt';
+    return;
+  }
+  if(measureState===2){
+    const dpx=Math.hypot(sx-panX-measurePt1.x,sy-panY-measurePt1.y);
+    const m=parseFloat(prompt(`Gemeten afstand: ${Math.round(dpx)} pixels.\nHoeveel meter is dit?`,'1'));
+    if(m&&m>0){pxPerM=dpx/m;document.getElementById('scaleInput').value=Math.round(pxPerM);document.getElementById('tlMeasureHint').textContent=`Schaal ingesteld: ${Math.round(pxPerM)} px/m`;}
+    measureState=0;
+    document.getElementById('tlMeasureBtn').classList.remove('on');
+    tlDraw();return;
+  }
+
+  if(mode==='select'){
+    // hit-test polys back to front
+    const wp={x:sx-panX,y:sy-panY};
+    let hit=null;
+    for(let i=polys.length-1;i>=0;i--){
+      if(ptInPoly(wp.x,wp.y,polys[i].pts)){hit=polys[i];break;}
+    }
+    selId=hit?hit.id:null;
+    if(hit){
+      activeType=hit.type; syncTypeUI();
+      document.getElementById('tlM2').value=hit.m2!=null?hit.m2:'';
+      updateM2Auto(hit);
+    }
+    tlRenderList();tlDraw();return;
+  }
+
+  // Draw mode
+  const wp=snapPts(sx-panX,sy-panY);
+  if(wip.length>2&&Math.hypot(wp.x-wip[0].x,wp.y-wip[0].y)<CLOSE){
+    closePoly();return;
+  }
+  wip.push({x:wp.x,y:wp.y});
+  setStatus(`${wip.length} punt(en) · Sluit vlak door op startpunt te klikken`);
+  tlDraw();
+});
+
+tlC.addEventListener('dblclick',e=>{e.preventDefault();if(wip.length>2)closePoly();});
+
+function closePoly(){
+  const T=TYPES[activeType]||TYPES.overig;
+  const pxA=polyArea(wip);
+  const autoM2=pxAreaToM2(pxA);
+  const m2val=parseFloat(document.getElementById('tlM2').value)||autoM2;
+  const p={id:++polyCounter,type:activeType,pts:[...wip],
+    m2:m2val,label:`${T.label} ${polys.filter(x=>x.type===activeType).length+1}`};
+  polys.push(p);
+  selId=p.id;
+  wip=[];
+  document.getElementById('tlM2').value=m2val;
+  updateM2Auto(p);
+  tlRenderList();tlUpdateTotals();tlDraw();
+  setStatus('Vlak toegevoegd. Klik om een volgend vlak te tekenen.');
+}
+
+function setStatus(t){document.getElementById('tlStatus').textContent=t;}
+
+function updateM2Auto(p){
+  const pxA=polyArea(p.pts);
+  const a=pxAreaToM2(pxA);
+  document.getElementById('tlM2Auto').textContent=`Berekend op schaal: ${a} m²`;
+}
+
+function syncTypeUI(){
+  document.querySelectorAll('.typebtn').forEach(b=>b.classList.toggle('on',b.dataset.type===activeType));
+}
+
+// Sidebar: type buttons
+document.querySelectorAll('.typebtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    activeType=b.dataset.type; syncTypeUI();
+    if(selId){
+      const p=polys.find(x=>x.id===selId);
+      if(p){p.type=activeType;tlRenderList();tlUpdateTotals();tlDraw();}
+    }
+  });
+});
+
+// m² input live update
+document.getElementById('tlM2').addEventListener('input',e=>{
+  if(selId){
+    const p=polys.find(x=>x.id===selId);
+    if(p){p.m2=parseFloat(e.target.value)||null;tlUpdateTotals();tlRenderList();tlDraw();}
+  }
+});
+
+// Toolbar buttons
+document.querySelectorAll('[data-mode]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    mode=b.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));
+    tlC.style.cursor=mode==='select'?'default':mode==='pan'?'grab':'crosshair';
+    if(mode==='select'){wip=[];setStatus('Klik op een vlak om het te selecteren');}
+    else if(mode==='pan'){wip=[];setStatus('Sleep om het canvas te verschuiven · Rechtermuisknop sleept de bouwtekening');}
+    else setStatus('Klik om punten te plaatsen');
+    tlDraw();
+  });
+});
+
+document.getElementById('tlUndo').addEventListener('click',()=>{
+  if(wip.length>0){wip.pop();}
+  else if(polys.length>0){polys.pop();selId=null;tlRenderList();tlUpdateTotals();}
+  tlDraw();
+});
+document.getElementById('tlEsc').addEventListener('click',()=>{wip=[];setStatus('Geannuleerd.');tlDraw();});
+document.getElementById('tlGrid').addEventListener('click',()=>{showGrid=!showGrid;tlDraw();});
+document.getElementById('tlClear').addEventListener('click',()=>{
+  if(!confirm('Alle vlakken wissen?'))return;
+  polys=[];wip=[];selId=null;tlRenderList();tlUpdateTotals();tlDraw();
+});
+
+// Scale input
+document.getElementById('scaleInput').addEventListener('change',e=>{
+  const v=parseFloat(e.target.value);if(v>0)pxPerM=v;tlDraw();
+});
+
+// Measure button
+document.getElementById('tlMeasureBtn').addEventListener('click',()=>{
+  measureState=measureState===0?1:0;
+  measurePt1=null;wip=[];
+  document.getElementById('tlMeasureBtn').classList.toggle('on',measureState===1);
+  document.getElementById('tlMeasureHint').textContent=measureState===1?'Klik op startpunt':'';
+  mode='select';document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode==='select'));
+  tlDraw();
+});
+
+function tlRenderList(){
+  const el=document.getElementById('tlPolyList');
+  if(!polys.length){el.innerHTML='<div class="tl-empty">Nog geen vlakken</div>';return;}
+  el.innerHTML=polys.map(p=>{
+    const T=TYPES[p.type]||TYPES.overig;
+    return `<div class="pitem${p.id===selId?' sel':''}" data-pid="${p.id}">
+      <div class="pi-dot" style="background:${T.color}"></div>
+      <span class="pi-name">${p.label}</span>
+      <span class="pi-m2">${p.m2!=null?p.m2+' m²':'—'}</span>
+      <span class="pi-del" data-del="${p.id}">✕</span>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('tlPolyList').addEventListener('click',e=>{
+  const del=e.target.closest('[data-del]');
+  if(del){const id=+del.dataset.del;polys=polys.filter(p=>p.id!==id);if(selId===id)selId=null;tlRenderList();tlUpdateTotals();tlDraw();return;}
+  const item=e.target.closest('[data-pid]');
+  if(item){
+    const p=polys.find(x=>x.id===+item.dataset.pid);
+    if(p){selId=p.id;activeType=p.type;syncTypeUI();document.getElementById('tlM2').value=p.m2!=null?p.m2:'';updateM2Auto(p);tlRenderList();tlDraw();}
+  }
+});
+
+function tlUpdateTotals(){
+  const tot={};
+  polys.forEach(p=>{if(p.m2)tot[p.type]=(tot[p.type]||0)+p.m2;});
+  const el=document.getElementById('tlTotals');
+  if(!Object.keys(tot).length){el.innerHTML='<div class="tl-empty">Voeg m² toe aan vlakken</div>';return;}
+  el.innerHTML=Object.entries(tot).map(([t,v])=>{
+    const T=TYPES[t]||TYPES.overig;
+    return `<div class="tot-item" style="background:${T.fill}">
+      <span style="font-weight:600;color:${T.color}">${T.label}</span>
+      <span class="tot-v" style="color:${T.color}">${v} m²</span>
+    </div>`;
+  }).join('');
+}
+
+function applyTekeningToGebouw(){
+  const tot={};
+  polys.forEach(p=>{if(p.m2)tot[p.type]=(tot[p.type]||0)+p.m2;});
+  gb._tekening=tot;
+
+  // Vul velden in
+  const filled=[];
+  if(tot.vloer){
+    const el=document.getElementById('vloeropp');
+    if(el){el.value=tot.vloer;el.classList.add('from-tekening');filled.push(`Vloer ${tot.vloer} m²`);}
+  }
+  if(tot.dak){
+    const el=document.getElementById('dakopp');
+    if(el){el.value=tot.dak;el.classList.add('from-tekening');filled.push(`Dak ${tot.dak} m²`);}
+  }
+  // Toon banner
+  const banner=document.getElementById('tekenBanner');
+  const tekst=document.getElementById('tekenBannerTekst');
+  if(filled.length&&banner&&tekst){
+    tekst.textContent=filled.join(', ');
+    banner.style.display='block';
+  }
+}
+
+// ── Upload achtergrondafbeelding ──
+document.getElementById('tlUploadInput').addEventListener('change',e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>{
+    bgImg=img;
+    bgScale=Math.min(1, (tlC.width-40)/img.naturalWidth, (tlC.height-40)/img.naturalHeight);
+    bgX=0; bgY=0;
+    document.getElementById('tlRemoveImg').style.display='inline-flex';
+    document.getElementById('tlOpacityWrap').style.display='flex';
+    setStatus('Bouwtekening geladen — teken erover heen. Versleep afbeelding met rechtermuisknop, schaal met Ctrl+scroll.');
+    tlDraw();
+  };
+  img.src=url;
+  e.target.value='';
+});
+
+document.getElementById('tlRemoveImg').addEventListener('click',()=>{
+  bgImg=null;bgX=0;bgY=0;bgScale=1;
+  document.getElementById('tlRemoveImg').style.display='none';
+  document.getElementById('tlOpacityWrap').style.display='none';
+  tlDraw();
+});
+
+document.getElementById('tlOpacity').addEventListener('input',e=>{
+  bgOpacity=+e.target.value/100;
+  document.getElementById('tlOpacityVal').textContent=e.target.value+'%';
+  tlDraw();
+});
+
+window.addEventListener('resize',tlResize);
+setTimeout(tlResize,50);
+
+
+
+// ── EVENT LISTENERS ──
+document.getElementById('btnNaarGebouw').addEventListener('click',()=>{
+  applyTekeningToGebouw();
+  goTo(1);
+});
+
+document.getElementById('btnNaarMaatregelen').addEventListener('click',()=>{
+  readGb();
+  goTo(2);
+  document.getElementById('gsbar2').innerHTML=gsbarHtml();
+  document.getElementById('gbEditBtn').addEventListener('click',()=>goTo(1));
+  if(gb._tekening){gb._tekOpp=gb._tekening;}
+  renderSchilOppBadges();
+  setCat('dak');
+});
+
+// Toon m²-badges per schil-categorie in het zijpaneel
+function renderSchilOppBadges(){
+  const tok=gb._tekening||{};
+  // Mapping tekentool-type → maatregelen-categorie
+  const MAP={dak:'dak',gevel:'gevel',vloer:'vloer',beglazing:'kozijnen',deur:'kozijnen'};
+  // Sommeer per categorie
+  const catOpp={};
+  Object.entries(tok).forEach(([type,m2])=>{
+    const cat=MAP[type];
+    if(cat)catOpp[cat]=(catOpp[cat]||0)+m2;
+  });
+  // Update badges
+  ['dak','gevel','vloer','kozijnen'].forEach(cat=>{
+    const el=document.getElementById('opp-'+cat);
+    if(el){
+      if(catOpp[cat]){el.textContent=catOpp[cat]+' m²';el.classList.add('vis');}
+      else{el.textContent='';el.classList.remove('vis');}
+    }
+  });
+  gb._catOpp=catOpp;
+}
+
+document.getElementById('btnNaarResultaten').addEventListener('click',()=>{
+  goTo(3);
+  renderRes();
+});
+
+document.getElementById('btnTerug2').addEventListener('click',()=>goTo(2));
+document.getElementById('btnTerug1').addEventListener('click',()=>goTo(1));
+
+// Step bar clicks (done steps)
+document.querySelector('.stepbar').addEventListener('click',e=>{
+  const s=e.target.closest('.step');
+  if(s&&s.classList.contains('done')){
+    const n=+s.dataset.goto-1;
+    goTo(n);
+    if(n===2)setCat(curCat);
+  }
+});
+
+// Category panel
+document.getElementById('catpanel').addEventListener('click',e=>{
+  const ci=e.target.closest('.catitem');
+  if(ci&&ci.dataset.cat)setCat(ci.dataset.cat);
+});
+
+// Measure panel – single delegated listener, never re-attached
+document.getElementById('mpanel').addEventListener('click',e=>{
+  const hdr=e.target.closest('.mhdr');
+  if(!hdr)return;
+  const id=hdr.dataset.mid;
+  if(id)toggleM(id);
+});
+
+document.getElementById('mpanel').addEventListener('change',e=>{
+  const inp=e.target.closest('input[data-uid]');
+  if(inp){
+    const field=inp.dataset.field||'u';
+    updateField(inp.dataset.uid, field, inp.value);
+  }
+});
+
+// Tab row
+document.getElementById('tabrow').addEventListener('click',e=>{
+  const t=e.target.closest('.tab');
+  if(!t||!t.dataset.tab)return;
+  const name=t.dataset.tab;
+  document.querySelectorAll('#tabrow .tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('active',p.id==='pane-'+name));
+  if(name==='grafieken')setTimeout(()=>Object.values(ch).forEach(c=>{try{c.resize();}catch(e){}}),50);
+});
+
+// Init
+setCat('dak');
+
+function gsbarHtml(){
+  return `<div class="gs-item"><span class="gs-lbl">Bouwjaar</span><span class="gs-val">${gb.bouwjaar}</span></div>
+  <div class="gs-div"></div><div class="gs-item"><span class="gs-lbl">Functie</span><span class="gs-val">${gb.functie}</span></div>
+  <div class="gs-div"></div><div class="gs-item"><span class="gs-lbl">Vloer</span><span class="gs-val">${f(gb.vloeropp)} m²</span></div>
+  <div class="gs-div"></div><div class="gs-item"><span class="gs-lbl">Gas</span><span class="gs-val">${f(gb.gasV)} m³/j</span></div>
+  <div class="gs-div"></div><div class="gs-item"><span class="gs-lbl">Elektra</span><span class="gs-val">${f(gb.elecV)} kWh/j</span></div>
+  <div class="gs-div"></div><div class="gs-item"><span class="gs-lbl">Verwarming</span><span class="gs-val">${gb.verw}</span></div>
+  <button class="btn btn-ghost" id="gbEditBtn" style="margin-left:auto;font-size:11px;padding:5px 12px;">✏️ Bewerk</button>`;
+}
+
+// ── MAATREGELEN ──
+function setCat(cat){
+  curCat=cat;
+  document.querySelectorAll('.catitem').forEach(el=>el.classList.toggle('active',el.dataset.cat===cat));
+  renderMaatregelen();
+}
+
+function renderMaatregelen(){
+  const cat=curCat;
+  const list=M[cat]||[];
+  const catOpp=gb._catOpp&&gb._catOpp[cat];
+
+  let html=`<div class="msec">`;
+  // Banner vanuit tekening
+  if(catOpp){
+    html+=`<div class="opp-banner">
+      <span>📐</span>
+      <span>Uit Stap 1 (Gebouw tekenen): <strong>${catOpp} m²</strong> ${CAT[cat].toLowerCase()} getekend — dit is de standaard oppervlakte bij isolatiemaatregelen.</span>
+    </div>`;
+  }
+  html+=`<h3>${CAT[cat]}</h3>`;
+  list.forEach(m=>{
+    const on=!!sel[m.id];
+    const u=(sel[m.id]||{}).u||1;
+    html+=`<div class="mcard${on?' sel':''}" id="mc-${m.id}">
+      <div class="mhdr" data-mid="${m.id}">
+        <div class="mcheck${on?' on':''}" data-mid="${m.id}">
+          <svg width="10" height="8" fill="none" stroke="#fff" stroke-width="2.2"><polyline points="1,4 4,7 9,1"/></svg>
+        </div>
+        <span class="mname">${m.n}</span>
+        <div class="mbadges">
+          <span class="mb mb-i">€\u202f${f(m.i,2)}/${m.u}</span>
+          ${m.g&&m.g>0?`<span class="mb mb-g">Gas −${f(m.g,1)} m³/${m.u}</span>`:''}
+          ${m.e&&m.e>0?`<span class="mb mb-e">+${f(m.e,1)} kWh/${m.u}</span>`:''}
+        </div>
+      </div>
+      <div class="mdetail${on?' open':''}" id="md-${m.id}">${renderDet(m,sel[m.id])}</div>
+    </div>`;
+  });
+  html+='</div>';
+  document.getElementById('mpanel').innerHTML=html;
+  // inputs get delegation via mpanel listener – no extra attach needed
+}
+
+function renderDet(m,s){
+  const u=(s||{}).u||1;
+  const rcHuidig=(s||{}).rcHuidig!=null?(s||{}).rcHuidig:0.3;
+  const opp=(s||{}).opp!=null?(s||{}).opp:u;
+
+  // Isolatie: toon Rc-velden en oppervlakteveld
+  if(m.rc){
+    const dRc=Math.max(0, m.rc - rcHuidig);
+    // Gasbesparing: U-waarde verbetering × opp × 21.6 kWh/m² gemiddeld kantoor × 1/10.3 m³/kWh
+    const gasBesp=calcIsoGas(opp, rcHuidig, m.rc);
+    const invest=opp*m.i;
+    const jb=gasBesp*GP;
+    const tvt=jb>0?invest/jb:9999;
+    return `<div class="dgrid">
+      <div class="df"><label>Te isoleren oppervlak (m²)</label><input type="number" value="${opp}" min="0" step="10" data-uid="${m.id}" data-field="opp"></div>
+      <div class="df"><label>Huidige Rc-waarde (m²K/W)</label><input type="number" value="${rcHuidig}" min="0" step="0.1" data-uid="${m.id}" data-field="rcHuidig"></div>
+      <div class="df"><label>Rc-waarde na maatregel</label><span class="dv">${m.rc} m²K/W</span></div>
+      <div class="df"><label>Rc-verbetering (ΔRc)</label><span class="dv" id="drc-${m.id}">${f(dRc,2)} m²K/W</span></div>
+      <div class="df"><label>Investering per m²</label><span class="dv">${eu(m.i)}</span></div>
+      <div class="df"><label>Totaalinvestering</label><span class="dv" id="dti-${m.id}">${eu(invest)}</span></div>
+      <div class="df"><label>Gasbesparing</label><span class="dv" id="dtg-${m.id}">${f(gasBesp,1)} m³/j</span></div>
+      <div class="df"><label>Jaarlijkse besparing</label><span class="dv" id="djb-${m.id}">${eu(jb)}/j</span></div>
+      <div class="df"><label>Terugverdientijd</label><span class="dv" id="dtvt-${m.id}">${tvt<500?f(tvt,1)+' jaar':'> 200 jaar'}</span></div>
+    </div>
+    <p class="dnote">💡 Gasbesparing = U-waardeverbetering × oppervlak × graaddagen × rendementsfactor. Rc huidig invullen voor nauwkeurigere berekening.</p>`;
+  }
+
+  // PV
+  const pvInfo=m.pv?`<div class="df"><label>Geadviseerd vermogen</label><span class="dv">${f(gb.dakopp*0.142,1)} kWp</span></div><div class="df"><label>Verwachte opwek</label><span class="dv">${f(gb.dakopp*0.142*880)} kWh/j</span></div>`:'';
+
+  // Standaard (niet-isolatie)
+  const invest=u*m.i;
+  const gasBesp=m.g&&m.g>0?u*m.g:0;
+  const elecBesp=m.e&&m.e>0?u*m.e:0;
+  return `<div class="dgrid">
+    <div class="df"><label>Aantal (${m.u})</label><input type="number" value="${u}" min="0" step="${m.u==='m²'||m.u==='m'?10:1}" data-uid="${m.id}" data-field="u"></div>
+    ${pvInfo}
+    <div class="df"><label>Investering per ${m.u}</label><span class="dv">${eu(m.i)}</span></div>
+    <div class="df"><label>Totaalinvestering</label><span class="dv" id="dti-${m.id}">${eu(invest)}</span></div>
+    ${gasBesp>0?`<div class="df"><label>Gasbesparing totaal</label><span class="dv" id="dtg-${m.id}">${f(gasBesp,1)} m³/j</span></div>`:''}
+    ${m.e&&m.e<0?`<div class="df"><label>Extra elektraverbruik</label><span class="dv" style="color:var(--red)">${f(Math.abs(m.e*u),1)} kWh/j</span></div>`:''}
+    ${elecBesp>0?`<div class="df"><label>Elektrabesparing totaal</label><span class="dv" id="dte-${m.id}">${f(elecBesp,1)} kWh/j</span></div>`:''}
+  </div>`;
+}
+
+function toggleM(id){
+  if(sel[id]){delete sel[id];}
+  else{
+    const m=getM(id);
+    const defaults={u:1, rcHuidig:0.3};
+    if(m.rc){
+      // Gebruik getekend oppervlak als standaard, anders 100m²
+      const cat=getCat(id);
+      defaults.opp=(gb._catOpp&&gb._catOpp[cat])||100;
+    }
+    sel[id]=defaults;
+  }
+  updateCounts();
+  // Update only the specific card, not the whole panel
+  const m=getM(id);
+  const on=!!sel[id];
+  const card=document.getElementById('mc-'+id);
+  if(card){
+    card.classList.toggle('sel',on);
+    const chk=card.querySelector('.mcheck');
+    if(chk)chk.classList.toggle('on',on);
+    const det=document.getElementById('md-'+id);
+    if(det){
+      det.classList.toggle('open',on);
+      if(on)det.innerHTML=renderDet(m,sel[id]);
+    }
+  }
+}
+
+function updateField(id, field, val){
+  if(!sel[id])sel[id]={u:1, opp:1, rcHuidig:0.3};
+  sel[id][field]=Math.max(0,+val)||0;
+  const m=getM(id), s=sel[id];
+  if(m.rc){
+    // Isolatie: herbereken alles
+    const opp=s.opp!=null?s.opp:1;
+    const rcH=s.rcHuidig!=null?s.rcHuidig:0.3;
+    const dRc=Math.max(0,m.rc-rcH);
+    const gasBesp=calcIsoGas(opp,rcH,m.rc);
+    const invest=opp*m.i;
+    const jb=gasBesp*GP;
+    const tvt=jb>0?invest/jb:9999;
+    const ti=document.getElementById('dti-'+id);if(ti)ti.textContent=eu(invest);
+    const tg=document.getElementById('dtg-'+id);if(tg)tg.textContent=f(gasBesp,1)+' m³/j';
+    const tjb=document.getElementById('djb-'+id);if(tjb)tjb.textContent=eu(jb)+'/j';
+    const ttvt=document.getElementById('dtvt-'+id);if(ttvt)ttvt.textContent=tvt<500?f(tvt,1)+' jaar':'> 200 jaar';
+    const trc=document.getElementById('drc-'+id);if(trc)trc.textContent=f(dRc,2)+' m²K/W';
+  } else {
+    const u=s.u||1;
+    const ti=document.getElementById('dti-'+id);if(ti)ti.textContent=eu(u*m.i);
+    const tg=document.getElementById('dtg-'+id);if(tg&&m.g)tg.textContent=f(u*m.g,1)+' m³/j';
+    const te=document.getElementById('dte-'+id);if(te&&m.e)te.textContent=f(u*m.e,1)+' kWh/j';
+  }
+}
+
+function updateCounts(){
+  for(const cat of Object.keys(M)){
+    const n=Object.keys(sel).filter(id=>getCat(id)===cat).length;
+    const el=document.getElementById('cnt-'+cat);
+    if(el){el.textContent=n;el.classList.toggle('vis',n>0);}
+  }
+}
+
+// ── ISOLATIE GASBESPARING ──
+// Methode: Q = A × (1/Rc_oud - 1/Rc_nieuw) × graaddagen × correctiefactor
+// Graaddagen NL kantoor ≈ 2800 (18°C stookgrens), energie naar m³ gas: /31.65 MJ/m³ × 1000 / ketelrendement 0.9
+function calcIsoGas(opp, rcOud, rcNieuw){
+  if(!opp||opp<=0)return 0;
+  const uOud=rcOud>0?1/rcOud:3.0;       // W/m²K
+  const uNieuw=rcNieuw>0?1/rcNieuw:0.5;
+  const dU=Math.max(0, uOud-uNieuw);     // verbetering W/m²K
+  const graaddagen=2800;                 // kelvin·dagen/j
+  const uren=graaddagen*24;              // uren
+  const Qwh=dU*opp*uren/1000;           // kWh/j warmteverliesreductie
+  const m3gas=Qwh*3.6/(31.65*0.9);      // m³ gas (HHV 31.65 MJ/m³, η=0.9)
+  return Math.round(m3gas*10)/10;
+}
+
+// ── CALC ──
+function calcRow(m,s){
+  const u=(s||{}).u||1;
+  let opp=(s||{}).opp;
+  const rcHuidig=(s||{}).rcHuidig!=null?(s||{}).rcHuidig:0.3;
+  let g=0,e=0,inv;
+
+  if(m.rc){
+    // Isolatiemaatregel: oppervlak is leidend
+    if(opp==null)opp=u; // fallback
+    inv=opp*m.i;
+    g=calcIsoGas(opp, rcHuidig, m.rc);
+    e=0;
+  } else {
+    inv=u*m.i;
+    g=m.g!==null?u*m.g:0;
+    e=m.e!==null?u*m.e:0;
+    if(m.pv){e=u*880*0.3+u*880*0.7*0.7;}
+  }
+  const jb=g*GP+Math.max(0,e)*EP;
+  return{inv,g,e,jb,tvt:jb>0?inv/jb:9999,opp:m.rc?opp:u,rcHuidig,rcNa:m.rc};
+}
+
+// ── RESULTATEN ──
+function renderRes(){
+  readGb();
+  document.getElementById('gsbar3').innerHTML=gsbarHtml();
+  document.getElementById('gbEditBtn').addEventListener('click',()=>goTo(1));
+
+  const rows=Object.keys(sel).map(id=>({m:getM(id),s:sel[id],cat:getCat(id)})).filter(x=>x.m);
+  if(!rows.length){
+    ['kI','kG','kE','kT'].forEach(id=>{document.getElementById(id).textContent='—';});
+    document.getElementById('tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">Geen maatregelen geselecteerd</td></tr>';
+    document.getElementById('energiebars').innerHTML='';
+    document.getElementById('berekenPanel').innerHTML='';
+    return;
+  }
+  let tI=0,tG=0,tE=0,wB=0,wI=0;
+  const ct={};
+  const tbl=[],bk=[];
+
+  rows.forEach(({m,s,cat})=>{
+    const r=calcRow(m,s);
+    tI+=r.inv;tG+=r.g;tE+=r.e;
+    if(r.tvt<500){wB+=r.jb;wI+=r.inv;}
+    if(!ct[cat])ct[cat]={inv:0,g:0,e:0};
+    ct[cat].inv+=r.inv;ct[cat].g+=r.g;ct[cat].e+=r.e;
+    const tc=r.tvt<10?'cg':r.tvt<20?'cm':'cr';
+    const tl=r.tvt>200?'>200 jr':f(r.tvt,1)+' jr';
+    tbl.push(`<tr><td>${m.n}</td><td>${CAT[cat]}</td><td class="r">${eu(r.inv)}</td><td class="r">${r.g>0?f(r.g):'—'}</td><td class="r">${r.e!==0?f(r.e):'—'}</td><td class="r"><span class="chip ${tc}">${tl}</span></td></tr>`);
+    bk.push({m,s,r,cat});
+  });
+  tbl.push(`<tr class="tot"><td colspan="2">Totaal</td><td class="r">${eu(tI)}</td><td class="r">${tG>0?f(tG):'—'}</td><td class="r">${tE!==0?f(tE):'—'}</td><td></td></tr>`);
+
+  document.getElementById('kI').textContent=eu(tI);
+  document.getElementById('kG').textContent=f(tG)+' m³';
+  document.getElementById('kE').textContent=f(tE)+' kWh';
+  document.getElementById('kT').textContent=wB>0?f(wI/wB,1)+' jr':'—';
+  document.getElementById('tbody').innerHTML=tbl.join('');
+
+  // Energy bars
+  const mxG=Math.max(...Object.values(ct).map(c=>c.g),1);
+  const mxE=Math.max(...Object.values(ct).map(c=>c.e),1);
+  let bHtml='';
+  Object.entries(ct).forEach(([cat,v])=>{
+    if(v.g>0){const p=Math.round(v.g/mxG*100);bHtml+=`<div class="bar-row"><div class="bar-lbl">⛽ ${CAT[cat]}</div><div class="bar-track"><div class="bar-fill" style="width:${p}%"><span>${p}%</span></div></div><div class="bar-val">${f(v.g)} m³</div></div>`;}
+    if(v.e>0){const p=Math.round(v.e/mxE*100);bHtml+=`<div class="bar-row"><div class="bar-lbl">⚡ ${CAT[cat]}</div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:var(--blue)"><span>${p}%</span></div></div><div class="bar-val">${f(v.e)} kWh</div></div>`;}
+  });
+  document.getElementById('energiebars').innerHTML=bHtml||'<p style="font-size:12px;color:var(--text3)">Geen energiebesparing berekend</p>';
+
+  // Berekeningen
+  let bkHtml='';
+  bk.forEach(({m,s,r,cat})=>{
+    const u=(s||{}).u||1;
+    bkHtml+=`<div class="twrap" style="margin-bottom:12px">
+      <div class="th">${m.n}<span class="badge">${CAT[cat]}</span></div>
+      <table><thead><tr><th>Parameter</th><th>Waarde</th><th>Berekening</th></tr></thead><tbody>
+        <tr><td>Hoeveelheid</td><td>${f(u)} ${m.u}</td><td>Ingevoerd</td></tr>
+        <tr><td>Investering per m²</td><td>${eu(m.i)}</td><td>Digipesis tarieflijst</td></tr>
+        <tr><td>Totaalinvestering</td><td>${eu(r.inv)}</td><td>${f(r.opp)} m² × ${eu(m.i)}</td></tr>
+        ${r.g>0?`<tr><td>Gasbesparing</td><td>${f(r.g,1)} m³/j</td><td>${m.rc?`${f(r.opp)} m² × (1/${f(r.rcHuidig,2)} − 1/${f(r.rcNa,2)}) U/W × 2800 graaddagen × 24u / (31,65 MJ/m³ × η0,9)`:`${f((s||{}).u||1)} × ${f(m.g,2)} m³/${m.u}`}</td></tr>`:''}
+        ${r.e!==0?`<tr><td>${r.e>0?'Elektrabesparing':'Extra elektraverbruik'}</td><td>${f(Math.abs(r.e),1)} kWh/j</td><td>${m.e!==null?`${f((s||{}).u||1)} × ${f(Math.abs(m.e),2)} kWh/${m.u}${r.e<0?' (extra verbruik)':''}`:'Berekend'}</td></tr>`:''}
+        ${m.rc?`<tr><td>Rc huidig → nieuw</td><td>${f(r.rcHuidig,2)} → ${f(r.rcNa,2)} m²K/W</td><td>ΔRc = ${f(Math.max(0,r.rcNa-r.rcHuidig),2)} m²K/W</td></tr>`:''}
+        <tr><td>Oppervlak</td><td>${f(r.opp)} m²</td><td>${m.rc?'Ingevoerd te isoleren oppervlak':'Ingevoerd aantal × eenheid'}</td></tr>
+        <tr><td><strong>Terugverdientijd</strong></td><td><strong>${r.tvt<500?f(r.tvt,1)+' jaar':'> 200 jaar'}</strong></td><td>${eu(r.inv)} ÷ ${eu(r.jb)}/j</td></tr>
+      </tbody></table></div>`;
+  });
+  document.getElementById('berekenPanel').innerHTML=bkHtml;
+
+  renderCharts(ct,bk,tI,tG,wB,wI);
+}
+
+function renderCharts(ct,bk,tI,tG,wB,wI){
+  Object.values(ch).forEach(c=>{try{c.destroy();}catch(e){}});ch={};
+  const COLS=['#1a6e3c','#1d5fa8','#e07a2f','#b45309','#b91c1c','#6b4f3a','#555','#2d8a6b','#8b2fc9','#c45e00','#a0522d','#0d6e8e'];
+  const ck=Object.keys(ct);
+  const id=ck.map(c=>Math.round(ct[c].inv));
+  if(id.some(v=>v>0)){
+    ch.inv=new Chart(document.getElementById('cInvest'),{type:'doughnut',data:{labels:ck.map(c=>CAT[c]),datasets:[{data:id,backgroundColor:COLS,borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10}}}}});
+  }
+  const gr=bk.filter(r=>r.r.g>0);
+  if(gr.length){ch.gas=new Chart(document.getElementById('cGas'),{type:'bar',data:{labels:gr.map(r=>r.m.n.substring(0,26)+'…'),datasets:[{label:'m³/j',data:gr.map(r=>Math.round(r.r.g)),backgroundColor:'#e07a2f',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{font:{size:10}}}}}});}
+  const tr2=bk.filter(r=>r.r.tvt<200);
+  if(tr2.length){ch.tvt=new Chart(document.getElementById('cTVT'),{type:'bar',data:{labels:tr2.map(r=>r.m.n.substring(0,26)+'…'),datasets:[{label:'Jaar',data:tr2.map(r=>Math.round(r.r.tvt*10)/10),backgroundColor:tr2.map(r=>r.r.tvt<10?'#1a6e3c':r.r.tvt<20?'#b45309':'#b91c1c'),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Jaar'},grid:{display:false}},y:{ticks:{font:{size:10}}}}}});}
+  const totJb=bk.reduce((s,r)=>s+r.r.jb,0);
+  const cl=['Nu'],ci=[tI],cb=[0];
+  for(let y=1;y<=25;y++){cl.push('Jaar '+y);ci.push(tI);cb.push(totJb*y);}
+  ch.cum=new Chart(document.getElementById('cCum'),{type:'line',data:{labels:cl,datasets:[{label:'Cumulatieve besparing (€)',data:cb,borderColor:'#1a6e3c',backgroundColor:'rgba(26,110,60,0.08)',fill:true,tension:0.1,pointRadius:2},{label:'Investering (€)',data:ci,borderColor:'#e07a2f',borderDash:[5,4],pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},scales:{y:{ticks:{callback:v=>'€'+Math.round(v).toLocaleString('nl-NL')}},x:{ticks:{font:{size:10}}}}}});
+}
+
+// Init
+setCat('dak');
+</script>
+</body>
+</html>

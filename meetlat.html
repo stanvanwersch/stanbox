@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meetlat — afstand & oppervlakte op afbeelding</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#faf9f7;
+    --white:#ffffff;
+    --border:#e8e4de;
+    --border2:#d4cfc8;
+    --text:#1c1a17;
+    --text2:#5a5650;
+    --text3:#9c9690;
+    --accent:#1C974D;
+    --accent-ink:#ffffff;
+    --confirm:#5c7a5e;
+    --danger:#b91c1c;
+    --sans:"Montserrat",system-ui,sans-serif;
+    --r:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:var(--cream);
+    font-family:var(--sans);
+    color:var(--text);
+    min-height:100vh;
+    font-size:15px;
+    line-height:1.6;
+  }
+  .app{
+    max-width:1400px;
+    margin:0 auto;
+    padding:32px 24px 60px;
+  }
+  header{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+    margin-bottom:22px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--border);
+  }
+  header h1{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-.2px;
+    margin:0;
+    color:var(--text);
+  }
+  header h1 .lat{color:var(--accent);}
+  header p{
+    margin:0;
+    font-size:13px;
+    font-weight:300;
+    color:var(--text2);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:20px;
+    align-items:start;
+  }
+  @media (max-width:880px){
+    .layout{grid-template-columns:1fr;}
+  }
+
+  .panel{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:16px;
+  }
+
+  /* Toolbar */
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:14px;
+    align-items:center;
+  }
+  .btn{
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:600;
+    border:1px solid var(--border2);
+    background:var(--white);
+    color:var(--text);
+    padding:9px 14px;
+    border-radius:var(--r);
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    transition:border-color .15s, opacity .15s, transform .05s;
+    white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--text3);}
+  .btn:active{transform:scale(0.97);}
+  .btn.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  .btn.danger{color:var(--danger);}
+  .btn.danger:hover{border-color:var(--danger);}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  .btn-primary:hover{opacity:.9;border-color:var(--accent);}
+
+  input[type=file]{display:none;}
+
+  .draw-hint{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(224,122,47,.07);
+    border:1px solid rgba(224,122,47,.25);
+    border-radius:var(--r);
+    padding:9px 12px;
+    font-size:12.5px;
+    color:var(--text2);
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+  .draw-hint strong{color:var(--accent);font-weight:600;}
+
+  /* Canvas area */
+  .canvas-wrap{
+    position:relative;
+    background:
+      repeating-linear-gradient(0deg, var(--border) 0, var(--border) 1px, transparent 1px, transparent 24px),
+      repeating-linear-gradient(90deg, var(--border) 0, var(--border) 1px, transparent 1px, transparent 24px),
+      var(--cream);
+    border:1px solid var(--border);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:340px;
+    overflow:hidden;
+  }
+  .canvas-wrap.empty{padding:50px 20px;}
+  #stage{
+    max-width:100%;
+    height:auto;
+    display:block;
+    cursor:crosshair;
+    touch-action:none;
+  }
+  .empty-state{
+    text-align:center;
+    color:var(--text3);
+  }
+  .empty-state .icon{font-size:34px;margin-bottom:8px;}
+  .empty-state p{margin:4px 0;font-size:13px;font-weight:300;}
+
+  /* Title block, like an architectural drawing stamp */
+  .title-block{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    background:var(--white);
+    color:var(--text);
+    font-size:10.5px;
+    border:1px solid var(--border2);
+    border-radius:var(--r);
+    padding:6px 9px;
+    line-height:1.5;
+    box-shadow:0 4px 14px rgba(28,26,23,.1);
+    pointer-events:none;
+  }
+  .title-block .row{display:flex;gap:8px;justify-content:space-between;}
+  .title-block .label{color:var(--text3);}
+
+  /* Sidebar */
+  .sidebar h2{
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.8px;
+    color:var(--text3);
+    margin:0 0 10px;
+  }
+  .calib-box{
+    background:var(--cream);
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:10px 12px;
+    margin-bottom:18px;
+    font-size:12.5px;
+  }
+  .calib-box.set{border-color:var(--accent);}
+  .calib-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    color:var(--text2);
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--danger);flex-shrink:0;}
+  .dot.on{background:var(--accent);}
+
+  .measure-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    max-height:420px;
+    overflow-y:auto;
+  }
+  .measure-list li{
+    background:var(--cream);
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:9px 10px;
+    margin-bottom:8px;
+    transition:border-color .15s;
+  }
+  .measure-list li:hover{border-color:var(--border2);}
+  .m-top{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .swatch{
+    width:12px;height:12px;border-radius:3px;flex-shrink:0;
+  }
+  .m-type{font-size:12px;color:var(--text3);flex-shrink:0;}
+  .m-name{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid transparent;
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:600;
+    padding:2px 0;
+    min-width:0;
+  }
+  .m-name:focus{outline:none;border-bottom:1px solid var(--accent);}
+  .m-del{
+    background:none;border:none;color:var(--text3);
+    cursor:pointer;font-size:14px;padding:2px 4px;flex-shrink:0;
+  }
+  .m-del:hover{color:var(--danger);}
+  .m-value{
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    margin-left:20px;
+  }
+  .m-value .sec{color:var(--text3);font-weight:300;font-size:11.5px;}
+
+  .empty-list{
+    font-size:12.5px;
+    color:var(--text3);
+    padding:10px 2px;
+  }
+
+  .sidebar-footer{
+    margin-top:14px;
+    display:flex;
+    gap:8px;
+  }
+  .sidebar-footer .btn{flex:1;justify-content:center;}
+
+  /* Modal */
+  .overlay{
+    position:fixed;inset:0;background:rgba(28,26,23,.55);backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;
+    z-index:50;
+  }
+  .modal{
+    background:var(--white);
+    color:var(--text);
+    border-radius:8px;
+    padding:26px 28px;
+    width:320px;
+    max-width:90vw;
+    border:1px solid var(--border);
+    box-shadow:0 16px 48px rgba(0,0,0,.12);
+  }
+  .modal h3{
+    margin:0 0 4px;
+    font-size:16px;
+    font-weight:600;
+  }
+  .modal p{margin:0 0 14px;font-size:12.5px;font-weight:300;color:var(--text2);}
+  .modal label{font-size:10px;font-weight:600;letter-spacing:.6px;color:var(--text3);display:block;margin-bottom:4px;}
+  .modal-row{display:flex;gap:8px;margin-bottom:16px;}
+  .modal input[type=number]{
+    flex:1;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:var(--sans);background:var(--cream);
+  }
+  .modal input[type=number]:focus{outline:none;border-color:var(--accent);background:var(--white);}
+  .modal select{
+    padding:9px 8px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;background:var(--white);font-family:var(--sans);
+  }
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
+  .modal-actions .btn{background:var(--text);color:var(--cream);border-color:var(--text);}
+  .modal-actions .btn.cancel{background:transparent;color:var(--text);border-color:var(--border2);}
+
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Meet<span class="lat">lat</span></h1>
+    <p>Laad een afbeelding, kalibreer en meet lijnen en vlakken</p>
+  </header>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="toolbar">
+        <label class="btn btn-primary" for="fileInput">📤 Afbeelding laden</label>
+        <input type="file" id="fileInput" accept="image/*">
+        <button class="btn" id="btnCalibrate" disabled>📏 Kalibreren</button>
+        <button class="btn" id="btnLine" disabled>／ Lijn meten</button>
+        <button class="btn" id="btnArea" disabled>▱ Vlak meten</button>
+        <button class="btn danger" id="btnClearAll" disabled>🗑 Alles wissen</button>
+        <button class="btn" id="btnExport" disabled>💾 Exporteren</button>
+      </div>
+
+      <div class="draw-hint" id="drawHint" style="display:none;"></div>
+
+      <div class="canvas-wrap empty" id="canvasWrap">
+        <div class="empty-state" id="emptyState">
+          <p><strong>Nog geen afbeelding geladen</strong></p>
+          <p>Laad een plattegrond of foto om te beginnen met meten</p>
+        </div>
+        <canvas id="stage" style="display:none;"></canvas>
+        <div class="title-block" id="titleBlock" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="panel sidebar">
+      <h2>Kalibratie</h2>
+      <div class="calib-box" id="calibBox">
+        <div class="calib-status"><span class="dot" id="calibDot"></span><span id="calibText">Nog niet gekalibreerd — meet in pixels</span></div>
+      </div>
+
+      <h2>Metingen</h2>
+      <ul class="measure-list" id="measureList"></ul>
+      <div class="empty-list" id="emptyList">Nog geen lijnen of vlakken getekend.</div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="calibModal" style="display:none;">
+  <div class="modal">
+    <h3>Kalibreren</h3>
+    <p>Wat is de werkelijke lengte van de lijn die je zojuist getekend hebt?</p>
+    <div class="modal-row">
+      <input type="number" id="calibValue" min="0" step="any" placeholder="bv. 80">
+      <select id="calibUnit">
+        <option value="mm">mm</option>
+        <option value="cm" selected>cm</option>
+        <option value="m">m</option>
+        <option value="inch">inch</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn cancel" id="calibCancel">Annuleren</button>
+      <button class="btn" id="calibConfirm">Bevestigen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('stage');
+  const ctx = canvas.getContext('2d');
+  const canvasWrap = document.getElementById('canvasWrap');
+  const emptyState = document.getElementById('emptyState');
+  const titleBlock = document.getElementById('titleBlock');
+  const drawHint = document.getElementById('drawHint');
+  const fileInput = document.getElementById('fileInput');
+
+  const btnCalibrate = document.getElementById('btnCalibrate');
+  const btnLine = document.getElementById('btnLine');
+  const btnArea = document.getElementById('btnArea');
+  const btnClearAll = document.getElementById('btnClearAll');
+  const btnExport = document.getElementById('btnExport');
+
+  const calibBox = document.getElementById('calibBox');
+  const calibDot = document.getElementById('calibDot');
+  const calibText = document.getElementById('calibText');
+
+  const measureList = document.getElementById('measureList');
+  const emptyList = document.getElementById('emptyList');
+
+  const calibModal = document.getElementById('calibModal');
+  const calibValueInput = document.getElementById('calibValue');
+  const calibUnitSelect = document.getElementById('calibUnit');
+
+  const PALETTE = ['#d65a4a','#e3a83b','#4a9e8e','#5b7fbd','#b36fb0','#8fa83d','#c4844a','#4aafc7'];
+  const UNIT_TO_M = { mm:0.001, cm:0.01, m:1, inch:0.0254, ft:0.3048 };
+
+  let img = null;
+  let imgFilename = '';
+  let shapes = [];          // {id, type:'line'|'area', points:[{x,y}], name, color}
+  let shapeCounter = 0;
+  let mode = null;          // null | 'calibrate' | 'line' | 'area'
+  let currentPoints = [];
+  let mousePos = null;
+  let calibration = null;   // {pixelLength, unitsPerPixelM, unit, realValue}
+  let hoveredId = null;
+  let pendingCalibPoints = null;
+
+  function unitsPerPixelM(){
+    return calibration ? calibration.unitsPerPixelM : null;
+  }
+
+  // ---------- Image loading ----------
+  fileInput.addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    imgFilename = file.name;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      const image = new Image();
+      image.onload = ()=>{
+        img = image;
+        setupCanvas();
+      };
+      image.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function setupCanvas(){
+    const MAX_DIM = 1800;
+    let w = img.naturalWidth, h = img.naturalHeight;
+    if(Math.max(w,h) > MAX_DIM){
+      const scale = MAX_DIM / Math.max(w,h);
+      w = Math.round(w*scale);
+      h = Math.round(h*scale);
+    }
+    canvas.width = w;
+    canvas.height = h;
+    canvas.style.display = 'block';
+    emptyState.style.display = 'none';
+    canvasWrap.classList.remove('empty');
+    titleBlock.style.display = 'block';
+
+    shapes = [];
+    calibration = null;
+    mode = null;
+    currentPoints = [];
+    updateCalibStatus();
+    renderList();
+    setToolButtonsEnabled(true);
+    updateTitleBlock();
+    redraw();
+  }
+
+  function setToolButtonsEnabled(on){
+    btnCalibrate.disabled = !on;
+    btnLine.disabled = !on;
+    btnArea.disabled = !on;
+    btnClearAll.disabled = !on;
+    btnExport.disabled = !on;
+  }
+
+  // ---------- Toolbar ----------
+  btnCalibrate.addEventListener('click', ()=> setMode(mode==='calibrate' ? null : 'calibrate'));
+  btnLine.addEventListener('click', ()=> setMode(mode==='line' ? null : 'line'));
+  btnArea.addEventListener('click', ()=> setMode(mode==='area' ? null : 'area'));
+  btnClearAll.addEventListener('click', ()=>{
+    if(shapes.length===0 && !calibration) return;
+    if(confirm('Weet je zeker dat je alle metingen en de kalibratie wilt wissen?')){
+      shapes = [];
+      calibration = null;
+      updateCalibStatus();
+      renderList();
+      updateTitleBlock();
+      redraw();
+    }
+  });
+  btnExport.addEventListener('click', exportImage);
+
+  function setMode(newMode){
+    mode = newMode;
+    currentPoints = [];
+    mousePos = null;
+    [btnCalibrate, btnLine, btnArea].forEach(b=>b.classList.remove('active'));
+    if(mode==='calibrate') btnCalibrate.classList.add('active');
+    if(mode==='line') btnLine.classList.add('active');
+    if(mode==='area') btnArea.classList.add('active');
+    updateHint();
+    redraw();
+  }
+
+  function updateHint(){
+    if(!mode){ drawHint.style.display='none'; return; }
+    drawHint.style.display='flex';
+    let text = '';
+    if(mode==='calibrate') text = 'Klik twee punten op een bekende maat (bv. de breedte van een deur).';
+    if(mode==='line') text = 'Klik het beginpunt en eindpunt van de lijn die je wilt meten.';
+    if(mode==='area') text = `Klik de hoekpunten van het vlak (${currentPoints.length} geplaatst). Klik op "Voltooien" als je klaar bent.`;
+    drawHint.innerHTML = `<strong>${mode==='calibrate'?'Kalibreren':mode==='line'?'Lijn meten':'Vlak meten'}:</strong> ${text}`;
+
+    if(mode==='area'){
+      const existing = drawHint.querySelectorAll('.hint-btn');
+      existing.forEach(b=>b.remove());
+      const finishBtn = document.createElement('button');
+      finishBtn.className='btn hint-btn';
+      finishBtn.style.padding='5px 10px';
+      finishBtn.style.fontSize='12px';
+      finishBtn.textContent='✓ Voltooien';
+      finishBtn.disabled = currentPoints.length < 3;
+      finishBtn.onclick = ()=> finishShape();
+      drawHint.appendChild(finishBtn);
+
+      const undoBtn = document.createElement('button');
+      undoBtn.className='btn hint-btn';
+      undoBtn.style.padding='5px 10px';
+      undoBtn.style.fontSize='12px';
+      undoBtn.textContent='↺ Laatste punt';
+      undoBtn.disabled = currentPoints.length===0;
+      undoBtn.onclick = ()=>{ currentPoints.pop(); updateHint(); redraw(); };
+      drawHint.appendChild(undoBtn);
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className='btn hint-btn';
+      cancelBtn.style.padding='5px 10px';
+      cancelBtn.style.fontSize='12px';
+      cancelBtn.textContent='✕ Annuleren';
+      cancelBtn.onclick = ()=>{ setMode(null); };
+      drawHint.appendChild(cancelBtn);
+    }
+  }
+
+  // ---------- Canvas interaction ----------
+  function getPos(evt){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = evt.clientX !== undefined ? evt.clientX : evt.touches[0].clientX;
+    const clientY = evt.clientY !== undefined ? evt.clientY : evt.touches[0].clientY;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
+  canvas.addEventListener('pointerdown', (e)=>{
+    if(!mode || !img) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    currentPoints.push(pos);
+
+    if(mode==='calibrate' && currentPoints.length===2){
+      pendingCalibPoints = currentPoints.slice();
+      openCalibModal();
+      currentPoints = [];
+      mousePos = null;
+      redraw();
+      return;
+    }
+    if(mode==='line' && currentPoints.length===2){
+      finishShape();
+      return;
+    }
+    updateHint();
+    redraw();
+  });
+
+  canvas.addEventListener('pointermove', (e)=>{
+    if(!mode || currentPoints.length===0) return;
+    mousePos = getPos(e);
+    redraw();
+  });
+
+  window.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape' && mode){ setMode(null); }
+    if(e.key==='Backspace' && mode==='area' && currentPoints.length>0){
+      currentPoints.pop();
+      updateHint();
+      redraw();
+    }
+  });
+
+  function finishShape(){
+    if(mode==='line' && currentPoints.length===2 ||
+       mode==='area' && currentPoints.length>=3){
+      const color = PALETTE[shapeCounter % PALETTE.length];
+      shapeCounter++;
+      const shape = {
+        id: 'shape_'+shapeCounter,
+        type: mode,
+        points: currentPoints.slice(),
+        name: mode==='line' ? `Lijn ${shapeCounter}` : `Vlak ${shapeCounter}`,
+        color
+      };
+      shapes.push(shape);
+      currentPoints = [];
+      const finishedMode = mode;
+      setMode(null);
+      renderList();
+      redraw();
+      // focus the new name field for quick renaming
+      setTimeout(()=>{
+        const input = document.querySelector(`[data-name-id="${shape.id}"]`);
+        if(input){ input.focus(); input.select(); }
+      }, 30);
+    }
+  }
+
+  // ---------- Calibration modal ----------
+  function openCalibModal(){
+    calibValueInput.value = '';
+    calibModal.style.display = 'flex';
+    setTimeout(()=>calibValueInput.focus(), 50);
+  }
+  document.getElementById('calibCancel').addEventListener('click', ()=>{
+    calibModal.style.display='none';
+    pendingCalibPoints = null;
+  });
+  document.getElementById('calibConfirm').addEventListener('click', ()=>{
+    const val = parseFloat(calibValueInput.value);
+    const unit = calibUnitSelect.value;
+    if(!val || val<=0 || !pendingCalibPoints){
+      calibValueInput.focus();
+      return;
+    }
+    const [p1,p2] = pendingCalibPoints;
+    const pixelLength = Math.hypot(p2.x-p1.x, p2.y-p1.y);
+    calibration = {
+      pixelLength,
+      realValue: val,
+      unit,
+      unitsPerPixelM: (val*UNIT_TO_M[unit]) / pixelLength
+    };
+    pendingCalibPoints = null;
+    calibModal.style.display='none';
+    updateCalibStatus();
+    updateTitleBlock();
+    renderList();
+    redraw();
+  });
+  calibValueInput.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter') document.getElementById('calibConfirm').click();
+  });
+
+  function updateCalibStatus(){
+    if(calibration){
+      calibBox.classList.add('set');
+      calibDot.classList.add('on');
+      calibText.textContent = `Gekalibreerd: ${calibration.realValue} ${calibration.unit} = ${calibration.pixelLength.toFixed(0)} px`;
+    } else {
+      calibBox.classList.remove('set');
+      calibDot.classList.remove('on');
+      calibText.textContent = 'Nog niet gekalibreerd — meet in pixels';
+    }
+  }
+
+  function updateTitleBlock(){
+    if(!img){ titleBlock.style.display='none'; return; }
+    const schaal = calibration ? `1 px = ${calibration.unitsPerPixelM.toFixed(5)} m` : 'niet gekalibreerd';
+    titleBlock.innerHTML = `
+      <div class="row"><span class="label">bestand</span><span>${(imgFilename||'afbeelding').slice(0,22)}</span></div>
+      <div class="row"><span class="label">schaal</span><span>${schaal}</span></div>
+      <div class="row"><span class="label">datum</span><span>${new Date().toLocaleDateString('nl-NL')}</span></div>
+    `;
+  }
+
+  // ---------- Geometry ----------
+  function pixelDistance(points){
+    return Math.hypot(points[1].x-points[0].x, points[1].y-points[0].y);
+  }
+  function pixelArea(points){
+    let sum=0;
+    for(let i=0;i<points.length;i++){
+      const a = points[i], b = points[(i+1)%points.length];
+      sum += a.x*b.y - b.x*a.y;
+    }
+    return Math.abs(sum)/2;
+  }
+
+  function formatDistance(px){
+    if(!calibration) return `${px.toFixed(0)} px`;
+    const m = px * calibration.unitsPerPixelM;
+    if(m < 1) return `${(m*100).toFixed(1)} cm`;
+    return `${m.toFixed(2)} m`;
+  }
+  function formatArea(px2){
+    if(!calibration) return { main:`${px2.toFixed(0)} px²`, sec:'' };
+    const m2 = px2 * Math.pow(calibration.unitsPerPixelM, 2);
+    if(m2 < 1) return { main:`${(m2*10000).toFixed(0)} cm²`, sec:`≈ ${m2.toFixed(3)} m²` };
+    return { main:`${m2.toFixed(2)} m²`, sec: m2>=10000 ? `≈ ${(m2/10000).toFixed(2)} ha` : '' };
+  }
+
+  // ---------- Rendering ----------
+  function redraw(){
+    if(!img) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    shapes.forEach(shape=> drawShape(shape, shape.id===hoveredId));
+
+    if(mode && currentPoints.length>0){
+      drawInProgress();
+    }
+  }
+
+  function drawShape(shape, highlighted){
+    ctx.save();
+    ctx.strokeStyle = shape.color;
+    ctx.fillStyle = shape.color;
+    ctx.lineWidth = highlighted ? 4 : 2.5;
+    ctx.lineJoin = 'round';
+
+    if(shape.type==='line'){
+      ctx.beginPath();
+      ctx.moveTo(shape.points[0].x, shape.points[0].y);
+      ctx.lineTo(shape.points[1].x, shape.points[1].y);
+      ctx.stroke();
+      shape.points.forEach(p=>drawDot(p, shape.color));
+      const mid = { x:(shape.points[0].x+shape.points[1].x)/2, y:(shape.points[0].y+shape.points[1].y)/2 };
+      drawLabel(mid, `${shape.name}: ${formatDistance(pixelDistance(shape.points))}`, shape.color);
+    } else {
+      ctx.beginPath();
+      shape.points.forEach((p,i)=> i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+      ctx.closePath();
+      ctx.globalAlpha = 0.18;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.stroke();
+      shape.points.forEach(p=>drawDot(p, shape.color));
+      const cx = shape.points.reduce((s,p)=>s+p.x,0)/shape.points.length;
+      const cy = shape.points.reduce((s,p)=>s+p.y,0)/shape.points.length;
+      const area = formatArea(pixelArea(shape.points));
+      drawLabel({x:cx,y:cy}, `${shape.name}: ${area.main}${area.sec ? ' ('+area.sec+')' : ''}`, shape.color);
+    }
+    ctx.restore();
+  }
+
+  function drawInProgress(){
+    ctx.save();
+    ctx.strokeStyle = '#f6f7f2';
+    ctx.fillStyle = '#f6f7f2';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    currentPoints.forEach((p,i)=> i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    if(mousePos) ctx.lineTo(mousePos.x, mousePos.y);
+    if(mode==='area' && currentPoints.length>=2) ctx.closePath();
+    ctx.stroke();
+    ctx.setLineDash([]);
+    currentPoints.forEach(p=>drawDot(p, '#f6f7f2'));
+
+    if(mode==='line' && currentPoints.length===1 && mousePos){
+      drawLabel({x:(currentPoints[0].x+mousePos.x)/2, y:(currentPoints[0].y+mousePos.y)/2},
+        formatDistance(Math.hypot(mousePos.x-currentPoints[0].x, mousePos.y-currentPoints[0].y)), '#f6f7f2');
+    }
+    if(mode==='calibrate' && currentPoints.length===1 && mousePos){
+      drawLabel({x:(currentPoints[0].x+mousePos.x)/2, y:(currentPoints[0].y+mousePos.y)/2},
+        `${Math.hypot(mousePos.x-currentPoints[0].x, mousePos.y-currentPoints[0].y).toFixed(0)} px`, '#f6f7f2');
+    }
+    if(mode==='area' && currentPoints.length>=2){
+      const pts = mousePos ? [...currentPoints, mousePos] : currentPoints;
+      if(pts.length>=3){
+        const cx = pts.reduce((s,p)=>s+p.x,0)/pts.length;
+        const cy = pts.reduce((s,p)=>s+p.y,0)/pts.length;
+        const area = formatArea(pixelArea(pts));
+        drawLabel({x:cx,y:cy}, area.main, '#f6f7f2');
+      }
+    }
+    ctx.restore();
+  }
+
+  function drawDot(p, color){
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4.5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#0f2a3d';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLabel(pos, text, color){
+    ctx.save();
+    ctx.font = '600 13px Montserrat, system-ui, sans-serif';
+    const paddingX = 6, paddingY = 4;
+    const metrics = ctx.measureText(text);
+    const w = metrics.width + paddingX*2;
+    const h = 18 + paddingY;
+    let x = pos.x - w/2, y = pos.y - h/2;
+    ctx.fillStyle = 'rgba(15,42,61,0.88)';
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    roundRect(x, y, w, h, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#f6f7f2';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x+paddingX, y+h/2+1);
+    ctx.restore();
+  }
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  // ---------- Sidebar list ----------
+  function renderList(){
+    measureList.innerHTML = '';
+    emptyList.style.display = shapes.length ? 'none' : 'block';
+    shapes.forEach(shape=>{
+      const li = document.createElement('li');
+      li.addEventListener('mouseenter', ()=>{ hoveredId = shape.id; redraw(); });
+      li.addEventListener('mouseleave', ()=>{ hoveredId = null; redraw(); });
+
+      const top = document.createElement('div');
+      top.className = 'm-top';
+
+      const swatch = document.createElement('span');
+      swatch.className = 'swatch';
+      swatch.style.background = shape.color;
+
+      const typeSpan = document.createElement('span');
+      typeSpan.className = 'm-type';
+      typeSpan.textContent = shape.type==='line' ? '／' : '▱';
+
+      const nameInput = document.createElement('input');
+      nameInput.className = 'm-name';
+      nameInput.value = shape.name;
+      nameInput.setAttribute('data-name-id', shape.id);
+      nameInput.addEventListener('input', ()=>{ shape.name = nameInput.value; redraw(); });
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'm-del';
+      delBtn.textContent = '🗑';
+      delBtn.title = 'Verwijderen';
+      delBtn.addEventListener('click', ()=>{
+        shapes = shapes.filter(s=>s.id!==shape.id);
+        renderList();
+        redraw();
+      });
+
+      top.appendChild(swatch);
+      top.appendChild(typeSpan);
+      top.appendChild(nameInput);
+      top.appendChild(delBtn);
+
+      const val = document.createElement('div');
+      val.className = 'm-value';
+      if(shape.type==='line'){
+        val.textContent = formatDistance(pixelDistance(shape.points));
+      } else {
+        const a = formatArea(pixelArea(shape.points));
+        val.innerHTML = a.main + (a.sec ? ` <span class="sec">${a.sec}</span>` : '');
+      }
+
+      li.appendChild(top);
+      li.appendChild(val);
+      measureList.appendChild(li);
+    });
+  }
+
+  // ---------- Export ----------
+  function exportImage(){
+    const out = document.createElement('canvas');
+    out.width = canvas.width;
+    out.height = canvas.height;
+    const octx = out.getContext('2d');
+    octx.drawImage(canvas, 0, 0);
+    const link = document.createElement('a');
+    link.download = (imgFilename.replace(/\.[^.]+$/,'') || 'meting') + '_gemeten.png';
+    link.href = out.toDataURL('image/png');
+    link.click();
+  }
+
+  updateHint();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAT 01 Watercalculator — BREEAM-NL</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#faf9f7;--white:#fff;--border:#e8e4de;--border2:#d4cfc8;
+  --text:#1c1a17;--text2:#5a5650;--text3:#9c9690;
+  --accent:#e07a2f;--accent-s:rgba(224,122,47,.09);--accent-b:rgba(224,122,47,.22);
+  --blue:#75AD4C;--blue-s:rgba(117,173,76,.08);--blue-b:rgba(117,173,76,.22);
+  --green:#0f7a4c;--green-s:rgba(15,122,76,.08);--green-b:rgba(15,122,76,.2);
+  --amber:#b45309;--amber-s:rgba(180,83,9,.08);
+  --red:#b91c1c;--red-s:rgba(185,28,28,.07);--red-b:rgba(185,28,28,.2);
+  --sans:"Poppins",system-ui,sans-serif;--r:4px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:var(--sans);background:var(--cream);color:var(--text);font-size:14px;}
+button,input,select{font-family:var(--sans);}
+
+#app{display:flex;flex-direction:column;height:100vh;}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-badge{height:26px;width:auto;flex-shrink:0;display:block;}
+.logo-divider{width:1px;align-self:stretch;background:var(--border2);margin:6px 0;}
+.logo-text{display:flex;flex-direction:column;line-height:1.2;}
+.logo-name{font-size:13.5px;font-weight:600;color:var(--text);}
+.logo-sub{font-size:10.5px;color:var(--text3);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.ver-badge{background:var(--accent-s);border:1px solid var(--accent-b);color:var(--accent);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;}
+.topbar-btn{background:none;border:1px solid var(--border2);border-radius:var(--r);padding:6px 13px;font-size:11.5px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .13s;}
+.topbar-btn:hover{border-color:var(--blue);color:var(--blue);}
+.topbar-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue);}
+.topbar-btn.blue:hover{opacity:.88;color:#fff;}
+
+/* KPI BAR */
+.kpi-bar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 20px;flex-shrink:0;display:flex;align-items:stretch;gap:22px;overflow-x:auto;}
+.kpi{display:flex;flex-direction:column;justify-content:center;padding-right:22px;border-right:1px solid var(--border);min-width:118px;flex-shrink:0;}
+.kpi:last-child{border-right:none;}
+.kpi-label{font-size:9.5px;font-weight:600;letter-spacing:.3px;color:var(--text3);margin-bottom:4px;}
+.kpi-val{font-size:24px;font-weight:700;color:var(--text);line-height:1.05;}
+.kpi-val.accent{color:var(--accent);}
+.kpi-val.blue{color:var(--blue);}
+.kpi-val.green{color:var(--green);}
+.kpi-sub{font-size:10.5px;color:var(--text2);font-weight:300;margin-top:2px;}
+.credit-dots{display:flex;gap:3px;margin-top:5px;}
+.credit-dot{width:13px;height:13px;border-radius:3px;background:var(--border);}
+.credit-dot.on{background:var(--green);}
+.ep-pill{display:inline-block;margin-top:5px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.ep-pill.yes{background:var(--green-s);color:var(--green);border:1px solid var(--green-b);}
+.ep-pill.no{background:var(--cream);color:var(--text3);border:1px solid var(--border2);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.tabs{display:flex;gap:4px;padding:10px 20px 0;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;}
+.tab-btn{padding:9px 18px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .13s;}
+.tab-btn:hover{color:var(--text2);}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-badge{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:700;background:var(--accent);color:#fff;padding:1px 6px;border-radius:20px;vertical-align:middle;}
+
+.wizard-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;max-width:640px;width:100%;margin:0 auto;}
+.form-panel{flex:1;overflow-y:auto;background:var(--cream);width:100%;}
+.results-panel{flex:1;overflow-y:auto;background:var(--white);max-width:900px;width:100%;margin:0 auto;}
+.hidden-view{display:none !important;}
+
+.step-progress{display:flex;align-items:center;gap:6px;padding:14px 20px 4px;flex-shrink:0;}
+.step-dot{flex:1;height:4px;border-radius:3px;background:var(--border);cursor:pointer;transition:background .13s;}
+.step-dot.done{background:var(--blue);}
+.step-dot.current{background:var(--accent);}
+.step-counter{padding:2px 20px 10px;font-size:10.5px;color:var(--text3);flex-shrink:0;}
+
+.section{border-bottom:1px solid var(--border);}
+.section-head{padding:13px 20px;background:var(--white);}
+.section-title-wrap{display:flex;align-items:center;gap:9px;}
+.section-num{font-size:10px;font-weight:700;color:#fff;background:var(--accent);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-title{font-size:14.5px;font-weight:600;color:var(--text);}
+.section-hint{font-size:10.5px;color:var(--text3);margin-top:1px;}
+.section-body{padding:6px 20px 18px;}
+
+.wizard-nav{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--border);background:var(--white);flex-shrink:0;}
+.wnav-btn{padding:9px 18px;border-radius:var(--r);font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:var(--white);color:var(--text2);transition:all .13s;}
+.wnav-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.wnav-btn.primary:hover{opacity:.88;}
+.wnav-btn:hover{border-color:var(--text3);}
+.wnav-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.field{margin-bottom:13px;}
+.field-label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px;display:block;}
+.field-label .req{color:var(--accent);margin-left:2px;}
+.field-hint{font-size:10.5px;color:var(--text3);margin-top:3px;}
+input[type=text],input[type=number],select{
+  width:100%;padding:8px 11px;border:1px solid var(--border2);border-radius:var(--r);
+  font-size:12.5px;color:var(--text);background:var(--white);outline:none;transition:border-color .15s;
+}
+input[type=text]:focus,input[type=number]:focus,select:focus{border-color:var(--blue);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+.yn{display:flex;gap:6px;}
+.yn-btn{flex:1;padding:7px 0;text-align:center;border:1px solid var(--border2);border-radius:var(--r);font-size:12px;font-weight:500;color:var(--text2);background:var(--white);cursor:pointer;transition:all .12s;}
+.yn-btn.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+.fixture-card{border:1px solid var(--border);border-radius:6px;background:var(--white);margin-bottom:12px;overflow:hidden;}
+.fixture-head{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.fixture-name{font-size:12.5px;font-weight:600;color:var(--text);}
+.fixture-body{padding:0 14px 14px;display:none;}
+.fixture-card.active .fixture-body{display:block;}
+.fixture-body.disabled-note{padding:0 14px 12px;font-size:11px;color:var(--text3);font-style:italic;}
+.stepper{display:flex;align-items:center;gap:6px;}
+.stepper button{width:24px;height:24px;border-radius:4px;border:1px solid var(--border2);background:var(--cream);color:var(--text2);font-size:14px;cursor:pointer;line-height:1;}
+.stepper span{font-size:12.5px;font-weight:600;min-width:16px;text-align:center;}
+.type-row{border-top:1px solid var(--border);padding:10px 0;display:grid;grid-template-columns:56px 1fr 1fr;gap:8px;align-items:end;}
+.type-row:first-child{border-top:none;}
+.type-row .tlabel{font-size:11px;font-weight:600;color:var(--text3);align-self:center;}
+.mini-label{font-size:10px;color:var(--text3);margin-bottom:3px;display:block;}
+.mini-input{padding:5px 8px;font-size:12px;border:1px solid var(--border2);border-radius:4px;width:100%;background:var(--white);}
+.eut-flag{font-size:9.5px;color:var(--red);margin-top:2px;font-weight:600;}
+
+.gb-row{display:grid;grid-template-columns:1.6fr .9fr .7fr;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--border);}
+.gb-row:first-child{border-top:none;}
+.gb-label{font-size:11.5px;color:var(--text2);}
+
+/* RESULTS PANEL */
+.res-section{padding:16px 20px;border-bottom:1px solid var(--border);}
+.res-section h3{font-size:11.5px;font-weight:600;letter-spacing:.2px;color:var(--text3);margin-bottom:11px;}
+table.rtable{width:100%;border-collapse:collapse;font-size:12px;}
+table.rtable th{text-align:right;font-weight:600;color:var(--text3);font-size:10px;letter-spacing:.2px;padding:5px 8px;border-bottom:1px solid var(--border2);}
+table.rtable th:first-child{text-align:left;}
+table.rtable td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:right;color:var(--text2);}
+table.rtable td:first-child{text-align:left;color:var(--text);font-weight:500;}
+table.rtable tr.total td{font-weight:700;color:var(--text);border-top:1.5px solid var(--border2);}
+table.rtable tr.sub td{color:var(--text3);font-style:italic;}
+
+.eut-list{display:flex;flex-direction:column;gap:6px;}
+.eut-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;background:var(--cream);}
+.eut-item .lbl{font-size:11.5px;color:var(--text2);}
+.eut-badge{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:20px;flex-shrink:0;margin-left:10px;}
+.eut-badge.yes{background:var(--green-s);color:var(--green);}
+.eut-badge.no{background:var(--red-s);color:var(--red);}
+
+.bignum{font-size:34px;font-weight:700;color:var(--accent);line-height:1;}
+.bignum-sub{font-size:11.5px;color:var(--text2);margin-top:4px;}
+.improve-bar{height:10px;border-radius:5px;background:var(--border);overflow:hidden;margin-top:10px;position:relative;}
+.improve-bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:5px;transition:width .2s;}
+.improve-marks{display:flex;justify-content:space-between;margin-top:4px;font-size:9.5px;color:var(--text3);}
+
+@media (max-width:900px){
+  .wizard-wrap,.results-panel{max-width:100%;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="logo">
+      <img class="logo-badge" src="data:image/png;base64,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" alt="BREEAM-NL">
+      <div class="logo-text">
+        <div class="logo-name">Watercalculator (WAT 01)</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="ver-badge" id="verBadge">v1.5</span>
+      <button class="topbar-btn" id="resetBtn">Wissen</button>
+      <button class="topbar-btn blue" id="printBtn">Afdrukken / PDF</button>
+    </div>
+  </div>
+
+  <div class="kpi-bar" id="kpiBar"></div>
+
+  <div class="tabs">
+    <button class="tab-btn" id="tabFormBtn">Invoer</button>
+    <button class="tab-btn" id="tabResultsBtn">Resultaten<span class="tab-badge" id="tabResultsBadge" style="display:none;"></span></button>
+  </div>
+
+  <div class="main">
+    <div class="wizard-wrap" id="formView">
+      <div class="step-progress" id="stepProgress"></div>
+      <div class="step-counter" id="stepCounter"></div>
+      <div class="form-panel" id="formPanel"></div>
+      <div class="wizard-nav">
+        <button class="wnav-btn" id="prevStepBtn">← Vorige</button>
+        <button class="wnav-btn primary" id="nextStepBtn">Volgende →</button>
+      </div>
+    </div>
+    <div class="results-panel hidden-view" id="resultsPanel"></div>
+  </div>
+</div>
+
+<script id="data-buildingtypes" type="application/json">[{"name":"Winkel","occDensity":0.0372589285714286,"occDensityFood":0.0372589285714286,"days":362,"hours":13,"wc":0.851840518405184,"urinal":0.70479497794978,"whb":0.851840518405184,"shower":0.0004860048600486,"bath":0.0004860048600486,"kitchenette":0.01620016200162,"domWM":0.000648006480064801,"domDW":0.000648006480064801,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Winkel met diensten (bv. kapper, reisbureau)","occDensity":0.0372589285714286,"occDensityFood":0.0372589285714286,"days":304,"hours":8,"wc":0.851840518405184,"urinal":0.70479497794978,"whb":0.851840518405184,"shower":0.0004860048600486,"bath":0.0004860048600486,"kitchenette":0.01620016200162,"domWM":0.000648006480064801,"domDW":0.000648006480064801,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Restaurants, cafés en afhaalzaken","occDensity":0.0663791666666667,"occDensityFood":0.0663791666666667,"days":304,"hours":8,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Kantoor","occDensity":0.0426565972220833,"occDensityFood":0.0426565972220833,"days":253,"hours":10,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Industrie","occDensity":0.0149095799180328,"occDensityFood":0.0149095799180328,"days":253,"hours":10,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Opslag / magazijn","occDensity":0.00747844684414846,"occDensityFood":0.00747844684414846,"days":362,"hours":13,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Hotel","occDensity":0.0465943760442997,"occDensityFood":0.0465943760442997,"days":362,"hours":24,"wc":4,"urinal":3,"whb":4,"shower":1,"bath":1,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Ziekenhuis","occDensity":0.0922416666666667,"occDensityFood":0.0922416666666667,"days":365,"hours":24,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Verzorgingshuis","occDensity":0.0552601506113585,"occDensityFood":0.0552601506113585,"days":365,"hours":24,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Schoolinternaat","occDensity":0.0527423075296121,"occDensityFood":0.0527423075296121,"days":195,"hours":24,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Universiteiten en hogescholen","occDensity":0.0548135999211705,"occDensityFood":0.0548135999211705,"days":195,"hours":13,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Gesloten instelling (bv. justitieel)","occDensity":0.0548135999211705,"occDensityFood":0.0548135999211705,"days":365,"hours":24,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Buurt- of dagcentrum","occDensity":0.0439635416666667,"occDensityFood":0.0439635416666667,"days":253,"hours":8,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Rechtbank","occDensity":0.0476482638875,"occDensityFood":0.0476482638875,"days":253,"hours":8,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"School (niet-residentieel)","occDensity":0.104155570978081,"occDensityFood":0.104155570978081,"days":195,"hours":10,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Bibliotheek, museum of galerie","occDensity":0.0469298959477225,"occDensityFood":0.0469298959477225,"days":253,"hours":8,"wc":0.851840518405184,"urinal":0.70479497794978,"whb":0.851840518405184,"shower":0.0004860048600486,"bath":0.0004860048600486,"kitchenette":0.01620016200162,"domWM":0.000648006480064801,"domDW":0.000648006480064801,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Huisartsenpraktijk / eerstelijnszorg","occDensity":0.0421666666666667,"occDensityFood":0.0421666666666667,"days":253,"hours":10,"wc":0.851840518405184,"urinal":0.70479497794978,"whb":0.851840518405184,"shower":0.0004860048600486,"bath":0.0004860048600486,"kitchenette":0.01620016200162,"domWM":0.000648006480064801,"domDW":0.000648006480064801,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Zwembad / ijsbaan","occDensity":0.0474547281330377,"occDensityFood":0.0474547281330377,"days":362,"hours":13,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Sportcentrum (droge sporten)","occDensity":0.0395892155731384,"occDensityFood":0.0395892155731384,"days":362,"hours":13,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Nachtclub","occDensity":0.0596423040173385,"occDensityFood":0.0596423040173385,"days":253,"hours":8,"wc":4,"urinal":3,"whb":4,"shower":0.03,"bath":0.03,"kitchenette":1,"domWM":0.04,"domDW":0.04,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Theater","occDensity":0.0603436929018513,"occDensityFood":0.0603436929018513,"days":253,"hours":8,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Hulpdiensten (brandweer/politie)","occDensity":0.0488483439256639,"occDensityFood":0.0488483439256639,"days":365,"hours":24,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Passagiersterminal (luchthaven/station)","occDensity":0.0853285328489914,"occDensityFood":0.0853285328489914,"days":362,"hours":24,"wc":0.851840518405184,"urinal":0.70479497794978,"whb":0.851840518405184,"shower":0.0004860048600486,"bath":0.0004860048600486,"kitchenette":0.01620016200162,"domWM":0.000648006480064801,"domDW":0.000648006480064801,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3},{"name":"Woongebouw","occDensity":0.06,"occDensityFood":0.06,"days":365,"hours":24,"wc":7,"urinal":6,"whb":7,"shower":0.5,"bath":0.5,"kitchenette":1,"domWM":0.3,"domDW":0.3,"restaurantTap":60,"wasteDisposal":30,"commDW":20,"commWM":3}]</script>
+<script>
+// WAT 01 Watercalculator - rekenengine (1:1 port van de formules in de xlsm)
+// Inclusief twee bekende "bugs" uit het origineel (bewust gerepliceerd voor 100% overeenkomst):
+//  1) Bij het "Werkelijke bezetting"-scenario tellen % hergebruikt water (m2/m3-kolommen) niet mee
+//     in het netwerkwaterverbruik (verkeerde celverwijzing in het origineel, alleen l/persoon/dag klopt daar wel).
+//  2) De "Netwerkwater"-regel telt hergebruikt water er in de m2/m3-kolommen bovenop (i.p.v. eraf) -
+//     staat letterlijk zo in de formule van het origineel.
+
+const ASSUMPTIONS = {
+  urinalPref: 0.428571428571429,
+  showerPref: 0.78,
+  bathFill: 0.4,
+  tapFlowFactor: 0.677,
+  greyRecovery: 0.95,
+  blackRecovery: 0.8
+};
+
+const EUT = { wcFull: 6, wcReduced: 3.5, urinalTimed: 2, urinalSensor: 1, whb: 6, shower: 8, kitchenette: 6 };
+const CREDIT_TABLE = [[0,0],[0.15,1],[0.30,2],[0.45,3],[0.60,4],[0.75,5]];
+const CARBON = { supply: 0.176684546579014, treatment: 0.201318291710656 };
+
+const BASELINE = {
+  wc: 6, urinal: 7.5, whb: 10, shower: 12, bath: 200, kitchenette: 10,
+  domWM: 90, domDW: 17, restaurantTap: 10.3, wasteDisposal: 17, commDW: 8
+};
+
+const FIXTURES = [
+  { key:'wc', label:"WC", usageKey:'wc', fields:['full','reduced'], effVol:t=>(t.full*1+t.reduced*3)/4, black:true },
+  { key:'urinalTimed', label:"Urinoir met tijdgestuurde spoeling", usageKey:'hours', fields:['flow'], effVol:t=>t.flow, continuous:true, black:true },
+  { key:'urinalSensor', label:"Urinoir met sensorspoeling", usageKey:'urinal', fields:['flow'], effVol:t=>t.flow, black:true },
+  { key:'urinalWaterless', label:"Waterloos urinoir", usageKey:'urinal', fields:[], single:true, black:true },
+  { key:'whb', label:"Wastafelkraan", usageKey:'whb', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'shower', label:"Douche", usageKey:'shower', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'bath', label:"Bad", usageKey:'bath', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'kitchenette', label:"Keukenkraan (pantry)", usageKey:'kitchenette', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'domWM', label:"Huishoudelijke wasmachine", usageKey:'domWM', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'domDW', label:"Huishoudelijke vaatwasser", usageKey:'domDW', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'restaurantTap', label:"Keukenkraan restaurant (pre-rinse)", usageKey:'restaurantTap', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'wasteDisposal', label:"Afvalverwerker (commerciële keuken)", usageKey:'wasteDisposal', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'commDW', label:"Commerciële vaatwasser", usageKey:'commDW', fields:['flow'], effVol:t=>t.flow, grey:true },
+  { key:'commWM', label:"Commerciële/industriële wasmachine", usageKey:'commWM', fields:['flow'], effVol:t=>t.flow, grey:true }
+];
+
+function sumProduct(a,b){ let s=0; for(let i=0;i<a.length;i++) s+=a[i]*b[i]; return s; }
+function weightedAvg(types, effVolFn){
+  const counts = types.map(t=>t.count||0);
+  const total = counts.reduce((a,b)=>a+b,0);
+  if(total===0) return {total:0, avg:0};
+  const vols = types.map(t=>effVolFn(t));
+  return {total, avg: sumProduct(counts, vols)/total};
+}
+
+function computeHFactors(input){
+  const uT = input.urinalTimed.types.reduce((a,t)=>a+(t.count||0),0);
+  const uS = input.urinalSensor.types.reduce((a,t)=>a+(t.count||0),0);
+  const uW = input.urinalWaterless.count||0;
+  const totalUrinals = uT+uS+uW;
+  const H = {};
+  H.wc = totalUrinals===0 ? 1 : ASSUMPTIONS.urinalPref;
+  H.urinalTimed = uT===0 ? 0 : uT/totalUrinals;
+  H.urinalSensor = uS===0 ? 0 : uS/totalUrinals;
+  H.urinalWaterless = uW===0 ? 0 : uW/totalUrinals;
+  H.whb = input.present.whb ? ASSUMPTIONS.tapFlowFactor : 0;
+  const bothShowerBath = input.present.shower && input.present.bath;
+  H.shower = bothShowerBath ? ASSUMPTIONS.showerPref : 1;
+  H.bath = (bothShowerBath ? (1-ASSUMPTIONS.showerPref) : 1) * ASSUMPTIONS.bathFill;
+  H.kitchenette = input.present.kitchenette ? ASSUMPTIONS.tapFlowFactor : 0;
+  H.domWM = input.present.domWM ? 1 : 0;
+  H.domDW = input.present.domDW ? 1 : 0;
+  H.restaurantTap = input.present.restaurantTap ? 1 : 0;
+  H.wasteDisposal = input.present.wasteDisposal ? 1 : 0;
+  H.commDW = input.present.commDW ? 1 : 0;
+  H.commWM = input.present.commWM ? 1 : 0;
+  return H;
+}
+
+function computeFixtureRow(fx, input, H, usagePerDay, occDensity, days, floorArea){
+  let total, avg;
+  if(fx.single){ total = input[fx.key].count||0; avg = 0; }
+  else { const w = weightedAvg(input[fx.key].types, fx.effVol); total = w.total; avg = w.avg; }
+  const F = avg * H[fx.key];
+  const I = usagePerDay;
+  let L;
+  if(fx.continuous){ L = (occDensity*floorArea)===0 ? 0 : F*I/(occDensity*floorArea); }
+  else { L = F*I; }
+  const M = occDensity*L;
+  const N = M/1000*days;
+  const O = N*floorArea;
+  return {total, avg, F, I, L, M, N, O};
+}
+
+// scenarioType: 'standard' | 'actual'  (bepaalt of recycled-water bug wordt toegepast)
+function computeScenario(input, buildingType, occDensity, days, floorArea, scenarioType){
+  const H = computeHFactors(input);
+  const usage = {
+    wc: buildingType.wc, urinal: buildingType.urinal, hours: buildingType.hours,
+    whb: buildingType.whb, shower: buildingType.shower, bath: buildingType.bath,
+    kitchenette: buildingType.kitchenette, domWM: buildingType.domWM, domDW: buildingType.domDW,
+    restaurantTap: buildingType.restaurantTap, wasteDisposal: buildingType.wasteDisposal,
+    commDW: buildingType.commDW, commWM: buildingType.commWM
+  };
+  const rows = {};
+  for(const fx of FIXTURES) rows[fx.key] = computeFixtureRow(fx, input, H, usage[fx.usageKey], occDensity, days, floorArea);
+
+  const totalUse = ['L','M','N','O'].reduce((acc,col)=>{ acc[col]=FIXTURES.reduce((s,fx)=>s+rows[fx.key][col],0); return acc; },{});
+
+  const recovery = {};
+  const gb = input.greyBlack;
+  recovery.wc = (gb.wc.pct||0)/100*ASSUMPTIONS.blackRecovery;
+  recovery.urinalTimed = (gb.urinalTimed.pct||0)/100*ASSUMPTIONS.blackRecovery;
+  recovery.urinalSensor = (gb.urinalSensor.pct||0)/100*ASSUMPTIONS.blackRecovery;
+  recovery.urinalWaterless = 0;
+  for(const fx of FIXTURES){ if(fx.grey) recovery[fx.key] = ((gb[fx.key]&&gb[fx.key].pct)||0)/100*ASSUMPTIONS.greyRecovery; }
+  const greyBlackAvail = ['L','M','N','O'].reduce((acc,col)=>{ acc[col]=FIXTURES.reduce((s,fx)=>s+rows[fx.key][col]*(recovery[fx.key]||0),0); return acc; },{});
+
+  const ru = input.recycledUse;
+  const recycledUse_L = (ru.wcPct||0)/100*rows.wc.L + (ru.urinalTimedPct||0)/100*rows.urinalTimed.L + (ru.urinalSensorPct||0)/100*rows.urinalSensor.L;
+  let recycledUse;
+  if(scenarioType==='actual'){
+    // origineel: M/N/O van deze regel verwijzen (per fout) naar lege cellen -> altijd 0, alleen L klopt
+    recycledUse = { L: recycledUse_L, M:0, N:0, O:0 };
+  } else {
+    const recycledUse_M = (ru.wcPct||0)/100*rows.wc.M + (ru.urinalTimedPct||0)/100*rows.urinalTimed.M + (ru.urinalSensorPct||0)/100*rows.urinalSensor.M;
+    const recycledUse_N = (ru.wcPct||0)/100*rows.wc.N + (ru.urinalTimedPct||0)/100*rows.urinalTimed.N + (ru.urinalSensorPct||0)/100*rows.urinalSensor.N;
+    const recycledUse_O = (ru.wcPct||0)/100*rows.wc.O + (ru.urinalTimedPct||0)/100*rows.urinalTimed.O + (ru.urinalSensorPct||0)/100*rows.urinalSensor.O;
+    recycledUse = { L:recycledUse_L, M:recycledUse_M, N:recycledUse_N, O:recycledUse_O };
+  }
+
+  const other = input.otherRecycled;
+  const O_other = other.enabled ? (other.m3PerYear||0) : 0;
+  const N_other = floorArea===0?0:O_other/floorArea;
+  const M_other = N_other*1000/365;
+  const L_other = occDensity===0?0:M_other/occDensity;
+  const nonNetworkUse = {L:L_other, M:M_other, N:N_other, O:O_other};
+
+  const networkUse = {
+    L: totalUse.L - (nonNetworkUse.L + recycledUse.L),
+    M: totalUse.M - nonNetworkUse.M + recycledUse.M,
+    N: totalUse.N - nonNetworkUse.N + recycledUse.N,
+    O: totalUse.O - nonNetworkUse.O + recycledUse.O
+  };
+  const sewageUse = {
+    L: totalUse.L - recycledUse.L, M: totalUse.M - recycledUse.M,
+    N: totalUse.N - recycledUse.N, O: totalUse.O - recycledUse.O
+  };
+
+  return {rows, totalUse, greyBlackAvail, recycledUse, nonNetworkUse, networkUse, sewageUse};
+}
+
+function computeRainwater(input, occDensity, floorArea){
+  const rw = input.rainwater;
+  let M = 0;
+  if(rw.enabled){
+    if(rw.method==='basic'){
+      M = floorArea===0?0:((rw.area*rw.rainfall*rw.hydraulicEff/100*rw.yieldCoeff/100)/365)/floorArea;
+    } else {
+      M = floorArea===0?0:(rw.dailyLitres)/floorArea;
+    }
+  }
+  const L = occDensity===0?0:M/occDensity;
+  const N = M/1000*365;
+  const O = N*floorArea;
+  return {L,M,N,O};
+}
+
+function computeBaseline(input, buildingType, occDensity, days, floorArea, standardScenario){
+  const H = computeHFactors(input);
+  const usage = {
+    wc: buildingType.wc, urinal: buildingType.urinal, hours: buildingType.hours,
+    whb: buildingType.whb, shower: buildingType.shower, bath: buildingType.bath,
+    kitchenette: buildingType.kitchenette, domWM: buildingType.domWM, domDW: buildingType.domDW,
+    restaurantTap: buildingType.restaurantTap, wasteDisposal: buildingType.wasteDisposal,
+    commDW: buildingType.commDW, commWM: buildingType.commWM
+  };
+  const uT = input.urinalTimed.types.reduce((a,t)=>a+(t.count||0),0);
+  const uS = input.urinalSensor.types.reduce((a,t)=>a+(t.count||0),0);
+  const uW = input.urinalWaterless.count||0;
+  const totalUrinals = uT+uS+uW;
+
+  // Let op: F wordt in het origineel NOOIT op 0 gezet o.b.v. aantallen - alleen de H-factor
+  // (gebaseerd op aanwezigheid ja/nee) bepaalt of een categorie meetelt. Dit is bewust zo
+  // gerepliceerd, ook al lijkt het onlogisch dat bv. "bad" meetelt zonder dat er baden zijn.
+  function row(baseVal, H_, I_, continuous){
+    const F = baseVal*H_;
+    let L;
+    if(continuous){ L = (occDensity*floorArea)===0?0:F*I_/(occDensity*floorArea); }
+    else { L = F*I_; }
+    const M = occDensity*L, N = M/1000*days, O = N*floorArea;
+    return {F,L,M,N,O};
+  }
+
+  const items = {};
+  items.wc = row(BASELINE.wc, H.wc, usage.wc, false);
+  items.urinal = row(BASELINE.urinal, 1, usage.hours, true); // H vast op 1, continue formule (zoals calc!L6)
+  items.whb = row(BASELINE.whb, H.whb, usage.whb, false);
+  items.shower = row(BASELINE.shower, H.shower, usage.shower, false);
+  items.bath = row(BASELINE.bath, H.bath, usage.bath, false);
+  items.kitchenette = row(BASELINE.kitchenette, H.kitchenette, usage.kitchenette, false);
+  items.domWM = row(BASELINE.domWM, H.domWM, usage.domWM, false);
+  items.domDW = row(BASELINE.domDW, H.domDW, usage.domDW, false);
+  items.restaurantTap = row(BASELINE.restaurantTap, H.restaurantTap, usage.restaurantTap, true);
+  items.wasteDisposal = row(BASELINE.wasteDisposal, H.wasteDisposal, usage.wasteDisposal, true);
+  items.commDW = row(BASELINE.commDW, H.commDW, usage.commDW, true);
+  // commWM heeft geen eigen baseline-waarde in het origineel (F16 verwijst naar F35 = de
+  // standaard-scenario F) - hergebruik die F, maar met baseline I/J/dagen.
+  const F_commWM = standardScenario.rows.commWM.F;
+  const L_commWM = (occDensity*floorArea)===0?0:F_commWM*usage.commWM/(occDensity*floorArea);
+  items.commWM = { F:F_commWM, L:L_commWM, M:occDensity*L_commWM, N:occDensity*L_commWM/1000*days, O:(occDensity*L_commWM/1000*days)*floorArea };
+
+  const total = {L:0,M:0,N:0,O:0};
+  for(const k in items) for(const c of ['L','M','N','O']) total[c]+=items[k][c];
+  return {items, total};
+}
+
+function creditsForImprovement(frac){
+  let credits = 0;
+  for(const [thr,c] of CREDIT_TABLE){ if(frac>=thr) credits=c; }
+  return credits;
+}
+
+
+/* ============ Data ============ */
+const BUILDING_TYPES = JSON.parse(document.getElementById('data-buildingtypes').textContent);
+
+const FIXTURE_UI = [
+  {key:'wc', label:'WC', black:true, fields:[
+      {key:'full',label:'Volledige spoeling',unit:'l',eut:EUT.wcFull},
+      {key:'reduced',label:'Bespaarspoeling',unit:'l',eut:EUT.wcReduced}
+  ]},
+  {key:'urinalTimed', label:'Urinoir met tijdgestuurde spoeling', black:true, fields:[
+      {key:'flow',label:'Spoelvolume',unit:'l per bak per uur',eut:EUT.urinalTimed}
+  ]},
+  {key:'urinalSensor', label:'Urinoir met sensorspoeling', black:true, fields:[
+      {key:'flow',label:'Spoelvolume',unit:'l per spoeling',eut:EUT.urinalSensor}
+  ]},
+  {key:'urinalWaterless', label:'Waterloos urinoir', black:true, single:true, fields:[]},
+  {key:'whb', label:'Wastafelkraan', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Debiet',unit:'l/min',eut:EUT.whb}
+  ]},
+  {key:'shower', label:'Douche', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Debiet',unit:'l/min',eut:EUT.shower}
+  ]},
+  {key:'bath', label:'Bad', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Vulvolume',unit:'l'}
+  ]},
+  {key:'kitchenette', label:'Keukenkraan (pantry)', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Debiet',unit:'l/min',eut:EUT.kitchenette}
+  ]},
+  {key:'domWM', label:'Huishoudelijke wasmachine', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Verbruik',unit:'l/cyclus'}
+  ]},
+  {key:'domDW', label:'Huishoudelijke vaatwasser', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Verbruik',unit:'l/cyclus'}
+  ]},
+  {key:'restaurantTap', label:'Keukenkraan restaurant (pre-rinse)', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Debiet',unit:'l/min'}
+  ]},
+  {key:'wasteDisposal', label:'Afvalverwerker (commerciële keuken)', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Debiet',unit:'l/min'}
+  ]},
+  {key:'commDW', label:'Commerciële vaatwasser', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Verbruik',unit:'l/rack'}
+  ]},
+  {key:'commWM', label:'Commerciële/industriële wasmachine', grey:true, hasPresence:true, fields:[
+      {key:'flow',label:'Verbruik',unit:'l/kg'}
+  ]}
+];
+const TYPED_FIXTURES = FIXTURE_UI.filter(f=>!f.single);
+
+/* ============ State ============ */
+function emptyType(fx){ const t={count:0}; for(const f of fx.fields) t[f.key]=0; return t; }
+function defaultFixtureState(fx){
+  if(fx.single) return {count:0};
+  return {typesCount:0, types:[emptyType(fx),emptyType(fx),emptyType(fx),emptyType(fx),emptyType(fx),emptyType(fx),emptyType(fx),emptyType(fx)]};
+}
+
+function freshState(){
+  const s = {
+    project:{name:'', regnr:'', client:'', expert:'', assessor:''},
+    building:{type:'Kantoor', floorArea:0, occupants:0, occupiedDays:0},
+    present:{whb:false, shower:false, bath:false, kitchenette:false, domWM:false, domDW:false, restaurantTap:false, wasteDisposal:false, commDW:false, commWM:false},
+    fixtures:{},
+    greyBlack:{enabled:false},
+    rainwater:{enabled:false, compliant:false, method:'basic', area:0, rainfall:0, hydraulicEff:0, yieldCoeff:0, dailyLitres:0},
+    otherRecycled:{enabled:false, source:'', m3PerYear:0},
+    recycledUse:{wcYes:false, wcPct:0, urinalTimedYes:false, urinalTimedPct:0, urinalSensorYes:false, urinalSensorPct:0},
+    sewage:{connected:true}
+  };
+  for(const fx of FIXTURE_UI) s.fixtures[fx.key]=defaultFixtureState(fx);
+  for(const fx of FIXTURE_UI){ s.greyBlack[fx.key] = {yes:false, pct:0}; }
+  return s;
+}
+let state = freshState();
+
+function getPath(obj, path){ return path.split('.').reduce((o,k)=>o==null?undefined:o[k], obj); }
+function setPath(obj, path, val){
+  const parts = path.split('.');
+  let o = obj;
+  for(let i=0;i<parts.length-1;i++) o = o[parts[i]];
+  o[parts[parts.length-1]] = val;
+}
+
+/* ============ Engine adapter: build engine input from state ============ */
+function buildEngineInput(){
+  const input = {
+    present: {...state.present},
+    greyBlack: {},
+    rainwater: state.rainwater,
+    otherRecycled: state.otherRecycled,
+    recycledUse: {
+      wcPct: state.recycledUse.wcYes ? (state.recycledUse.wcPct||0) : 0,
+      urinalTimedPct: state.recycledUse.urinalTimedYes ? (state.recycledUse.urinalTimedPct||0) : 0,
+      urinalSensorPct: state.recycledUse.urinalSensorYes ? (state.recycledUse.urinalSensorPct||0) : 0
+    }
+  };
+  for(const fx of FIXTURE_UI){
+    const fs = state.fixtures[fx.key];
+    if(fx.single){ input[fx.key] = {count: fs.count||0}; }
+    else {
+      const n = fs.typesCount||0;
+      input[fx.key] = {types: fs.types.slice(0,n).map(t=>({...t}))};
+    }
+    const gb = state.greyBlack[fx.key];
+    input.greyBlack[fx.key] = { pct: (state.greyBlack.enabled && gb.yes) ? (gb.pct||0) : 0 };
+  }
+  return input;
+}
+
+function getBuildingType(){ return BUILDING_TYPES.find(b=>b.name===state.building.type) || BUILDING_TYPES[0]; }
+
+function computeAll(){
+  const bt = getBuildingType();
+  const floorArea = state.building.floorArea||0;
+  const occupants = state.building.occupants||0;
+  const userDays = state.building.occupiedDays||0;
+  const occDensity = floorArea===0 ? 0 : occupants/floorArea;
+  const input = buildEngineInput();
+
+  const standard = computeScenario(input, bt, occDensity, bt.days, floorArea, 'standard');
+  const actual = computeScenario(input, bt, occDensity, userDays, floorArea, 'actual');
+  const baseline = computeBaseline(input, bt, occDensity, userDays, floorArea, standard);
+  const rainwaterAvail = computeRainwater(input, occDensity, floorArea);
+
+  const pctImprove = baseline.total.L===0 ? 0 : Math.max(0, 1 - actual.networkUse.L/baseline.total.L);
+  const credits = creditsForImprovement(pctImprove);
+  const epAchieved = pctImprove >= 0.85;
+  const carbonYear = actual.networkUse.O*CARBON.supply + actual.sewageUse.O*CARBON.treatment;
+
+  // EUT checks
+  function allLE(fxKey, fieldKey, max){
+    const fs = state.fixtures[fxKey];
+    if(!fs || fs.typesCount===0) return true;
+    for(let i=0;i<fs.typesCount;i++){ const v=fs.types[i][fieldKey]; if(v>max) return false; }
+    return true;
+  }
+  const eut = {
+    wcFull: allLE('wc','full',EUT.wcFull),
+    wcReduced: allLE('wc','reduced',EUT.wcReduced),
+    urinalTimed: allLE('urinalTimed','flow',EUT.urinalTimed),
+    urinalSensor: allLE('urinalSensor','flow',EUT.urinalSensor),
+    shower: allLE('shower','flow',EUT.shower),
+    whb: allLE('whb','flow',EUT.whb),
+    kitchenette: allLE('kitchenette','flow',EUT.kitchenette)
+  };
+  eut.metCore = eut.wcFull && eut.wcReduced && eut.urinalTimed && eut.urinalSensor;
+
+  return {bt, floorArea, occupants, userDays, occDensity, standard, actual, baseline, rainwaterAvail, pctImprove, credits, epAchieved, carbonYear, eut};
+}
+
+/* ============ Formatting ============ */
+const nf1 = new Intl.NumberFormat('nl-NL',{maximumFractionDigits:1, minimumFractionDigits:0});
+const nf2 = new Intl.NumberFormat('nl-NL',{maximumFractionDigits:2, minimumFractionDigits:0});
+const nf0 = new Intl.NumberFormat('nl-NL',{maximumFractionDigits:0});
+function fmt(n,d){ if(n==null||isNaN(n)) return '–'; return (d===2?nf2:d===0?nf0:nf1).format(n); }
+
+/* ============ KPI bar ============ */
+function renderKPI(r){
+  const dots = Array.from({length:5},(_,i)=>`<div class="credit-dot ${i<r.credits?'on':''}"></div>`).join('');
+  document.getElementById('kpiBar').innerHTML = `
+    <div class="kpi">
+      <div class="kpi-label">Netwerkwater</div>
+      <div class="kpi-val blue">${fmt(r.actual.networkUse.O,0)}</div>
+      <div class="kpi-sub">m³ / jaar</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Per persoon per dag</div>
+      <div class="kpi-val">${fmt(r.actual.networkUse.L,2)}</div>
+      <div class="kpi-sub">liter</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Verbetering t.o.v. baseline</div>
+      <div class="kpi-val accent">${fmt(r.pctImprove*100,1)}%</div>
+      <div class="improve-bar"><div class="improve-bar-fill" style="width:${Math.min(100,r.pctImprove*100)}%"></div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">BREEAM-NL punten</div>
+      <div class="kpi-val green">${r.credits}<span style="font-size:14px;color:var(--text3);font-weight:400;"> / 5</span></div>
+      <div class="credit-dots">${dots}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">EP-Score (≥85%)</div>
+      <div class="kpi-val" style="font-size:18px;">${r.epAchieved?'Behaald':'Niet behaald'}</div>
+      <span class="ep-pill ${r.epAchieved?'yes':'no'}">${r.epAchieved?'✓ EP behaald':'nog niet'}</span>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">CO₂-impact water</div>
+      <div class="kpi-val">${fmt(r.carbonYear,0)}</div>
+      <div class="kpi-sub">kg CO₂e / jaar</div>
+    </div>
+  `;
+}
+
+/* ============ Results panel ============ */
+function renderResults(r){
+  const s=r.standard, a=r.actual;
+  function rowSum(keys, col){ return keys.reduce((acc,k)=>acc+s.rows[k][col],0); }
+  function rowSumA(keys, col){ return keys.reduce((acc,k)=>acc+a.rows[k][col],0); }
+  const groups = [
+    {label:'WC & urinoirs', keys:['wc','urinalTimed','urinalSensor','urinalWaterless']},
+    {label:'Wastafelkraan', keys:['whb']},
+    {label:'Douche / bad', keys:['shower','bath']},
+    {label:'Keukenkraan (pantry)', keys:['kitchenette']},
+    {label:'Huishoudelijke wasmachine', keys:['domWM']},
+    {label:'Huishoudelijke vaatwasser', keys:['domDW']},
+    {label:'Commerciële keuken', keys:['restaurantTap','wasteDisposal','commDW']},
+    {label:'Commerciële/industriële wasmachine', keys:['commWM']}
+  ];
+  const rowsHtml = groups.map(g=>`
+    <tr><td>${g.label}</td><td>${fmt(rowSumA(g.keys,'L'),2)}</td><td>${fmt(rowSumA(g.keys,'M'),2)}</td><td>${fmt(rowSumA(g.keys,'O'),0)}</td></tr>
+  `).join('');
+
+  const html = `
+    <div class="res-section">
+      <h3>Waterbalans — werkelijke bezetting</h3>
+      <table class="rtable">
+        <tr><th>Voorziening</th><th>l/persoon/dag</th><th>l/m²/dag</th><th>m³/jaar</th></tr>
+        ${rowsHtml}
+        <tr class="total"><td>Totaal waterverbruik</td><td>${fmt(a.totalUse.L,2)}</td><td>${fmt(a.totalUse.M,2)}</td><td>${fmt(a.totalUse.O,0)}</td></tr>
+        <tr class="sub"><td>Regenwater beschikbaar</td><td>${fmt(r.rainwaterAvail.L,2)}</td><td>${fmt(r.rainwaterAvail.M,2)}</td><td>${fmt(r.rainwaterAvail.O,0)}</td></tr>
+        <tr class="sub"><td>Grijs-/zwartwater beschikbaar</td><td>${fmt(s.greyBlackAvail.L,2)}</td><td>${fmt(s.greyBlackAvail.M,2)}</td><td>${fmt(s.greyBlackAvail.O,0)}</td></tr>
+        <tr class="sub"><td>Hergebruikt water</td><td>${fmt(a.recycledUse.L,2)}</td><td>${fmt(a.recycledUse.M,2)}</td><td>${fmt(a.recycledUse.O,0)}</td></tr>
+        <tr class="sub"><td>Niet-netwerkwater (overige bron)</td><td>${fmt(a.nonNetworkUse.L,2)}</td><td>${fmt(a.nonNetworkUse.M,2)}</td><td>${fmt(a.nonNetworkUse.O,0)}</td></tr>
+        <tr class="total"><td>Netwerkwaterverbruik</td><td>${fmt(a.networkUse.L,2)}</td><td>${fmt(a.networkUse.M,2)}</td><td>${fmt(a.networkUse.O,0)}</td></tr>
+        <tr class="sub"><td>Geloosd op rioolnetwerk</td><td>${fmt(a.sewageUse.L,2)}</td><td>${fmt(a.sewageUse.M,2)}</td><td>${fmt(a.sewageUse.O,0)}</td></tr>
+      </table>
+    </div>
+
+    <div class="res-section">
+      <h3>Verbetering t.o.v. baseline</h3>
+      <div class="bignum">${fmt(r.pctImprove*100,1)}%</div>
+      <div class="bignum-sub">Baseline (ongereguleerd): ${fmt(r.baseline.total.L,2)} l/persoon/dag &nbsp;→&nbsp; Werkelijk: ${fmt(a.networkUse.L,2)} l/persoon/dag</div>
+      <div class="improve-bar"><div class="improve-bar-fill" style="width:${Math.min(100,r.pctImprove*100)}%"></div></div>
+      <div class="improve-marks"><span>0%</span><span>15%</span><span>30%</span><span>45%</span><span>60%</span><span>75%</span></div>
+      <div class="improve-marks"><span>0 pt</span><span>1 pt</span><span>2 pt</span><span>3 pt</span><span>4 pt</span><span>5 pt</span></div>
+    </div>
+
+    <div class="res-section">
+      <h3>EU-Taxonomie minimumeisen (EUT)</h3>
+      <div class="eut-list">
+        ${eutItem('WC — volledige spoeling ≤ 6 l', r.eut.wcFull)}
+        ${eutItem('WC — gemiddelde spoeling ≤ 3,5 l', r.eut.wcReduced)}
+        ${eutItem('Urinoir tijdgestuurd ≤ 2 l/bak/uur', r.eut.urinalTimed)}
+        ${eutItem('Urinoir sensorgestuurd ≤ 1 l/spoeling', r.eut.urinalSensor)}
+        ${eutItem('Douche ≤ 8 l/min', r.eut.shower)}
+        ${eutItem('Wastafelkraan ≤ 6 l/min', r.eut.whb)}
+        ${eutItem('Keukenkraan (pantry) ≤ 6 l/min', r.eut.kitchenette)}
+        ${eutItem('Kernvereisten EUT water behaald (WC + urinoirs)', r.eut.metCore, true)}
+      </div>
+    </div>
+
+    <div class="res-section">
+      <h3>CO₂-impact</h3>
+      <table class="rtable">
+        <tr><th>Onderdeel</th><th>m³/jaar</th><th>kg CO₂e/jaar</th></tr>
+        <tr><td>Waterlevering</td><td>${fmt(a.networkUse.O,0)}</td><td>${fmt(a.networkUse.O*CARBON.supply,0)}</td></tr>
+        <tr><td>Afvalwaterzuivering</td><td>${fmt(a.sewageUse.O,0)}</td><td>${fmt(a.sewageUse.O*CARBON.treatment,0)}</td></tr>
+        <tr class="total"><td>Totaal</td><td>–</td><td>${fmt(r.carbonYear,0)}</td></tr>
+      </table>
+    </div>
+  `;
+  document.getElementById('resultsPanel').innerHTML = html;
+}
+function eutItem(label, ok, strong){
+  return `<div class="eut-item" style="${strong?'border:1px solid var(--border2);':''}"><span class="lbl" style="${strong?'font-weight:600;':''}">${label}</span><span class="eut-badge ${ok?'yes':'no'}">${ok?'Voldoet':'Voldoet niet'}</span></div>`;
+}
+
+/* ============ Recompute + repaint (called on every input) ============ */
+function refresh(){
+  const r = computeAll();
+  renderKPI(r);
+  renderResults(r);
+  refreshEutFlagsInForm();
+  const badge = document.getElementById('tabResultsBadge');
+  if(badge){
+    if(r.floorArea>0 && r.occupants>0){
+      badge.textContent = `${r.credits}/5 pt`;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+function refreshEutFlagsInForm(){
+  for(const fx of FIXTURE_UI){
+    const fs = state.fixtures[fx.key];
+    if(!fs || fs.single) continue;
+    for(const f of fx.fields){
+      if(!f.eut) continue;
+      for(let i=0;i<8;i++){
+        const el = document.querySelector(`[data-flag="${fx.key}.${i}.${f.key}"]`);
+        if(!el) continue;
+        const v = fs.types[i] ? fs.types[i][f.key] : 0;
+        el.style.display = (v>f.eut) ? 'block' : 'none';
+      }
+    }
+  }
+}
+
+/* ============ Form panel rendering ============ */
+
+function ynButtons(path, val, labels){
+  labels = labels || ['Ja','Nee'];
+  const yes = val===true, no = val===false;
+  return `<div class="yn">
+    <div class="yn-btn ${yes?'on':''}" data-yn="${path}" data-val="true">${labels[0]}</div>
+    <div class="yn-btn ${no?'on':''}" data-yn="${path}" data-val="false">${labels[1]}</div>
+  </div>`;
+}
+
+function stepperHtml(fxKey, count){
+  return `<div class="stepper">
+    <button data-step="${fxKey}" data-dir="-1" type="button">−</button>
+    <span>${count}</span>
+    <button data-step="${fxKey}" data-dir="1" type="button">+</button>
+  </div>`;
+}
+
+function fixtureCard(fx){
+  const fs = state.fixtures[fx.key];
+  const present = fx.hasPresence ? state.present[fx.key] : (fs.typesCount>0 || (fx.single && fs.count>0));
+  const active = fx.hasPresence ? state.present[fx.key] : true;
+
+  let head = `<div class="fixture-head">
+      <div class="fixture-name">${fx.label}</div>
+      ${fx.hasPresence ? ynButtons('present.'+fx.key, state.present[fx.key]) : ''}
+    </div>`;
+
+  let body = '';
+  if(fx.single){
+    body = `<div class="fixture-body active" style="display:${(!fx.hasPresence || active)?'block':'none'}">
+      <div class="field"><label class="field-label">Aantal geïnstalleerd</label>
+      <input type="number" min="0" step="1" data-path="fixtures.${fx.key}.count" value="${fs.count||0}"></div>
+    </div>`;
+  } else {
+    const showTypes = !fx.hasPresence || active;
+    let typeRows = '';
+    for(let i=0;i<fs.typesCount;i++){
+      const t = fs.types[i];
+      const fields = fx.fields.map(f=>`
+        <div>
+          <span class="mini-label">${f.label} (${f.unit})</span>
+          <input class="mini-input" type="number" min="0" step="0.01" data-path="fixtures.${fx.key}.types.${i}.${f.key}" value="${t[f.key]||0}">
+          ${f.eut?`<div class="eut-flag" data-flag="${fx.key}.${i}.${f.key}" style="display:none;">boven EUT-eis van ${f.eut} ${f.unit}</div>`:''}
+        </div>`).join('');
+      typeRows += `<div class="type-row" style="grid-template-columns:56px 1fr repeat(${fx.fields.length-1},1fr);">
+        <div class="tlabel">Type ${i+1}</div>
+        <div><span class="mini-label">Aantal</span><input class="mini-input" type="number" min="0" step="1" data-path="fixtures.${fx.key}.types.${i}.count" value="${t.count||0}"></div>
+        ${fields}
+      </div>`;
+    }
+    body = `<div class="fixture-body" style="display:${showTypes?'block':'none'}">
+      <div class="field-label" style="margin-bottom:8px;">Aantal verschillende types <span style="color:var(--text3);font-weight:400;">(max. 8)</span></div>
+      ${stepperHtml(fx.key, fs.typesCount)}
+      ${typeRows}
+    </div>`;
+  }
+  return `<div class="fixture-card ${present?'active':''}">${head}${body}</div>`;
+}
+
+function greyBlackRow(fx){
+  const gb = state.greyBlack[fx.key];
+  const wording = fx.black ? 'zwartwater' : 'grijswater';
+  if(fx.key==='urinalWaterless'){
+    return `<div class="gb-row"><div class="gb-label">${fx.label} (geen watergebruik, n.v.t.)</div><div></div><div></div></div>`;
+  }
+  return `<div class="gb-row">
+    <div class="gb-label">${fx.label} — ${wording} opgevangen?</div>
+    ${ynButtons('greyBlack.'+fx.key+'.yes', gb.yes, ['Ja','Nee'])}
+    <input type="number" min="0" max="100" step="1" placeholder="% opgevangen" data-path="greyBlack.${fx.key}.pct" value="${gb.pct||0}" style="${gb.yes?'':'visibility:hidden;'}">
+  </div>`;
+}
+
+const STEPS = [
+  {id:'s1', title:'Project- en gebouwgegevens', hint:'Projectinfo optioneel, gebouwgegevens verplicht'},
+  {id:'s2', title:'Waterverbruikende voorzieningen', hint:'Per voorziening: aanwezig? hoeveel types? aantallen en volumes'},
+  {id:'s3', title:'Grijs- en zwartwater', hint:'Opvang en hergebruik per voorziening'},
+  {id:'s4', title:'Regenwater', hint:null},
+  {id:'s5', title:'Overige hergebruikte waterbron', hint:null},
+  {id:'s6', title:'Gebruik van hergebruikt water', hint:'Alleen relevant als hierboven water wordt opgevangen'},
+  {id:'s7', title:'Riolering', hint:'Alleen voor CO₂-rapportage'}
+];
+let currentStep = 0;
+let activeTab = 'form';
+
+function stepBody(id){
+  const bt = getBuildingType();
+  if(id==='s1'){
+    const buildingOptions = BUILDING_TYPES.map(b=>`<option value="${b.name}" ${b.name===state.building.type?'selected':''}>${b.name}</option>`).join('');
+    return `
+    <div class="field"><label class="field-label">Projectnaam</label><input type="text" data-path="project.name" value="${state.project.name}"></div>
+    <div class="row2">
+      <div class="field"><label class="field-label">Registratienummer</label><input type="text" data-path="project.regnr" value="${state.project.regnr}"></div>
+      <div class="field"><label class="field-label">Opdrachtgever</label><input type="text" data-path="project.client" value="${state.project.client}"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label class="field-label">BREEAM-NL Expert</label><input type="text" data-path="project.expert" value="${state.project.expert}"></div>
+      <div class="field"><label class="field-label">BREEAM-NL Assessor</label><input type="text" data-path="project.assessor" value="${state.project.assessor}"></div>
+    </div>
+    <div class="field" style="border-top:1px solid var(--border);padding-top:14px;margin-top:2px;">
+      <label class="field-label">Gebouwtype<span class="req">*</span></label>
+      <select data-select="building.type">${buildingOptions}</select>
+      <div class="field-hint">Bepaalt gebruiksfrequenties, bezettingsdagen en -uren (BRE Wat 01-activiteitendatabase).</div>
+    </div>
+    <div class="row3">
+      <div class="field"><label class="field-label">Vloeroppervlak (m²)<span class="req">*</span></label><input type="number" min="0" step="0.01" data-path="building.floorArea" value="${state.building.floorArea||0}"></div>
+      <div class="field"><label class="field-label">Aantal gebruikers<span class="req">*</span></label><input type="number" min="0" step="1" data-path="building.occupants" value="${state.building.occupants||0}"></div>
+      <div class="field"><label class="field-label">Bezette dagen/jaar<span class="req">*</span></label><input type="number" min="0" step="1" data-path="building.occupiedDays" value="${state.building.occupiedDays||0}"></div>
+    </div>
+    <div class="field-hint">Bezettingsdichtheid gebruikt voor de berekening: ${fmt((state.building.occupants||0)/(state.building.floorArea||1),4)} persoon/m². Referentie-bezettingsdagen (standaard-scenario) voor dit gebouwtype: ${bt.days} dagen/jaar.</div>`;
+  }
+  if(id==='s2'){
+    return FIXTURE_UI.map(fx=>fixtureCard(fx)).join('');
+  }
+  if(id==='s3'){
+    return `
+    <div class="field" style="margin-bottom:10px;">${ynButtons('greyBlack.enabled', state.greyBlack.enabled)}</div>
+    <div style="display:${state.greyBlack.enabled?'block':'none'}">
+      ${FIXTURE_UI.map(fx=>greyBlackRow(fx)).join('')}
+    </div>`;
+  }
+  if(id==='s4'){
+    const rw = state.rainwater;
+    return `
+    <div class="field" style="margin-bottom:10px;"><label class="field-label">Regenwater wordt opgevangen?</label>${ynButtons('rainwater.enabled', rw.enabled)}</div>
+    <div style="display:${rw.enabled?'block':'none'}">
+      <div class="field"><label class="field-label">Systeem conform BS EN 16941-1:2018?</label>${ynButtons('rainwater.compliant', rw.compliant)}</div>
+      <div class="field"><label class="field-label">Berekeningsmethode</label>
+        <select data-select="rainwater.method">
+          <option value="basic" ${rw.method==='basic'?'selected':''}>Basic approach (oppervlak × neerslag)</option>
+          <option value="detailed" ${rw.method==='detailed'?'selected':''}>Detailed approach (directe jaaropvang in liter)</option>
+        </select>
+      </div>
+      <div style="display:${rw.method==='basic'?'block':'none'}">
+        <div class="row2">
+          <div class="field"><label class="field-label">Opvangoppervlak (m²)</label><input type="number" min="0" step="0.01" data-path="rainwater.area" value="${rw.area||0}"></div>
+          <div class="field"><label class="field-label">Jaarlijkse neerslag (mm/jaar)</label><input type="number" min="0" step="1" data-path="rainwater.rainfall" value="${rw.rainfall||0}"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label class="field-label">Hydraulisch rendement filter (%)</label><input type="number" min="0" max="100" step="1" data-path="rainwater.hydraulicEff" value="${rw.hydraulicEff||0}"></div>
+          <div class="field"><label class="field-label">Opbrengstcoëfficiënt (%)</label><input type="number" min="0" max="100" step="1" data-path="rainwater.yieldCoeff" value="${rw.yieldCoeff||0}"></div>
+        </div>
+      </div>
+      <div style="display:${rw.method==='detailed'?'block':'none'}">
+        <div class="field"><label class="field-label">Jaarlijkse regenwateropvang (liter)</label><input type="number" min="0" step="1" data-path="rainwater.dailyLitres" value="${rw.dailyLitres||0}"></div>
+      </div>
+    </div>`;
+  }
+  if(id==='s5'){
+    const orc = state.otherRecycled;
+    return `
+    <div class="field" style="margin-bottom:10px;"><label class="field-label">Andere bron van hergebruikt water?</label>${ynButtons('otherRecycled.enabled', orc.enabled)}</div>
+    <div style="display:${orc.enabled?'block':'none'}">
+      <div class="field"><label class="field-label">Omschrijving bron</label><input type="text" data-path="otherRecycled.source" value="${orc.source||''}"></div>
+      <div class="field"><label class="field-label">Jaarlijks hergebruikt (m³/jaar)</label><input type="number" min="0" step="0.01" data-path="otherRecycled.m3PerYear" value="${orc.m3PerYear||0}"></div>
+    </div>`;
+  }
+  if(id==='s6'){
+    const ru = state.recycledUse;
+    return `
+    <div class="gb-row"><div class="gb-label">Hergebruikt water gebruikt voor WC-spoeling?</div>${ynButtons('recycledUse.wcYes', ru.wcYes)}<input type="number" min="0" max="100" step="1" placeholder="% van WC's" data-path="recycledUse.wcPct" value="${ru.wcPct||0}" style="${ru.wcYes?'':'visibility:hidden;'}"></div>
+    <div class="gb-row"><div class="gb-label">Hergebruikt water voor urinoirs (tijdgestuurd)?</div>${ynButtons('recycledUse.urinalTimedYes', ru.urinalTimedYes)}<input type="number" min="0" max="100" step="1" placeholder="% urinoirs" data-path="recycledUse.urinalTimedPct" value="${ru.urinalTimedPct||0}" style="${ru.urinalTimedYes?'':'visibility:hidden;'}"></div>
+    <div class="gb-row"><div class="gb-label">Hergebruikt water voor urinoirs (sensor)?</div>${ynButtons('recycledUse.urinalSensorYes', ru.urinalSensorYes)}<input type="number" min="0" max="100" step="1" placeholder="% urinoirs" data-path="recycledUse.urinalSensorPct" value="${ru.urinalSensorPct||0}" style="${ru.urinalSensorYes?'':'visibility:hidden;'}"></div>`;
+  }
+  if(id==='s7'){
+    return `<div class="field">${ynButtons('sewage.connected', state.sewage.connected)}</div>`;
+  }
+  return '';
+}
+
+function renderFormPanel(){
+  const step = STEPS[currentStep];
+  document.getElementById('formPanel').innerHTML = `
+    <div class="section open">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-num">${currentStep+1}</div>
+          <div><div class="section-title">${step.title}</div>${step.hint?`<div class="section-hint">${step.hint}</div>`:''}</div>
+        </div>
+      </div>
+      <div class="section-body">${stepBody(step.id)}</div>
+    </div>`;
+
+  document.getElementById('stepProgress').innerHTML = STEPS.map((s,i)=>
+    `<div class="step-dot ${i<currentStep?'done':''} ${i===currentStep?'current':''}" data-goto="${i}"></div>`
+  ).join('');
+  document.getElementById('stepCounter').textContent = `Stap ${currentStep+1} van ${STEPS.length}`;
+
+  const prevBtn = document.getElementById('prevStepBtn');
+  const nextBtn = document.getElementById('nextStepBtn');
+  prevBtn.disabled = currentStep===0;
+  nextBtn.textContent = currentStep===STEPS.length-1 ? 'Bekijk resultaten →' : 'Volgende →';
+}
+
+function showTab(tab){
+  activeTab = tab;
+  document.getElementById('formView').classList.toggle('hidden-view', tab!=='form');
+  document.getElementById('resultsPanel').classList.toggle('hidden-view', tab!=='results');
+  document.getElementById('tabFormBtn').classList.toggle('active', tab==='form');
+  document.getElementById('tabResultsBtn').classList.toggle('active', tab==='results');
+}
+
+function goToStep(i){
+  currentStep = Math.max(0, Math.min(STEPS.length-1, i));
+  renderFormPanel();
+}
+
+/* ============ Event wiring ============ */
+function initApp(){
+  renderFormPanel();
+  showTab('form');
+  refresh();
+
+  const panel = document.getElementById('formPanel');
+
+  panel.addEventListener('input', e=>{
+    const path = e.target.getAttribute('data-path');
+    if(path){
+      const v = e.target.type==='number' ? (e.target.value===''?0:parseFloat(e.target.value)) : e.target.value;
+      setPath(state, path, v);
+      refresh();
+    }
+  });
+
+  panel.addEventListener('change', e=>{
+    const sel = e.target.getAttribute('data-select');
+    if(sel){ setPath(state, sel, e.target.value); renderFormPanel(); refresh(); }
+  });
+
+  panel.addEventListener('click', e=>{
+    const yn = e.target.closest('[data-yn]');
+    if(yn){
+      const path = yn.getAttribute('data-yn');
+      const val = yn.getAttribute('data-val')==='true';
+      setPath(state, path, val);
+      renderFormPanel();
+      refresh();
+      return;
+    }
+    const step = e.target.closest('[data-step]');
+    if(step){
+      const fxKey = step.getAttribute('data-step');
+      const dir = parseInt(step.getAttribute('data-dir'),10);
+      const fs = state.fixtures[fxKey];
+      fs.typesCount = Math.max(0, Math.min(8, (fs.typesCount||0)+dir));
+      renderFormPanel();
+      refresh();
+      return;
+    }
+  });
+
+  document.getElementById('stepProgress').addEventListener('click', e=>{
+    const dot = e.target.closest('[data-goto]');
+    if(dot) goToStep(parseInt(dot.getAttribute('data-goto'),10));
+  });
+
+  document.getElementById('prevStepBtn').addEventListener('click', ()=> goToStep(currentStep-1));
+  document.getElementById('nextStepBtn').addEventListener('click', ()=>{
+    if(currentStep===STEPS.length-1){ showTab('results'); }
+    else goToStep(currentStep+1);
+  });
+
+  document.getElementById('tabFormBtn').addEventListener('click', ()=> showTab('form'));
+  document.getElementById('tabResultsBtn').addEventListener('click', ()=> showTab('results'));
+
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    if(confirm('Alle ingevoerde gegevens wissen?')){ state = freshState(); currentStep=0; renderFormPanel(); showTab('form'); refresh(); }
+  });
+  document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+}
+
+initApp();
+
+</script>
+</body>
+</html>

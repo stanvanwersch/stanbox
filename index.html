@@ -189,7 +189,36 @@ main{
   background-size:cover;background-position:center;background-color:#1b1b19;
 }
 .web-search-empty{padding:10px 14px;font-size:12px;color:rgba(255,255,255,.4);}
-.web-spacer{flex:1;min-height:0;}
+.web-spacer{flex:1;min-height:0;position:relative;}
+.strip-preview{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(.85);
+  width:min(34vw,260px);
+  aspect-ratio:1/1;
+  border-radius:14px;
+  overflow:hidden;
+  background:#1b1b19;
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease;
+  z-index:10;
+  cursor:pointer;
+}
+.strip-preview.show{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
+.strip-preview-media{position:absolute;inset:0;background-size:cover;background-position:center;background-color:#1b1b19;}
+.strip-preview-gradient{
+  position:absolute;left:0;right:0;bottom:0;height:55%;
+  background:linear-gradient(to top,rgba(10,9,8,.9),rgba(10,9,8,0));
+  pointer-events:none;
+}
+.strip-preview-name{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:14px 16px;
+  font-family:var(--box-font);font-weight:600;font-size:clamp(13px,1.8vw,16px);
+  color:#fff;
+}
 .web-strip{
   flex:0 0 auto;
   display:flex;
@@ -228,6 +257,8 @@ main{
   .web-topbar{padding:6% 5% 2%;}
   .web-strip{padding:0 5% 5%;gap:8px;}
   .strip-tile{width:44px;height:44px;}
+  .strip-preview{width:min(52vw,190px);}
+  .strip-preview-name{font-size:12px;padding:10px 12px;}
   .web-search.open .web-search-input{width:120px;}
   .portal-close{width:36px;height:36px;}
   .portal-close svg{width:14px;height:14px;}
@@ -484,7 +515,13 @@ main{
         <div class="web-search-dropdown" id="web-search-dropdown"></div>
       </div>
     </div>
-    <div class="web-spacer"></div>
+    <div class="web-spacer">
+      <div class="strip-preview" id="strip-preview">
+        <div class="strip-preview-media" id="strip-preview-media"></div>
+        <div class="strip-preview-gradient"></div>
+        <div class="strip-preview-name" id="strip-preview-name"></div>
+      </div>
+    </div>
     <div class="web-strip" id="web-strip"></div>
   </div>
 
@@ -716,6 +753,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var toolbarExternal = document.getElementById("toolbar-external");
   var portalFrameImage = document.getElementById("portal-frame-image");
   var webStrip = document.getElementById("web-strip");
+  var stripPreview = document.getElementById("strip-preview");
+  var stripPreviewMedia = document.getElementById("strip-preview-media");
+  var stripPreviewName = document.getElementById("strip-preview-name");
   var webSearch = document.getElementById("web-search");
   var webSearchBtn = document.getElementById("web-search-btn");
   var webSearchInput = document.getElementById("web-search-input");
@@ -782,6 +822,7 @@ document.addEventListener("DOMContentLoaded", function(){
     portalFrameImage.style.opacity = "0";
     currentToolUrl = null;
     closeSearch();
+    hideStripPreviewNow();
   }
   function openTool(tool, originEl){
     if (!tool) return;
@@ -789,6 +830,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var url = tool.url;
     if (!url) return;
     closeSearch();
+    hideStripPreviewNow();
     currentToolUrl = url;
 
     // the clicked tile's dim little square "grows" into the full box and
@@ -877,9 +919,46 @@ document.addEventListener("DOMContentLoaded", function(){
       tile.addEventListener("click", function(){
         openTool(tool, media);
       });
+      tile.addEventListener("mouseenter", function(){
+        showStripPreview(tool);
+      });
+      tile.addEventListener("mouseleave", function(){
+        hideStripPreviewSoon();
+      });
       webStrip.appendChild(tile);
     });
   }
+
+  // --- Hover preview: hovering a strip tile pops an enlarged, clickable
+  // version of it up in the middle of the box.
+  var previewTool = null;
+  var previewHideTimer = null;
+  function showStripPreview(tool){
+    clearTimeout(previewHideTimer);
+    previewTool = tool;
+    stripPreviewMedia.style.backgroundImage = TOOL_IMAGES[tool.id] || "";
+    stripPreviewName.textContent = tool.name;
+    stripPreview.classList.add("show");
+  }
+  function hideStripPreviewNow(){
+    clearTimeout(previewHideTimer);
+    stripPreview.classList.remove("show");
+    previewTool = null;
+  }
+  function hideStripPreviewSoon(){
+    clearTimeout(previewHideTimer);
+    previewHideTimer = setTimeout(hideStripPreviewNow, 150);
+  }
+  stripPreview.addEventListener("mouseenter", function(){
+    clearTimeout(previewHideTimer);
+  });
+  stripPreview.addEventListener("mouseleave", function(){
+    hideStripPreviewSoon();
+  });
+  stripPreview.addEventListener("click", function(){
+    if (previewTool) openTool(previewTool, stripPreviewMedia);
+    hideStripPreviewNow();
+  });
 
   // --- Search: opens instantly with a dropdown of every tool, filters as you type
   function renderSearchResults(query){
@@ -1040,6 +1119,7 @@ document.addEventListener("DOMContentLoaded", function(){
     portalMiniFace.classList.remove("hidden");
     currentToolUrl = null;
     closeSearch();
+    hideStripPreviewNow();
 
     var rect1 = portalBox.getBoundingClientRect(); // current, full expanded rect
     var rect0 = { // back to wherever the wander path was frozen when it opened

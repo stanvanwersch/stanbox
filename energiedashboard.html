@@ -382,7 +382,7 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
   <div class="tabs" id="main-tabs">
     <button type="button" class="tab-btn on" data-tab="overzicht">Overzicht</button>
     <button type="button" class="tab-btn" data-tab="weii">WEii per gebouwtype</button>
-    <button type="button" class="tab-btn" data-tab="verloop">Verloop per gebouwtype</button>
+    <button type="button" class="tab-btn" data-tab="details">Details en vergelijking</button>
   </div>
 
   <div class="tab-panels">
@@ -409,7 +409,7 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
       </div>
     </div>
 
-    <div class="tab-panel" data-panel="verloop">
+    <div class="tab-panel" data-panel="details">
       <p class="section-sub">Kies links één of meer gebouwtypen voor het verloop van de WEii-score en de onderliggende kentallen tussen 2020 en 2024.</p>
       <div class="split">
         <div class="rail">
@@ -1228,7 +1228,7 @@ function activateMainTab(name){
   // het paneel display:none staat, dus opnieuw tekenen zodra het zichtbaar wordt.
   if(name==='overzicht') renderOverviewChart();
   if(name==='weii') renderBarChart();
-  if(name==='verloop') renderDetail();
+  if(name==='details') renderDetail();
 }
 mainTabBtns.forEach(b=>{
   b.addEventListener('click', ()=> activateMainTab(b.dataset.tab));

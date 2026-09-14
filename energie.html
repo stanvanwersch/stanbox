@@ -76,10 +76,14 @@ a{color:var(--accent);}
 /* ─── app-shell: het dashboard (het vlak) blijft altijd op zijn plaats; alleen
    de inhoud erbinnen scrolt, het paneel zelf schuift nooit mee omhoog ─── */
 .app-shell{height:100vh;display:flex;flex-direction:column;}
-.app-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+/* padding-top reserveert precies de ruimte van de vaste topbar (gemeten in JS),
+   zodat inhoud daar nooit onder/doorheen kan lopen: geen scroll-trucje meer nodig. */
+.app-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding-top:var(--topbar-total-h,76px);}
 
-/* ─── topbar (zwevend, sticky, transparant over de achtergrond) ─── */
-.topbar-wrap{flex-shrink:0;position:sticky;top:0;z-index:80;padding:14px 14px 0;}
+/* ─── topbar: echt vast (position:fixed) t.o.v. het viewport, blijft altijd op
+   dezelfde plek staan, ongeacht scrollen of tab-wissels; blijft transparant
+   zodat de achtergrondfoto er doorheen blijft schemeren ─── */
+.topbar-wrap{position:fixed;top:0;left:0;right:0;z-index:80;padding:14px 14px 0;}
 .topbar{
   max-width:1080px;margin:0 auto;
   background:rgba(255,255,255,.68);
@@ -336,13 +340,12 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
   .list-wrap{max-height:320px;}
 }
 @media (max-width:760px){
-  /* Op smalle schermen past een vast paneel met interne scroll niet goed:
-     val terug op een normaal doorlopend document (de hele pagina scrolt). */
-  html,body{height:auto;overflow:visible;}
-  .app-shell{height:auto;}
-  .app-body{overflow:visible;}
-  .page-card-wrap{display:block;}
-  .page{overflow:visible;padding:28px 18px 40px;}
+  /* Zelfde architectuur als desktop (vast paneel, alleen de kaart scrolt
+     intern): zo blijft de topbar op elke schermbreedte gegarandeerd op
+     dezelfde plek en kan er nooit tekst achter/door de rand heen schuiven.
+     Alleen de padding wordt smaller voor kleine schermen. */
+  .page-card-wrap{padding:10px 10px 10px;}
+  .page{padding:20px 18px 20px;}
   .tabs{margin:0 -18px;padding:0 18px;}
   .year-row{margin:0 -18px;padding:14px 18px 8px;}
 }
@@ -1261,22 +1264,24 @@ function initMlist(){
 initMlist();
 
 // ---------- sticky offsets ----------
-// Boven de 760px-drempel staat het vlak (.page) vast en scrolt alleen zijn
-// eigen inhoud: de tabs plakken dan bovenaan DIE scrolcontainer (top:0), los
-// van de topbar. Onder de drempel valt het vlak terug op gewone documentflow
-// (de hele pagina scrolt), en plakken de tabs t.o.v. het document, dus met de
-// hoogte van de topbar als offset. Hoogtes worden gemeten i.p.v. hardcoded,
-// zodat het klopt ongeacht theme/font-rendering.
+// De topbar staat altijd position:fixed t.o.v. het viewport (blijft dus
+// altijd op dezelfde plek, op elke schermbreedte, ongeacht scrollen of
+// tab-wissels). --topbar-total-h reserveert exact zijn gemeten hoogte als
+// padding-top op .app-body, zodat het vlak (.page) er nooit onder begint.
+// Het vlak zelf staat ook altijd vast (zelfde architectuur op elke
+// breedte): alleen zijn eigen inhoud scrolt intern, dus er kan nooit tekst
+// achter de (transparante) rand van de topbar vandaan schuiven. De tabs
+// plakken daarbinnen bovenaan DIE scrolcontainer (top:0). Hoogtes worden
+// gemeten i.p.v. hardcoded, zodat het klopt ongeacht theme/font-rendering.
 function updateStickyOffsets(){
   const topbar = document.querySelector('.topbar-wrap');
   const tabs = document.querySelector('.tabs');
   if(!topbar || !tabs) return;
-  const isMobileFlow = window.matchMedia('(max-width:760px)').matches;
   const topbarH = Math.round(topbar.getBoundingClientRect().height);
-  const tabsTop = isMobileFlow ? topbarH : 0;
-  document.documentElement.style.setProperty('--sticky-tabs-top', tabsTop + 'px');
+  document.documentElement.style.setProperty('--topbar-total-h', topbarH + 'px');
+  document.documentElement.style.setProperty('--sticky-tabs-top', '0px');
   const tabsH = Math.round(tabs.getBoundingClientRect().height);
-  document.documentElement.style.setProperty('--sticky-year-top', (tabsTop + tabsH) + 'px');
+  document.documentElement.style.setProperty('--sticky-year-top', tabsH + 'px');
 }
 window.addEventListener('resize', updateStickyOffsets);
 window.addEventListener('load', updateStickyOffsets);

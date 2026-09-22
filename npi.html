@@ -112,7 +112,7 @@ html[data-theme="dark"] .theme-toggle .ti-sun{display:block;}
 .dgbc-link{overflow:hidden;transition:border-color .15s,box-shadow .15s,transform .15s;}
 .dgbc-link:hover{border-color:var(--accent2-b);box-shadow:0 0 0 3px var(--accent2-s);transform:translateY(-1px);}
 .dgbc-link img{width:70%;height:70%;object-fit:contain;transform:translateX(2px);}
-.betabadge{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;font-style:italic;color:#fff;background:var(--accent2);padding:4px 12px;border-radius:20px;display:inline-block;white-space:nowrap;}
+.betabadge{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;font-style:italic;color:#0f3320;background:#7fb88a;padding:4px 12px;border-radius:20px;display:inline-block;white-space:nowrap;}
 
 .goog-te-banner-frame,iframe.goog-te-banner-frame,.goog-te-banner-frame.skiptranslate{display:none!important;visibility:hidden!important;height:0!important;}
 body > .skiptranslate{display:none!important;visibility:hidden!important;height:0!important;}
@@ -383,10 +383,6 @@ li strong{color:var(--text);font-weight:600;}
       <div style="background:#3f9e68;">P</div>
       <div style="background:#1a7a4c;">I</div>
     </div>
-    <div class="logo-word">
-      <div>Natuur Portfolio</div>
-      <div>Index</div>
-    </div>
       </div>
       <div class="topbar-right">
         <button type="button" class="lang-toggle notranslate" translate="no" onclick="toggleLanguage()" aria-label="Vertaal pagina naar Engels" title="Nederlands / English">
@@ -430,10 +426,6 @@ li strong{color:var(--text);font-weight:600;}
       <div style="background:#7fb88a;">N</div>
       <div style="background:#3f9e68;">P</div>
       <div style="background:#1a7a4c;">I</div>
-    </div>
-    <div class="logo-word">
-      <div>Natuur Portfolio</div>
-      <div>Index</div>
     </div>
   </a>
   <nav class="topbar-nav">
@@ -505,7 +497,6 @@ li strong{color:var(--text);font-weight:600;}
   <div class="rdiv"></div>
   <div class="rail-label">Overig</div>
   <div class="ni" data-key="faq" onclick="nav('faq',this)">Veelgestelde vragen</div>
-  <div class="ni" data-key="archief" onclick="nav('archief',this)">Archiefkaarten</div>
   <div class="ni" data-key="changelog" onclick="nav('changelog',this)">Changelog</div>
 </nav>
 
@@ -890,22 +881,6 @@ li strong{color:var(--text);font-weight:600;}
 </div>
 
 
-<div class="page" id="page-archief">
-  <h1>Archiefkaarten</h1>
-  <p class="lead">Eerdere versies van de kaartlagen die aan de Geo-scan ten grondslag liggen, bewaard voor traceerbaarheid wanneer een dataset of methodiek wordt geactualiseerd.</p>
-
-  <h2 id="archief-over"><span class="h2-num">1</span>Waarom een archief?</h2>
-  <p>Landelijke open databronnen worden periodiek geactualiseerd - nieuwe metingen of verbeterde modellen kunnen een kaartlaag laten verschuiven. Omdat een NPI-score op een vastgelegd moment wordt bepaald, is het voor de traceerbaarheid van eerdere analyses van belang om te kunnen terugzien welke versie van een kaartlaag destijds is gebruikt - net als bij het Framework for Climate Adaptive Buildings.</p>
-  <div class="ib">Dit onderdeel is in opbouw. Zodra de Geo-scan-kaartlagen zijn vastgesteld en voor het eerst worden herzien, wordt de vervangen versie hier met ingangsdatum en toelichting gearchiveerd.</div>
-
-  <h2 id="archief-overzicht"><span class="h2-num">2</span>Overzicht</h2>
-  <div class="phb">
-    <div class="pht">Nog geen gearchiveerde kaartversies</div>
-    <div class="phd">Zodra een kaartlaag wordt vervangen door een geactualiseerde versie, verschijnt de vorige versie hier met datum, bron en een korte toelichting op wat er is gewijzigd.</div>
-  </div>
-</div>
-
-
 <div class="page" id="page-changelog">
   <h1>Changelog</h1>
   <p class="lead">Een overzicht van wijzigingen aan deze online omgeving, per datum.</p>
@@ -917,7 +892,7 @@ li strong{color:var(--text);font-weight:600;}
     <div class="clc">
       <span class="ct ctn">nieuw</span> Eerste versie van deze online omgeving gepubliceerd, gebaseerd op het consortiumvoorstel "Natuur Portfolio Index - Hoe natuurinclusief is mijn vastgoedportfolio?".<br>
       <span class="ct ctn">nieuw</span> Structuur en vormgeving opgezet in dezelfde stijl als de website van het Framework for Climate Adaptive Buildings (FCAB), inclusief toegangscode-gate, licht/donker-modus en NL/EN-taalwissel.<br>
-      <span class="ct ctn">nieuw</span> Hoofdstukken 1 t/m 8 (Over de NPI t/m Kennisagenda), de 3 stappen (Geo-scan, Kavelscan, Kansenanalyse), Over DGBC, Veelgestelde vragen, Archiefkaarten en Changelog toegevoegd.<br>
+      <span class="ct ctn">nieuw</span> Hoofdstukken 1 t/m 8 (Over de NPI t/m Kennisagenda), de 3 stappen (Geo-scan, Kavelscan, Kansenanalyse), Over DGBC, Veelgestelde vragen en Changelog toegevoegd.<br>
       <span class="ct ctu">update</span> Onderdelen waarvoor de methodiek nog niet is uitgewerkt (scoremethodiek, kaartlagen, maatregelentabel, kennisagenda) zijn gemarkeerd als "in ontwikkeling", in lijn met het consortiumvoorstel.
     </div>
   </div>
@@ -966,7 +941,7 @@ try{
   }
 }catch(e){}
 
-const PG={home:'page-home',overdgbc:'page-overdgbc',geoscan:'page-geoscan',kavelscan:'page-kavelscan',kansenanalyse:'page-kansenanalyse',npi1:'page-npi1',npi2:'page-npi2',npi3:'page-npi3',npi4:'page-npi4',npi5:'page-npi5',npi6:'page-npi6',npi7:'page-npi7',npi8:'page-npi8',faq:'page-faq',archief:'page-archief',changelog:'page-changelog'};
+const PG={home:'page-home',overdgbc:'page-overdgbc',geoscan:'page-geoscan',kavelscan:'page-kavelscan',kansenanalyse:'page-kansenanalyse',npi1:'page-npi1',npi2:'page-npi2',npi3:'page-npi3',npi4:'page-npi4',npi5:'page-npi5',npi6:'page-npi6',npi7:'page-npi7',npi8:'page-npi8',faq:'page-faq',changelog:'page-changelog'};
 const THEME_KEYS=['geoscan','kavelscan','kansenanalyse'];
 let cur='home';
 function scrollCanvasToTop(){

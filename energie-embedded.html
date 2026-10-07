@@ -368,6 +368,12 @@ html[data-theme="dark"] .view-btn.on{color:#0e1b33;}
 /* ─── Settings ─── */
 #view-settings .kader{margin-bottom:14px;}
 #view-settings .kader + .kader{margin-top:0;}
+.set-sec-head{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;cursor:pointer;padding:0;font-size:16px;font-weight:600;color:var(--text);font-family:var(--wordmark);line-height:1.35;}
+.set-sec-head:hover{color:var(--accent);}
+.set-sec-chev{margin-left:auto;color:var(--text3);font-size:17px;flex-shrink:0;transition:transform .15s,color .15s;}
+.set-sec.on .set-sec-chev{transform:rotate(90deg);color:var(--accent);}
+.set-sec-body{display:none;margin-top:10px;}
+.set-sec.on .set-sec-body{display:block;}
 .set-h{font-size:16px;font-weight:600;color:var(--text);font-family:var(--wordmark);margin-bottom:6px;line-height:1.35;}
 .set-sub{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:10px;}
 .set-status{font-size:13px;color:var(--text2);margin:8px 0 12px;}
@@ -2246,7 +2252,44 @@ function buildSettings(){
     + '<p class="set-sub">Vul het gemiddelde gebruiksoppervlak per pand in dat TNO per gebouwtype en jaar opgeeft. Een lege cel betekent dat de schatting uit de TNO-oppervlakteklassen wordt gebruikt (grijs weergegeven). Ingevulde waarden kleuren groen. Heeft TNO een totaaloppervlak gegeven? Deel dat dan door het aantal panden. Dit oppervlak bepaalt, samen met het aantal panden, hoe zwaar elk TNO-gebouwtype meeweegt. Voor zonnestroom wordt het oppervlak van de elektriciteitspopulatie gebruikt.</p>'
     + '<div class="set-tab" id="set-opp-tab"><button type="button" data-opp-mode="gas" class="'+(oppMode==='gas'?'on':'')+'">Gas</button><button type="button" data-opp-mode="elek" class="'+(oppMode==='elek'?'on':'')+'">Elektriciteit</button></div>'
     + '<div class="set-scroll"><table class="set-table"><thead><tr><th>TNO-gebouwtype</th>'+YEARS.map(y=>'<th class="num">'+y+'</th>').join('')+'</tr></thead><tbody id="set-opp-body">'+oppRows()+'</tbody></table></div></div>';
+  makeSettingsCollapsible();
   settingsBuilt = true;
+}
+// Hoofdstukken 1 t/m 4 in Settings zijn individueel uit- en inklapbaar; standaard ingeklapt.
+function makeSettingsCollapsible(){
+  // alleen de genummerde hoofdstukken 1 t/m 4 klappen; de intro- en Excelbestand-kaart blijven open
+  const cards = Array.from(viewSet.querySelectorAll(':scope > .kader')).filter(c=>/^\d\./.test(c.querySelector('.set-h').textContent));
+  cards.forEach(card=>{
+    const h = card.querySelector('.set-h');
+    const body = document.createElement('div');
+    body.className = 'set-sec-body';
+    Array.from(card.children).forEach(ch=>{ if(ch!==h) body.appendChild(ch); });
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'set-sec-head'; btn.setAttribute('aria-expanded','false');
+    btn.innerHTML = '<span></span><span class="set-sec-chev">›</span>';
+    btn.firstChild.textContent = h.textContent;
+    h.replaceWith(btn);
+    card.appendChild(body);
+    card.classList.add('set-sec');
+    btn.addEventListener('click', ()=>{ const on = card.classList.toggle('on'); btn.setAttribute('aria-expanded', String(on)); syncSetAll(); });
+  });
+  const tb = viewSet.querySelector('.set-toolbar');
+  if(tb && !document.getElementById('set-all')){
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'set-btn'; b.id = 'set-all'; b.textContent = 'Alles uitklappen';
+    tb.appendChild(b);
+    b.addEventListener('click', ()=>{
+      const secs = viewSet.querySelectorAll('.set-sec');
+      const open = !Array.from(secs).every(x=>x.classList.contains('on'));
+      secs.forEach(x=>{ x.classList.toggle('on', open); x.querySelector('.set-sec-head').setAttribute('aria-expanded', String(open)); });
+      syncSetAll();
+    });
+  }
+}
+function syncSetAll(){
+  const b = document.getElementById('set-all'); if(!b) return;
+  const secs = Array.from(viewSet.querySelectorAll('.set-sec'));
+  b.textContent = secs.every(x=>x.classList.contains('on')) ? 'Alles inklappen' : 'Alles uitklappen';
 }
 function refreshSettingsDynamic(){
   const st = document.getElementById('set-status'); if(st) st.innerHTML = statusHtml();

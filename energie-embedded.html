@@ -62,9 +62,7 @@ html[data-theme="dark"]{
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{color-scheme:light;}
-html[data-theme="dark"]{color-scheme:light;}
-html[data-theme="dark"] .page-scroll{scrollbar-color:#3a4256 transparent;}
-html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] .page-scroll{color-scheme:dark;}
+html[data-theme="dark"]{color-scheme:dark;}
 html,body{background:var(--cream);color:var(--text);height:100%;overflow:hidden;}
 body{font-family:var(--sans);font-size:15px;line-height:1.7;font-weight:300;transition:background .2s,color .2s;}
 ::selection{background:var(--accent-b);}
@@ -76,7 +74,11 @@ button,select,input{font-family:var(--sans);}
 strong,b{font-weight:600;color:var(--text);}
 a{color:var(--accent);}
 
-/* achtergrondfoto verwijderd voor de embed-variant */
+/* ─── fixed full-page background photo ─── */
+.bg-photo{position:fixed;inset:0;z-index:0;pointer-events:none;background:#eceef2;}
+html[data-theme="dark"] .bg-photo{background:#0b0d14;}
+.page{box-shadow:0 8px 30px rgba(14,27,51,.10);}
+html[data-theme="dark"] .page{box-shadow:0 8px 30px rgba(0,0,0,.45);}
 
 /* ─── app-shell: het dashboard is nu 1 scherm/vlak. De topbar staat als vaste
    kopregel bovenin dát vlak (geen los zwevend balkje meer erboven) en scrolt
@@ -111,18 +113,15 @@ html[data-theme="dark"] .theme-toggle .ti-moon{display:none;}
 html[data-theme="dark"] .theme-toggle .ti-sun{display:block;}
 
 /* ─── page: één vlak/scherm (topbar + inhoud samen) ─── */
-.page-card-wrap{flex:1;min-height:0;padding:0;position:relative;z-index:1;display:flex;}
+.page-card-wrap{flex:1;min-height:0;padding:14px 14px 14px;position:relative;z-index:1;display:flex;}
 /* .page zelf scrolt niet: .topbar (vast bovenaan) en .page-scroll (de
-   eigenlijke scrollende inhoud eronder) zijn de enige kinderen. Embed-variant:
-   geen zwevende kaart, de inhoud vult de iframe zelf volledig. */
+   eigenlijke scrollende inhoud eronder) zijn de enige kinderen. */
 .page{
   flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;
-  width:100%;background:var(--cream);
-  border-radius:20px;
+  max-width:980px;margin:0 auto;width:100%;background:var(--cream);
+  border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);
   overflow:hidden;
 }
-/* achter de afgeronde hoeken zit de pagina waarin de iframe staat: transparante achtergrond */
-html,body{background:transparent !important;}
 .page-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:22px 32px 22px;}
 
 p{margin-bottom:12px;color:var(--text2);font-weight:300;}
@@ -440,7 +439,7 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
      intern): zo blijft de topbar op elke schermbreedte gegarandeerd op
      dezelfde plek en kan er nooit tekst achter/door de rand heen schuiven.
      Alleen de padding wordt smaller voor kleine schermen. */
-  .page-card-wrap{padding:0;}
+  .page-card-wrap{padding:10px 10px 10px;}
   .topbar{padding:14px 18px;}
   .page-scroll{padding:20px 18px 20px;}
   .mode-row{align-items:stretch;}
@@ -449,15 +448,12 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
   .pathway-toggles{width:100%;}
   .cat-dropdown-panel{width:calc(100vw - 56px);}
 }
-
-/* neutrale variant: past op een witte website */
-:root{--cream:#ffffff;--border:#e4e6eb;--border2:#cfd3da;--neutral-s:#f3f4f6;--grid-line:#e8eaee;}
-.page{border-radius:0;}
-.topbar{border-bottom-color:#e4e6eb;}
 </style>
 </head>
 <body>
 
+
+<div class="bg-photo"></div>
 
 <div class="app-shell">
 

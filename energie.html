@@ -521,7 +521,7 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
       </div>
       <div class="pathway-toggles" id="pathway-toggles">
         <label class="pathway-chk" id="pp-toggle-label"><input type="checkbox" id="pp-toggle"><span>Paris Proof-pad</span></label>
-        <label class="pathway-chk disabled" id="crrem-toggle-label" title="Het CRREM-pad is te tonen bij uitsluitend WEii of WEii-CO₂, met minstens één geselecteerd gebouwtype."><input type="checkbox" id="crrem-toggle" disabled aria-disabled="true"><span>CRREM-pad</span></label>
+        <label class="pathway-chk disabled" id="crrem-toggle-label" title="Het CRREM-pad is te tonen bij uitsluitend WEii-finaal of WEii-CO₂, met minstens één geselecteerd gebouwtype."><input type="checkbox" id="crrem-toggle" disabled aria-disabled="true"><span>CRREM-pad</span></label>
       </div>
       <div class="year-tabs-inline" id="year-tabs-weii-wrap" hidden>
         <div class="year-tabs" id="year-tabs-weii"></div>
@@ -582,8 +582,8 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
           <div class="msec">
             <button type="button" class="msec-head" aria-expanded="false"><span>Het CRREM-pad</span><span class="msec-chev">›</span></button>
             <div class="msec-body">
-              <p>Het CRREM-pad is het 1,5°C-doelpad uit de <strong>CRREM Global Pathways (versie 2.01, 11 januari 2023)</strong>, voor Nederland, per CRREM-pandtype en per jaar van 2020 tot en met 2050 (energie in kWh/m², en CO₂ in kg CO₂/m²). Elk gebouwtype is aan het meest verwante CRREM-pandtype gekoppeld (tabel hieronder); waar de aansluiting niet exact is staat "benadering", en gebouwtypen zonder vergelijkbaar CRREM-type (zoals onderwijs, kinderopvang, restaurants en cellengebouwen) hebben geen CRREM-pad. Het pad is te tonen bij uitsluitend WEii (energie) of uitsluitend WEii-CO₂, voor minstens één geselecteerd gebouwtype.</p>
-              <p>CRREM heeft een eigen oppervlakte-definitie en rekent met finaal energiegebruik, terwijl de WEii op het werkelijke energiegebruik (hoofdmeter) per m² gebruiksoppervlak is gebaseerd; lees het CRREM-pad daarom als richtinggevende vergelijking. Het CRREM-CO₂-pad gebruikt de CRREM-emissiefactoren voor het Nederlandse net, WEii-CO₂ de WEii.nl-factoren per jaar. De CRREM-gegevens zijn afkomstig van het CRREM-consortium en worden gebruikt onder de voorwaarden en disclaimer van dat bestand ("as is", op eigen risico).</p>
+              <p>Het CRREM-pad is het 1,5°C-doelpad uit de <strong>CRREM Global Pathways (versie 2.01, 11 januari 2023)</strong>, voor Nederland, per CRREM-pandtype en per jaar van 2020 tot en met 2050 (energie in kWh/m², en CO₂ in kg CO₂/m²). Elk gebouwtype is aan het meest verwante CRREM-pandtype gekoppeld (tabel hieronder); waar de aansluiting niet exact is staat "benadering", en gebouwtypen zonder vergelijkbaar CRREM-type (zoals onderwijs, kinderopvang, restaurants en cellengebouwen) hebben geen CRREM-pad. Het pad is te tonen bij uitsluitend WEii-finaal (energie) of uitsluitend WEii-CO₂, voor minstens één geselecteerd gebouwtype.</p>
+              <p>CRREM heeft een eigen oppervlakte-definitie en rekent met finaal energiegebruik; daarom is het CRREM-pad te vergelijken met WEii-finaal (WEii plus lokale zonopwek) en niet met de gewone WEii. De vergelijking blijft richtinggevend. Het CRREM-CO₂-pad gebruikt de CRREM-emissiefactoren voor het Nederlandse net, WEii-CO₂ de WEii.nl-factoren per jaar. De CRREM-gegevens zijn afkomstig van het CRREM-consortium en worden gebruikt onder de voorwaarden en disclaimer van dat bestand ("as is", op eigen risico).</p>
               <div id="crrem-map-wrap"></div>
             </div>
           </div>
@@ -1417,7 +1417,7 @@ function crremValues(cat, group){
 }
 function crremGroupForKeys(keys){
   if(keys.length!==1) return null;
-  return keys[0]==='weii' ? 'kwh' : keys[0]==='co2' ? 'co2' : null;
+  return keys[0]==='finaal' ? 'kwh' : keys[0]==='co2' ? 'co2' : null;
 }
 
 // ---------- trendlijn: landelijk gemiddelde + zelf toegevoegde gebouwtypen ----------
@@ -1460,7 +1460,7 @@ function renderTrendPanels(holder, noteEl){
     notes.push('Selecteer minstens één gebouwtype om het Paris Proof-pad te tonen (het landelijk gemiddelde heeft geen eigen klassegrens).');
   }
   if(state.showCrrem && !crremGroup){
-    notes.push('Het CRREM-pad is alleen te tonen wanneer uitsluitend WEii (kWh/m²) of uitsluitend WEii-CO₂ (kg CO₂/m²) is geselecteerd.');
+    notes.push('Het CRREM-pad is alleen te tonen wanneer uitsluitend WEii-finaal (kWh/m²) of uitsluitend WEii-CO₂ (kg CO₂/m²) is geselecteerd.');
   } else if(state.showCrrem && shownCats.length===0){
     notes.push('Selecteer minstens één gebouwtype om het CRREM-pad te tonen (het landelijk gemiddelde heeft geen eigen CRREM-pad).');
   } else if(crActive){
@@ -1979,8 +1979,8 @@ function updatePathwayControlsState(){
     state.showParisProof = false;
     ppToggle.checked = false;
   }
-  // CRREM-pad: bij uitsluitend WEii of uitsluitend WEii-CO2, en minstens één gebouwtype
-  const crAllowed = state.mode==='lijn' && state.metrics.size===1 && (state.metrics.has('weii') || state.metrics.has('co2')) && state.selectedIds.size>0;
+  // CRREM-pad: bij uitsluitend WEii-finaal of uitsluitend WEii-CO2, en minstens één gebouwtype
+  const crAllowed = state.mode==='lijn' && state.metrics.size===1 && (state.metrics.has('finaal') || state.metrics.has('co2')) && state.selectedIds.size>0;
   if(crremToggle){
     crremToggle.disabled = !crAllowed;
     crremToggle.setAttribute('aria-disabled', String(!crAllowed));

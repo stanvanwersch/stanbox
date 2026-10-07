@@ -62,7 +62,9 @@ html[data-theme="dark"]{
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{color-scheme:light;}
-html[data-theme="dark"]{color-scheme:dark;}
+html[data-theme="dark"]{color-scheme:light;}
+html[data-theme="dark"] .page-scroll{scrollbar-color:#3a4256 transparent;}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] .page-scroll{color-scheme:dark;}
 html,body{background:var(--cream);color:var(--text);height:100%;overflow:hidden;}
 body{font-family:var(--sans);font-size:15px;line-height:1.7;font-weight:300;transition:background .2s,color .2s;}
 ::selection{background:var(--accent-b);}
@@ -116,8 +118,11 @@ html[data-theme="dark"] .theme-toggle .ti-sun{display:block;}
 .page{
   flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;
   width:100%;background:var(--cream);
+  border-radius:20px;
   overflow:hidden;
 }
+/* achter de afgeronde hoeken zit de pagina waarin de iframe staat: transparante achtergrond */
+html,body{background:transparent !important;}
 .page-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:22px 32px 22px;}
 
 p{margin-bottom:12px;color:var(--text2);font-weight:300;}

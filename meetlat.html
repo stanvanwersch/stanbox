@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meetlat — afstand & oppervlakte op afbeelding</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Meetlat · Stanbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --cream:#faf9f7;
@@ -14,51 +14,94 @@
     --text:#1c1a17;
     --text2:#5a5650;
     --text3:#9c9690;
-    --accent:#1C974D;
+    --accent:#e07a2f;
     --accent-ink:#ffffff;
-    --confirm:#5c7a5e;
+    --box:#3d3730;
+    --box2:#232019;
+    --ok:#3ca87c;
     --danger:#b91c1c;
-    --sans:"Montserrat",system-ui,sans-serif;
-    --r:4px;
+    --sans:"Poppins",system-ui,sans-serif;
+    --ui:"Inter",system-ui,sans-serif;
+    --r:12px;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{margin:0;padding:0;height:100%;}
+  html,body{margin:0;padding:0;min-height:100%;}
   body{
-    background:var(--cream);
-    font-family:var(--sans);
+    font-family:var(--ui);
     color:var(--text);
     min-height:100vh;
-    font-size:15px;
+    font-size:14px;
     line-height:1.6;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(60,168,124,.07), transparent 38%),
+      radial-gradient(circle at 88% 82%, rgba(224,122,47,.07), transparent 40%),
+      var(--cream);
+    position:relative;
+  }
+  /* the animated isometric scene from stanbox.nl, fixed behind the tool */
+  .bg-scene{position:fixed;inset:0;z-index:-1;pointer-events:none;}
+  .bg-scene svg{width:100%;height:100%;display:block;}
+  .bg-grid{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.55;
+    background:
+      repeating-linear-gradient(30deg, rgba(183,201,218,.35) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(-30deg, rgba(183,201,218,.35) 0 1px, transparent 1px 64px);
+    -webkit-mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);
+            mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);
   }
   .app{
     max-width:1400px;
     margin:0 auto;
-    padding:32px 24px 60px;
+    padding:28px 28px 24px;
   }
   header{
+    position:relative;
     display:flex;
     flex-direction:column;
-    align-items:flex-start;
-    gap:6px;
-    margin-bottom:22px;
-    padding-bottom:16px;
-    border-bottom:1px solid var(--border);
+    align-items:center;
+    text-align:center;
+    gap:8px;
+    margin:4px 0 26px;
   }
+  .brand{display:flex;flex-direction:column;align-items:center;gap:10px;}
   header h1{
-    font-size:22px;
+    font-family:var(--sans);
+    font-size:36px;
     font-weight:700;
-    letter-spacing:-.2px;
-    margin:0;
+    letter-spacing:-.4px;
+    line-height:1.15;
     color:var(--text);
+    padding:12px 34px;
+    border-radius:18px;
+    background:rgba(250,249,247,.82);
+    backdrop-filter:blur(14px) saturate(160%);
+    -webkit-backdrop-filter:blur(14px) saturate(160%);
   }
+  header .badge{position:absolute;right:0;top:10px;}
+  @media (max-width:700px){ header .badge{position:static;} }
   header h1 .lat{color:var(--accent);}
   header p{
-    margin:0;
-    font-size:13px;
+    font-family:var(--sans);
+    font-size:14px;
     font-weight:300;
     color:var(--text2);
+    background:rgba(250,249,247,.7);
+    border-radius:999px;
+    padding:2px 14px;
   }
+  .badge{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:-.2px;
+    color:#fff;
+    background:var(--box);
+    padding:7px 16px;
+    border-radius:999px;
+    box-shadow:0 8px 20px rgba(0,0,0,.14);
+    text-decoration:none;
+  }
+  .badge span{color:var(--accent);}
 
   .layout{
     display:grid;
@@ -68,13 +111,17 @@
   }
   @media (max-width:880px){
     .layout{grid-template-columns:1fr;}
+    .app{padding:20px 16px 40px;}
   }
 
   .panel{
-    background:var(--white);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:16px;
+    background:rgba(255,255,255,.62);
+    backdrop-filter:blur(16px) saturate(150%);
+    -webkit-backdrop-filter:blur(16px) saturate(150%);
+    border:1px solid rgba(255,255,255,.8);
+    border-radius:26px;
+    padding:18px;
+    box-shadow:0 24px 60px rgba(28,26,23,.12);
   }
 
   /* Toolbar */
@@ -86,29 +133,31 @@
     align-items:center;
   }
   .btn{
-    font-family:var(--sans);
+    font-family:var(--ui);
     font-size:13px;
     font-weight:600;
     border:1px solid var(--border2);
     background:var(--white);
     color:var(--text);
-    padding:9px 14px;
-    border-radius:var(--r);
+    padding:9px 16px;
+    border-radius:999px;
     cursor:pointer;
     display:inline-flex;
     align-items:center;
-    gap:6px;
-    transition:border-color .15s, opacity .15s, transform .05s;
+    gap:7px;
+    transition:border-color .15s, background .15s, color .15s, opacity .15s, transform .1s;
     white-space:nowrap;
   }
+  .btn svg{width:15px;height:15px;flex:0 0 auto;}
   .btn:hover{border-color:var(--text3);}
   .btn:active{transform:scale(0.97);}
-  .btn.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  .btn.active{background:var(--box);color:#fff;border-color:var(--box);}
   .btn.danger{color:var(--danger);}
   .btn.danger:hover{border-color:var(--danger);}
   .btn:disabled{opacity:.35;cursor:not-allowed;}
   .btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
   .btn-primary:hover{opacity:.9;border-color:var(--accent);}
+  .toolbar .sep{width:1px;height:22px;background:var(--border);margin:0 4px;}
 
   input[type=file]{display:none;}
 
@@ -116,10 +165,10 @@
     display:flex;
     align-items:center;
     gap:10px;
-    background:rgba(224,122,47,.07);
-    border:1px solid rgba(224,122,47,.25);
+    background:rgba(224,122,47,.08);
+    border:1px solid rgba(224,122,47,.28);
     border-radius:var(--r);
-    padding:9px 12px;
+    padding:9px 14px;
     font-size:12.5px;
     color:var(--text2);
     margin-bottom:14px;
@@ -127,24 +176,26 @@
   }
   .draw-hint strong{color:var(--accent);font-weight:600;}
 
-  /* Canvas area */
+  /* Canvas area: the dark stanbox "box" */
   .canvas-wrap{
     position:relative;
     background:
-      repeating-linear-gradient(0deg, var(--border) 0, var(--border) 1px, transparent 1px, transparent 24px),
-      repeating-linear-gradient(90deg, var(--border) 0, var(--border) 1px, transparent 1px, transparent 24px),
-      var(--cream);
-    border:1px solid var(--border);
-    border-radius:8px;
+      repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0, rgba(255,255,255,.05) 1px, transparent 1px, transparent 26px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0, rgba(255,255,255,.05) 1px, transparent 1px, transparent 26px),
+      var(--box);
+    border-radius:18px;
     display:flex;
     align-items:center;
     justify-content:center;
-    min-height:340px;
+    min-height:max(460px, calc(100vh - 225px));
     overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);
   }
   .canvas-wrap.empty{padding:50px 20px;}
   #stage{
     max-width:100%;
+    max-height:calc(100vh - 225px);
+    width:auto;
     height:auto;
     display:block;
     cursor:crosshair;
@@ -152,80 +203,87 @@
   }
   .empty-state{
     text-align:center;
-    color:var(--text3);
+    color:rgba(255,255,255,.55);
+    display:flex;flex-direction:column;align-items:center;gap:6px;
   }
-  .empty-state .icon{font-size:34px;margin-bottom:8px;}
-  .empty-state p{margin:4px 0;font-size:13px;font-weight:300;}
+  .empty-state .ico{
+    width:64px;height:64px;border-radius:18px;
+    background:rgba(255,255,255,.08);
+    display:flex;align-items:center;justify-content:center;margin-bottom:8px;
+  }
+  .empty-state .ico svg{width:30px;height:30px;color:var(--accent);}
+  .empty-state strong{font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;}
+  .empty-state p{font-size:13px;font-weight:400;}
+  .empty-state .btn{margin-top:12px;}
 
   /* Title block, like an architectural drawing stamp */
   .title-block{
     position:absolute;
-    right:10px;
-    bottom:10px;
-    background:var(--white);
-    color:var(--text);
+    right:12px;
+    bottom:12px;
+    background:rgba(35,32,25,.88);
+    color:#fff;
     font-size:10.5px;
-    border:1px solid var(--border2);
-    border-radius:var(--r);
-    padding:6px 9px;
-    line-height:1.5;
-    box-shadow:0 4px 14px rgba(28,26,23,.1);
+    border-radius:10px;
+    padding:7px 11px;
+    line-height:1.55;
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
     pointer-events:none;
   }
-  .title-block .row{display:flex;gap:8px;justify-content:space-between;}
-  .title-block .label{color:var(--text3);}
+  .title-block .row{display:flex;gap:10px;justify-content:space-between;}
+  .title-block .label{color:rgba(255,255,255,.5);}
 
   /* Sidebar */
   .sidebar h2{
-    font-size:10px;
+    font-size:12.5px;
     font-weight:600;
-    letter-spacing:.8px;
     color:var(--text3);
     margin:0 0 10px;
   }
   .calib-box{
-    background:var(--cream);
+    background:rgba(250,249,247,.75);
     border:1px solid var(--border);
     border-radius:var(--r);
-    padding:10px 12px;
-    margin-bottom:18px;
+    padding:11px 13px;
+    margin-bottom:20px;
     font-size:12.5px;
+    transition:border-color .2s, background .2s;
   }
-  .calib-box.set{border-color:var(--accent);}
+  .calib-box.set{border-color:rgba(60,168,124,.45);background:rgba(60,168,124,.06);}
   .calib-status{
     display:flex;
     align-items:center;
-    gap:8px;
+    gap:9px;
     font-size:12px;
     color:var(--text2);
   }
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--danger);flex-shrink:0;}
-  .dot.on{background:var(--accent);}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex-shrink:0;box-shadow:0 0 0 3px rgba(224,122,47,.18);}
+  .dot.on{background:var(--ok);box-shadow:0 0 0 3px rgba(60,168,124,.2);}
 
   .measure-list{
     list-style:none;
     margin:0;
     padding:0;
-    max-height:420px;
+    max-height:calc(100vh - 360px);
     overflow-y:auto;
   }
   .measure-list li{
-    background:var(--cream);
+    background:rgba(250,249,247,.8);
     border:1px solid var(--border);
     border-radius:var(--r);
-    padding:9px 10px;
+    padding:10px 12px;
     margin-bottom:8px;
-    transition:border-color .15s;
+    transition:border-color .15s, transform .15s;
   }
-  .measure-list li:hover{border-color:var(--border2);}
+  .measure-list li:hover{border-color:var(--border2);transform:translateY(-1px);}
   .m-top{
     display:flex;
     align-items:center;
     gap:8px;
-    margin-bottom:6px;
+    margin-bottom:4px;
   }
   .swatch{
-    width:12px;height:12px;border-radius:3px;flex-shrink:0;
+    width:12px;height:12px;border-radius:4px;flex-shrink:0;
   }
   .m-type{font-size:12px;color:var(--text3);flex-shrink:0;}
   .m-name{
@@ -234,7 +292,7 @@
     border:none;
     border-bottom:1px solid transparent;
     color:var(--text);
-    font-family:var(--sans);
+    font-family:var(--ui);
     font-size:13px;
     font-weight:600;
     padding:2px 0;
@@ -243,16 +301,19 @@
   .m-name:focus{outline:none;border-bottom:1px solid var(--accent);}
   .m-del{
     background:none;border:none;color:var(--text3);
-    cursor:pointer;font-size:14px;padding:2px 4px;flex-shrink:0;
+    cursor:pointer;padding:3px;flex-shrink:0;border-radius:6px;
+    display:flex;align-items:center;
   }
-  .m-del:hover{color:var(--danger);}
+  .m-del svg{width:14px;height:14px;}
+  .m-del:hover{color:var(--danger);background:rgba(185,28,28,.07);}
   .m-value{
-    font-size:13px;
+    font-family:var(--sans);
+    font-size:15px;
     font-weight:600;
-    color:var(--accent);
+    color:var(--text);
     margin-left:20px;
   }
-  .m-value .sec{color:var(--text3);font-weight:300;font-size:11.5px;}
+  .m-value .sec{color:var(--text3);font-weight:400;font-size:11.5px;font-family:var(--ui);}
 
   .empty-list{
     font-size:12.5px;
@@ -260,77 +321,254 @@
     padding:10px 2px;
   }
 
-  .sidebar-footer{
-    margin-top:14px;
-    display:flex;
-    gap:8px;
-  }
-  .sidebar-footer .btn{flex:1;justify-content:center;}
-
   /* Modal */
   .overlay{
-    position:fixed;inset:0;background:rgba(28,26,23,.55);backdrop-filter:blur(4px);
+    position:fixed;inset:0;background:rgba(38,34,29,.45);backdrop-filter:blur(4px);
     display:flex;align-items:center;justify-content:center;
     z-index:50;
   }
   .modal{
     background:var(--white);
     color:var(--text);
-    border-radius:8px;
-    padding:26px 28px;
-    width:320px;
+    border-radius:22px;
+    padding:28px 30px;
+    width:340px;
     max-width:90vw;
-    border:1px solid var(--border);
-    box-shadow:0 16px 48px rgba(0,0,0,.12);
+    box-shadow:0 24px 60px rgba(0,0,0,.25);
   }
   .modal h3{
+    font-family:var(--sans);
     margin:0 0 4px;
-    font-size:16px;
+    font-size:18px;
     font-weight:600;
   }
-  .modal p{margin:0 0 14px;font-size:12.5px;font-weight:300;color:var(--text2);}
-  .modal label{font-size:10px;font-weight:600;letter-spacing:.6px;color:var(--text3);display:block;margin-bottom:4px;}
-  .modal-row{display:flex;gap:8px;margin-bottom:16px;}
+  .modal p{margin:0 0 16px;font-size:13px;color:var(--text2);}
+  .modal-row{display:flex;gap:8px;margin-bottom:18px;}
   .modal input[type=number]{
-    flex:1;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:var(--sans);background:var(--cream);
+    flex:1;min-width:0;padding:10px 14px;border:1px solid var(--border2);border-radius:999px;font-size:14px;font-family:var(--ui);background:var(--cream);
   }
   .modal input[type=number]:focus{outline:none;border-color:var(--accent);background:var(--white);}
   .modal select{
-    padding:9px 8px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;background:var(--white);font-family:var(--sans);
+    padding:10px 12px;border:1px solid var(--border2);border-radius:999px;font-size:13px;background:var(--white);font-family:var(--ui);
   }
   .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
-  .modal-actions .btn{background:var(--text);color:var(--cream);border-color:var(--text);}
+  .modal-actions .btn{background:var(--accent);color:#fff;border-color:var(--accent);}
   .modal-actions .btn.cancel{background:transparent;color:var(--text);border-color:var(--border2);}
 
   ::-webkit-scrollbar{width:8px;}
   ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+  /* Sidebar holds every control and is exactly as tall as the canvas panel */
+  .layout{align-items:stretch;}
+  .sidebar{display:flex;flex-direction:column;contain:size;min-height:0;}
+  @media (max-width:880px){ .sidebar{contain:none;} }
+  .btn-block{width:100%;justify-content:center;}
+  .tool-upload{margin-bottom:18px;}
+  .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+  .tool-grid .btn{justify-content:center;padding:9px 10px;}
+  .sidebar .draw-hint{margin-bottom:16px;font-size:12px;line-height:1.5;}
+  .sidebar .draw-hint .hint-btn{font-size:11.5px !important;padding:5px 10px !important;}
+  .measure-list{flex:0 1 auto;min-height:0;max-height:none !important;}
+  .sidebar-footer{margin-top:auto;padding-top:12px;}
+  .bg-scene{opacity:.5;}
 </style>
 </head>
 <body>
+<div class="bg-scene" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <style>
+    .scene-drift{transform-box:view-box;transform-origin:50% 50%;animation:sceneDrift 30s ease-in-out infinite;}
+    @keyframes sceneDrift{
+      0%,100%{transform:translate(0,0) scale(1);}
+      50%{transform:translate(18px,-12px) scale(1.02);}
+    }
+    .grid-lines{transform-box:fill-box;transform-origin:50% 50%;animation:gridPulse 8s ease-in-out infinite;}
+    @keyframes gridPulse{0%,100%{opacity:.5;}50%{opacity:.82;}}
+    .dash-lines{animation:dashFlow 14s linear infinite;}
+    @keyframes dashFlow{to{stroke-dashoffset:-52;}}
+    .cluster{transform-box:fill-box;transform-origin:50% 50%;animation-timing-function:ease-in-out;animation-iteration-count:infinite;}
+    .cluster-tl{animation-name:floatA;animation-duration:6s;}
+    .cluster-bl{animation-name:floatB;animation-duration:7s;animation-delay:-2s;}
+    .cluster-r-small{animation-name:floatA;animation-duration:5s;animation-delay:-1s;}
+    .cluster-r-big{animation-name:floatB;animation-duration:7.5s;animation-delay:-4s;}
+    @keyframes floatA{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+    @keyframes floatB{0%,100%{transform:translateY(0);}50%{transform:translateY(16px);}}
+    .dot{transform-box:fill-box;transform-origin:center;animation-name:dotBob;animation-timing-function:ease-in-out;animation-iteration-count:infinite;}
+    @keyframes dotBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+    .diamond{animation:diamondPulse 3.5s ease-in-out infinite;}
+    @keyframes diamondPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.5);}}
+    .arrow{animation:arrowFade 4s ease-in-out infinite;}
+    @keyframes arrowFade{0%,100%{opacity:1;}50%{opacity:.35;}}
+  </style>
+
+  <defs>
+    <linearGradient id="cubeFront" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5f7f8"/>
+      <stop offset="1" stop-color="#d8dde0"/>
+    </linearGradient>
+    <linearGradient id="cubeTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f3f5f6"/>
+    </linearGradient>
+    <linearGradient id="cubeSide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9edef"/>
+      <stop offset="1" stop-color="#cfd5d9"/>
+    </linearGradient>
+    <linearGradient id="greenCube" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9f8ef"/>
+      <stop offset="1" stop-color="#b9e7c9"/>
+    </linearGradient>
+  </defs>
+
+  <g class="scene-drift">
+
+    <!-- fine construction grid / perspective lines -->
+    <g class="grid-lines" fill="none" stroke="#b7c9da" stroke-width="1" opacity=".58">
+      <path d="M0 510L278 347L468 274"/>
+      <path d="M57 273L279 143L469 274L361 337"/>
+      <path d="M0 239L225 369L400 456"/>
+      <path d="M112 56V176M179 127V281M290 55V384M361 190V423"/>
+      <path d="M57 273L179 207L361 337"/>
+      <path d="M119 310L278 221L468 274"/>
+      <path d="M225 369L225 450M278 143V221M361 337V423"/>
+      <path d="M249 755L417 848L304 927L136 834Z"/>
+      <path d="M252 687L304 718L286 732L234 702Z"/>
+      <path d="M0 762L112 699L414 869"/>
+      <path d="M78 814L78 931M179 756V951M252 702V905M317 740V1000M413 805V967"/>
+      <path d="M0 934L180 826L414 951"/>
+      <path d="M1045 695L1199 601L1391 711L1240 806Z"/>
+      <path d="M1050 730L1200 642L1390 753L1240 842Z"/>
+      <path d="M978 804L1199 676L1519 862"/>
+      <path d="M1064 578L1200 481L1394 593"/>
+      <path d="M1200 481V676M1296 538V733M1394 593V790"/>
+      <path d="M1102 538L1199 481L1296 538L1200 598Z"/>
+      <path d="M1347 345L1434 294L1536 352L1448 404Z"/>
+      <path d="M1391 369L1475 319L1536 354"/>
+      <path d="M1475 319V397"/>
+      <path d="M1303 154L1391 103L1536 185"/>
+      <path d="M1391 103V292"/>
+      <path d="M1476 96L1536 62"/>
+      <path d="M1391 292L1476 341"/>
+    </g>
+
+    <!-- dashed construction lines -->
+    <g class="dash-lines" fill="none" stroke="#9bb5ca" stroke-width="1" stroke-dasharray="6 7" opacity=".48">
+      <path d="M112 56V180"/>
+      <path d="M179 127V347"/>
+      <path d="M290 55V384"/>
+      <path d="M361 190V423"/>
+      <path d="M250 644V932"/>
+      <path d="M414 772V954"/>
+      <path d="M1050 514V805"/>
+      <path d="M1199 481V676"/>
+      <path d="M1296 538V733"/>
+      <path d="M1394 593V790"/>
+      <path d="M1475 319V397"/>
+      <path d="M1391 103V292"/>
+      <path d="M1536 185V250"/>
+    </g>
+
+    <!-- top-left cube cluster -->
+    <g class="cluster cluster-tl">
+      <g fill="none" stroke="#5c86ad" stroke-width="1.25" opacity=".8">
+        <path d="M195 193L278 143L361 193L278 243Z"/>
+        <path d="M195 193V293L278 343V243"/>
+        <path d="M278 243V343L361 293V193"/>
+        <path d="M278 143V243"/>
+      </g>
+      <path d="M155 252L225 212L294 252L225 292Z" fill="url(#cubeTop)"/>
+      <path d="M155 252V352L225 392V292Z" fill="url(#cubeFront)"/>
+      <path d="M225 292V392L294 352V252Z" fill="url(#cubeSide)"/>
+      <path d="M329 311L361 293L393 311L361 330Z" fill="#d8f1e1"/>
+      <path d="M329 311V341L361 360V330Z" fill="#c6ead3"/>
+      <path d="M361 330V360L393 341V311Z" fill="#a9ddbd"/>
+      <g fill="none" stroke="#6f8eaa" stroke-width="1">
+        <path d="M166 168L179 160L192 168L179 176Z"/>
+        <path d="M166 168V184L179 192V176"/>
+        <path d="M179 176V192L192 184V168"/>
+      </g>
+    </g>
+
+    <!-- lower-left small cube -->
+    <g class="cluster cluster-bl">
+      <path d="M219 814L251 796L284 815L251 834Z" fill="url(#cubeTop)"/>
+      <path d="M219 814V859L251 878V834Z" fill="url(#cubeFront)"/>
+      <path d="M251 834V878L284 859V815Z" fill="url(#cubeSide)"/>
+    </g>
+
+    <!-- right upper small cube -->
+    <g class="cluster cluster-r-small">
+      <path d="M1161 263L1190 246L1220 263L1190 280Z" fill="#fff"/>
+      <path d="M1161 263V296L1190 313V280Z" fill="#e7ebed"/>
+      <path d="M1190 280V313L1220 296V263Z" fill="#d2d8dc"/>
+    </g>
+
+    <!-- right lower cube cluster -->
+    <g class="cluster cluster-r-big">
+      <g fill="none" stroke="#6d91b0" stroke-width="1.2" opacity=".75">
+        <path d="M1103 601L1199 546L1296 602L1199 657Z"/>
+        <path d="M1103 601V714L1199 769V657"/>
+        <path d="M1199 657V769L1296 714V602"/>
+        <path d="M1199 546V657"/>
+      </g>
+      <path d="M1102 631L1199 576L1296 632L1199 688Z" fill="url(#cubeTop)"/>
+      <path d="M1102 631V745L1199 801V688Z" fill="url(#cubeFront)"/>
+      <path d="M1199 688V801L1296 745V632Z" fill="url(#cubeSide)"/>
+      <path d="M1315 694L1346 676L1390 701L1359 720Z" fill="#dff5e7"/>
+      <path d="M1315 694V721L1359 746V720Z" fill="#c3ead1"/>
+      <path d="M1359 720V746L1390 727V701Z" fill="#a7dfbd"/>
+    </g>
+
+    <!-- perspective base lines -->
+    <g class="grid-lines" fill="none" stroke="#7399b8" stroke-width="1" opacity=".72">
+      <path d="M1045 730L1199 641L1518 825"/>
+      <path d="M976 815L1200 685L1536 879"/>
+      <path d="M1100 842L1240 760L1518 919"/>
+      <path d="M1150 919L1300 832L1536 968"/>
+      <path d="M1010 876L1200 766L1450 910"/>
+    </g>
+
+    <!-- small floating / accent points -->
+    <g>
+      <circle class="dot" style="animation-duration:6.2s;animation-delay:0s" cx="290" cy="43" r="3.2" fill="#3ca87c"/>
+      <circle class="dot" style="animation-duration:5.4s;animation-delay:-1.2s" cx="113" cy="388" r="3.4" fill="#f0c928"/>
+      <circle class="dot" style="animation-duration:7s;animation-delay:-2.6s" cx="1251" cy="297" r="3.2" fill="#f28b35"/>
+      <circle class="dot" style="animation-duration:4.8s;animation-delay:-.6s" cx="1474" cy="422" r="2.6" fill="#4c84b0"/>
+      <circle class="dot" style="animation-duration:6.6s;animation-delay:-3.4s" cx="78" cy="814" r="2" fill="#55b783"/>
+      <circle class="dot" style="animation-duration:5.8s;animation-delay:-1.8s" cx="412" cy="935" r="2.2" fill="#55b783"/>
+      <circle class="dot" style="animation-duration:7.4s;animation-delay:-4.2s" cx="1052" cy="953" r="2.3" fill="#3f6f99"/>
+      <circle class="dot" style="animation-duration:5s;animation-delay:-2.2s" cx="1310" cy="988" r="2.2" fill="#e18a55"/>
+      <circle class="dot" style="animation-duration:6.9s;animation-delay:-3.9s" cx="1472" cy="792" r="2.8" fill="#426f99"/>
+    </g>
+
+    <!-- accent diamonds -->
+    <path class="diamond" style="animation-delay:0s;transform-origin:650px 456px" d="M641 456L650 450L659 456L650 462Z" fill="#f38b3a"/>
+    <path class="diamond" style="animation-delay:-2.7s;transform-origin:850px 780px" d="M831 780L850 769L868 780L850 791Z" fill="#f1c52a"/>
+
+    <!-- subtle arrow -->
+    <g class="arrow">
+      <path d="M0 764L111 699" fill="none" stroke="#48779e" stroke-width="1.1"/>
+      <path d="M111 699L100 699L106 706Z" fill="#48779e"/>
+    </g>
+
+  </g>
+</svg></div>
 <div class="app">
   <header>
-    <h1>Meet<span class="lat">lat</span></h1>
-    <p>Laad een afbeelding, kalibreer en meet lijnen en vlakken</p>
+    <div class="brand">
+      <h1>meet<span class="lat">lat</span></h1>
+      <p>Laad een afbeelding, kalibreer en meet lijnen en vlakken</p>
+    </div>
+    <a class="badge" href="https://stanbox.nl" target="_top">stan<span>box</span></a>
   </header>
 
   <div class="layout">
     <div class="panel">
-      <div class="toolbar">
-        <label class="btn btn-primary" for="fileInput">📤 Afbeelding laden</label>
-        <input type="file" id="fileInput" accept="image/*">
-        <button class="btn" id="btnCalibrate" disabled>📏 Kalibreren</button>
-        <button class="btn" id="btnLine" disabled>／ Lijn meten</button>
-        <button class="btn" id="btnArea" disabled>▱ Vlak meten</button>
-        <button class="btn danger" id="btnClearAll" disabled>🗑 Alles wissen</button>
-        <button class="btn" id="btnExport" disabled>💾 Exporteren</button>
-      </div>
-
-      <div class="draw-hint" id="drawHint" style="display:none;"></div>
-
       <div class="canvas-wrap empty" id="canvasWrap">
         <div class="empty-state" id="emptyState">
-          <p><strong>Nog geen afbeelding geladen</strong></p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg></div>
+          <strong>Nog geen afbeelding geladen</strong>
           <p>Laad een plattegrond of foto om te beginnen met meten</p>
+          <label class="btn btn-primary" for="fileInput">Afbeelding kiezen</label>
         </div>
         <canvas id="stage" style="display:none;"></canvas>
         <div class="title-block" id="titleBlock" style="display:none;"></div>
@@ -338,6 +576,19 @@
     </div>
 
     <div class="panel sidebar">
+      <h2>Afbeelding</h2>
+      <div class="tool-upload"><label class="btn btn-primary btn-block" for="fileInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Afbeelding laden</label>
+        <input type="file" id="fileInput" accept="image/*"></div>
+
+      <h2>Gereedschap</h2>
+      <div class="tool-grid">
+        <button class="btn" id="btnCalibrate" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg>Kalibreren</button>
+        <button class="btn" id="btnLine" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6" fill="currentColor"/><circle cx="19" cy="5" r="1.6" fill="currentColor"/></svg>Lijn meten</button>
+        <button class="btn" id="btnArea" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 18L7 6l12 2-2 11z"/></svg>Vlak meten</button>
+        <button class="btn" id="btnExport" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>Exporteren</button>
+      </div>
+      <div class="draw-hint" id="drawHint" style="display:none;"></div>
+
       <h2>Kalibratie</h2>
       <div class="calib-box" id="calibBox">
         <div class="calib-status"><span class="dot" id="calibDot"></span><span id="calibText">Nog niet gekalibreerd — meet in pixels</span></div>
@@ -346,6 +597,7 @@
       <h2>Metingen</h2>
       <ul class="measure-list" id="measureList"></ul>
       <div class="empty-list" id="emptyList">Nog geen lijnen of vlakken getekend.</div>
+      <div class="sidebar-footer"><button class="btn danger btn-block" id="btnClearAll" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Alles wissen</button></div>
     </div>
   </div>
 </div>
@@ -398,7 +650,7 @@
   const calibValueInput = document.getElementById('calibValue');
   const calibUnitSelect = document.getElementById('calibUnit');
 
-  const PALETTE = ['#d65a4a','#e3a83b','#4a9e8e','#5b7fbd','#b36fb0','#8fa83d','#c4844a','#4aafc7'];
+  const PALETTE = ['#f28b35','#3ca87c','#5f95ef','#f0c928','#e0602f','#55b783','#4c84b0','#b36fb0'];
   const UNIT_TO_M = { mm:0.001, cm:0.01, m:1, inch:0.0254, ft:0.3048 };
 
   let img = null;
@@ -510,9 +762,9 @@
       existing.forEach(b=>b.remove());
       const finishBtn = document.createElement('button');
       finishBtn.className='btn hint-btn';
-      finishBtn.style.padding='5px 10px';
+      finishBtn.style.padding='5px 12px';
       finishBtn.style.fontSize='12px';
-      finishBtn.textContent='✓ Voltooien';
+      finishBtn.textContent='✓ Voltooien'; finishBtn.classList.add('btn-primary');
       finishBtn.disabled = currentPoints.length < 3;
       finishBtn.onclick = ()=> finishShape();
       drawHint.appendChild(finishBtn);
@@ -697,6 +949,9 @@
   }
 
   // ---------- Rendering ----------
+  // keeps labels, dots and lines the same on-screen size however much the image is scaled down
+  function k(){ const w = canvas.getBoundingClientRect().width; return w ? Math.max(1, canvas.width / w) : 1; }
+
   function redraw(){
     if(!img) return;
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -713,7 +968,7 @@
     ctx.save();
     ctx.strokeStyle = shape.color;
     ctx.fillStyle = shape.color;
-    ctx.lineWidth = highlighted ? 4 : 2.5;
+    ctx.lineWidth = (highlighted ? 4 : 2.5) * k();
     ctx.lineJoin = 'round';
 
     if(shape.type==='line'){
@@ -743,10 +998,10 @@
 
   function drawInProgress(){
     ctx.save();
-    ctx.strokeStyle = '#f6f7f2';
-    ctx.fillStyle = '#f6f7f2';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6,4]);
+    ctx.strokeStyle = '#ffffff';
+    ctx.fillStyle = '#ffffff';
+    ctx.lineWidth = 2 * k();
+    ctx.setLineDash([6*k(),4*k()]);
     ctx.beginPath();
     currentPoints.forEach((p,i)=> i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
     if(mousePos) ctx.lineTo(mousePos.x, mousePos.y);
@@ -779,26 +1034,27 @@
     ctx.save();
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 4.5, 0, Math.PI*2);
+    ctx.arc(p.x, p.y, 4.5*k(), 0, Math.PI*2);
     ctx.fill();
-    ctx.strokeStyle = '#0f2a3d';
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = '#232019';
+    ctx.lineWidth = 1.2*k();
     ctx.stroke();
     ctx.restore();
   }
 
   function drawLabel(pos, text, color){
     ctx.save();
-    ctx.font = '600 13px Montserrat, system-ui, sans-serif';
-    const paddingX = 6, paddingY = 4;
+    const s = k();
+    ctx.font = `600 ${13*s}px Inter, system-ui, sans-serif`;
+    const paddingX = 10*s, paddingY = 4*s;
     const metrics = ctx.measureText(text);
     const w = metrics.width + paddingX*2;
-    const h = 18 + paddingY;
+    const h = 18*s + paddingY;
     let x = pos.x - w/2, y = pos.y - h/2;
-    ctx.fillStyle = 'rgba(15,42,61,0.88)';
+    ctx.fillStyle = 'rgba(35,32,25,0.9)';
     ctx.strokeStyle = color;
-    ctx.lineWidth = 1.5;
-    roundRect(x, y, w, h, 4);
+    ctx.lineWidth = 1.5*s;
+    roundRect(x, y, w, h, h/2);
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = '#f6f7f2';
@@ -844,7 +1100,7 @@
 
       const delBtn = document.createElement('button');
       delBtn.className = 'm-del';
-      delBtn.textContent = '🗑';
+      delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>';
       delBtn.title = 'Verwijderen';
       delBtn.addEventListener('click', ()=>{
         shapes = shapes.filter(s=>s.id!==shape.id);
@@ -885,6 +1141,7 @@
     link.click();
   }
 
+  window.addEventListener('resize', redraw);
   updateHint();
 })();
 </script>

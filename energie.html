@@ -843,7 +843,13 @@ const state = {
   metrics: new Set(['weii']),
   showParisProof: false,
   showCrrem: false,
-  showLandelijk: true, // landelijk gemiddelde standaard aan; uit te zetten via de toggle
+  // Landelijk gemiddelde: in de trendlijn standaard aan, in het staafdiagram per jaar
+  // standaard uit. Elke weergave onthoudt zijn eigen keuze; de dropdown wijzigt die
+  // van de actieve weergave.
+  showLandelijkLijn: true,
+  showLandelijkStaaf: false,
+  get showLandelijk(){ return this.mode==='staaf' ? this.showLandelijkStaaf : this.showLandelijkLijn; },
+  set showLandelijk(v){ if(this.mode==='staaf') this.showLandelijkStaaf = v; else this.showLandelijkLijn = v; },
 };
 
 // ---------- helpers ----------
@@ -1917,6 +1923,7 @@ function setMode(mode){
   state.mode = mode;
   modeBtns.forEach(b=> b.classList.toggle('on', b.dataset.mode===mode));
   if(yearTabsWrap) yearTabsWrap.hidden = mode !== 'staaf'; // jaartabs alleen bij het staafdiagram per jaar
+  renderCatDropdownList();
   // de doelpaden (Paris Proof / CRREM) zijn tijdreeks-concepten en horen
   // alleen bij de trendlijn, niet bij het staafdiagram van één jaar
   if(pathwayTogglesWrap) pathwayTogglesWrap.hidden = mode !== 'lijn';

@@ -496,8 +496,8 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
 
     <div class="mode-row">
       <div class="mode-toggle" id="mode-toggle">
-        <button type="button" class="mode-btn on" data-mode="lijn">Trendlijn</button>
-        <button type="button" class="mode-btn" data-mode="staaf">Staafdiagram per jaar</button>
+        <button type="button" class="mode-btn on" data-mode="staaf">Staafdiagram per jaar</button>
+        <button type="button" class="mode-btn" data-mode="lijn">Trendlijn</button>
       </div>
       <div class="cat-dropdown" id="indicator-dropdown">
         <button type="button" class="cat-dropdown-btn" id="indicator-dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
@@ -520,11 +520,11 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
           <div class="cat-dropdown-list" id="cat-dropdown-list"></div>
         </div>
       </div>
-      <div class="pathway-toggles" id="pathway-toggles">
+      <div class="pathway-toggles" id="pathway-toggles" hidden>
         <label class="pathway-chk" id="pp-toggle-label"><input type="checkbox" id="pp-toggle"><span>Paris Proof-pad</span></label>
         <label class="pathway-chk disabled" id="crrem-toggle-label" title="Het CRREM-pad is te tonen bij uitsluitend WEii-finaal of WEii-CO₂, met minstens één geselecteerd gebouwtype."><input type="checkbox" id="crrem-toggle" disabled aria-disabled="true"><span>CRREM-pad</span></label>
       </div>
-      <div class="year-tabs-inline" id="year-tabs-weii-wrap" hidden>
+      <div class="year-tabs-inline" id="year-tabs-weii-wrap">
         <div class="year-tabs" id="year-tabs-weii"></div>
       </div>
     </div>
@@ -836,7 +836,7 @@ const state = {
   // gemiddelde), zonder vooraf geselecteerde gebouwtypen - de gebruiker voegt
   // die er zelf aan toe.
   selectedIds: new Set(),
-  mode: 'lijn', // 'lijn' (trendlijn, incl. landelijk gemiddelde) of 'staaf' (staafdiagram per jaar)
+  mode: 'staaf', // 'lijn' (trendlijn, incl. landelijk gemiddelde) of 'staaf' (staafdiagram per jaar)
   search: '', // zoekterm in de gebouwtype-dropdown
   // meerdere indicatoren tegelijk selecteerbaar (zie METRICS hierboven); de
   // trendlijn tekent een apart paneel per eenheid die in deze set voorkomt.

@@ -496,7 +496,7 @@ body.cart-open{overflow:hidden}
 .pvdoc .pv-pos{background:var(--green-s);border-color:var(--green-b)}
 .pvdoc .pv-neg{background:var(--red-s);border-color:var(--red-b)}
 .pvdoc .pv-notes b{display:block;font-size:8pt;color:var(--text);font-weight:600}
-.pvdoc .pv-foot{margin-top:20px;padding-top:10px;border-top:1px solid var(--border);font-size:7.5pt;color:var(--text3);line-height:1.5}
+.pvdoc .pv-foot{margin-top:16px;font-size:7.5pt;color:var(--text3);line-height:1.5}
 .cbtn:disabled{opacity:.6;cursor:progress}
 @page{size:A4;margin:16mm 15mm 18mm}
 @media print{
@@ -555,6 +555,36 @@ body{background:#fff}
 }
 
 @media (max-width:700px){.mhead .plogos img{height:24px}}
+/* v16: page intro aligned with the analysis area */
+@media (min-width:1001px){.phead{padding-left:328px}}
+.phead h1{margin-bottom:22px}
+/* v17: step instruction inside the filter box, source aligned with the analysis area */
+.layout.l3d .side{display:flex;flex-direction:column}
+.scap{margin:auto 0 0;padding:14px 0 0;border-top:1px solid var(--border2);font-size:12.5px;line-height:1.55;color:var(--text2)}
+.side .rreset{align-self:flex-start;margin-bottom:16px}
+@media (min-width:1001px){.src{margin-left:328px}}
+@media (max-width:1000px){.layout.l3d .side{display:grid}.scap{grid-column:1/-1;margin-top:8px}}
+/* v18: logos above the filter box, top-aligned with the heading */
+@media (min-width:1001px){
+  .phead{display:grid;grid-template-columns:300px minmax(0,1fr);column-gap:28px;padding-left:0;justify-content:start}
+  .phead .ptxt{display:contents}
+  .phead .pname{grid-column:2;grid-row:1}
+  .phead h1{grid-column:2;grid-row:2}
+  .phead .plogos{grid-column:1;grid-row:2;align-self:start;margin-top:6px;padding:0;gap:22px}
+  .phead .plogos img{height:38px}
+}
+@media (max-width:1000px){.phead{flex-direction:column}.phead .plogos{order:-1;padding:0}.phead .plogos img{height:30px}}
+/* v19: compact header band */
+@media (min-width:1001px){
+  .phead{align-items:center;row-gap:0;padding:4px 0 8px;margin:0 0 24px}
+  .phead .pname{margin:0 0 4px;font-size:12.5px;color:var(--text3);font-weight:500}
+  .phead h1{margin:0!important;font-size:30px;line-height:1.2;white-space:nowrap}
+  .phead h1 br{display:none}
+  .phead h1 em::before{content:" "}
+  .phead .plogos{grid-row:1/3;align-self:center;margin:0}
+  .phead .plogos img{height:36px}
+}
+@media (min-width:1001px) and (max-width:1250px){.phead h1{white-space:normal}.phead h1 br{display:inline}.phead h1 em::before{content:none}}
 </style>
 
 
@@ -1094,7 +1124,7 @@ const HK=['ctx','bld','gen','dist','term','ctrl','gnl'];
 const T={
  nl:{
   search:'Zoek interventies',clear:'Zoekopdracht wissen',close:'Sluiten',langBtn:'en',langTitle:'English',
-  h1:'Ontdek circulaire interventies<br><em>voor installaties</em>',
+  h1:'Ontdek circulaire interventies<br><em>voor klimaatinstallaties</em>',
   lead:'Kies een gebouwtype en een installatiefunctie. Klik daarna op een punt in de doorsnede om te zien welke circulaire interventies daar mogelijk zijn.',
   step1:'Kies een gebouw',step2:'Kies een functie',
   B:{r:['Woningbouw','Rijwoning of appartement'],c:['Utiliteitsbouw','Kantoorgebouw']},
@@ -1108,7 +1138,7 @@ const T={
   H:{ctx:['Omgeving','Schaduw, groen en zon rond het gebouw'],bld:['Gebouwschil','Isolatie, glas, zonwering en indeling'],gen:['Opwekking','Warmtepomp, ketel, WTW-unit of LBK'],dist:['Distributie','Leidingen, kanalen en pompen'],term:['Afgifte','Radiatoren, vloer, klimaatplafond en roosters'],ctrl:['Regeling','Thermostaten, sensoren en software'],gnl:['Algemeen','Ontwerprichtlijnen en afspraken met leveranciers']},
   pickF:'Kies hierboven verwarming, koeling of ventilatie om de klikbare punten te zien.',
   pickH:'Klik op een gele + of direct op een onderdeel in het gebouw om de maatregelen te zien.',
-  hint:'Klik op een punt',drag:'Sleep om te draaien · scroll of knijp om te zoomen',fxTip:'Beweeg of klik om dit in het gebouw te zien',v3d:'3D-gebouw',vtab:'Tabel',allB:'Alle',allF:'Alle functies',toTable:'Of bekijk de volledige tabel',more:'Meer details',capF:'Kies verwarming, koeling of ventilatie om de punten in het gebouw te zien.',capH:'Klik op een + of op een onderdeel. Sleep om te draaien, scroll om te zoomen.',capP:'Beweeg over een maatregel om hem in het gebouw te zien. Klik om hem vast te zetten.',rStrat:'R-strategie',level:'Niveau',allCols:'Alle',pg:{systems:'Circulaire systemen',demand:'Installatiebehoefte beperken',guidelines:'Algemene richtlijnen'},fxSeen:'Zichtbaar in het gebouw',apply:'Toepassen',applied:'Toegepast',design:'Mijn ontwerp',clearAll:'Alles wissen',toastOn:'Toegepast in het gebouw',toastAdd:'Toegevoegd aan je selectie',toastOff:'Verwijderd uit je selectie',designSub:'gekozen maatregelen',designEmpty:'Nog geen maatregelen gekozen. Klik op de + naast een maatregel om hem aan je selectie toe te voegen.',cart:'Mijn selectie',cartEb:'Circular HVAC Design Framework',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',busy:'PDF maken…',pdfName:'mijn-selectie-circular-hvac.pdf',pg2:'Pagina',fTitle:'Filter',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Let op'],none:'Geen interventies bij deze filters.',
+  hint:'Klik op een punt',drag:'Sleep om te draaien · scroll of knijp om te zoomen',fxTip:'Beweeg of klik om dit in het gebouw te zien',v3d:'3D-gebouw',vtab:'Tabel',allB:'Alle',allF:'Alle functies',toTable:'Of bekijk de volledige tabel',more:'Meer details',capF:'Kies verwarming, koeling of ventilatie om de punten in het gebouw te zien.',capH:'Klik op een + of op een onderdeel. Sleep om te draaien, scroll om te zoomen.',capP:'Beweeg over een maatregel om hem in het gebouw te zien. Klik om hem vast te zetten.',rStrat:'R-strategie',level:'Niveau',allCols:'Alle',pg:{systems:'Circulaire systemen',demand:'Installatiebehoefte beperken',guidelines:'Algemene richtlijnen'},fxSeen:'Zichtbaar in het gebouw',apply:'Toepassen',applied:'Toegepast',design:'Mijn ontwerp',clearAll:'Alles wissen',toastOn:'Toegepast in het gebouw',toastAdd:'Toegevoegd aan je selectie',toastOff:'Verwijderd uit je selectie',designSub:'gekozen maatregelen',designEmpty:'Nog geen maatregelen gekozen. Klik op de + naast een maatregel om hem aan je selectie toe te voegen.',cart:'Mijn selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Let op'],none:'Geen interventies bij deze filters.',
   allParts:'Alle onderdelen',interventions:'interventies',results:'Zoekresultaten',noResults:'Geen interventies gevonden.',
   tagM:'materiaal',tagE:'energie',lgLv:'schaalniveau',lgW:'bekend neveneffect',
   why:'Waarom dit helpt',watch:'Let op',noWhy:'Nog niet beschreven in het kader.',noNeg:'Geen neveneffecten genoemd in de interviews. Dat betekent niet dat ze er niet zijn.',
@@ -1132,7 +1162,7 @@ const T={
   H:{ctx:['Surroundings','Shade, greenery and sun around the building'],bld:['Building envelope','Insulation, glazing, shading and layout'],gen:['Generation','Heat pump, boiler, heat recovery unit or AHU'],dist:['Distribution','Pipes, ducts and pumps'],term:['Terminal units','Radiators, floors, climate ceilings and grilles'],ctrl:['Control','Thermostats, sensors and software'],gnl:['General','Design guidelines and agreements with suppliers']},
   pickF:'Choose heating, cooling or ventilation above to see the clickable points.',
   pickH:'Click a yellow + or a part of the building to see the interventions.',
-  hint:'Click a point',drag:'Drag to rotate · scroll or pinch to zoom',fxTip:'Hover or click to see this in the building',v3d:'3D building',vtab:'Table',allB:'All',allF:'All functions',toTable:'Or view the full table',more:'More details',capF:'Choose heating, cooling or ventilation to see the points in the building.',capH:'Click a + or a part of the building. Drag to rotate, scroll to zoom.',capP:'Hover an intervention to see it in the building. Click to keep it in view.',rStrat:'R-strategy',level:'Level',allCols:'All',pg:{systems:'Circular systems',demand:'Reducing demand',guidelines:'General guidelines'},fxSeen:'Shown in the building',apply:'Apply',applied:'Applied',design:'My design',clearAll:'Clear all',toastOn:'Applied in the building',toastAdd:'Added to your selection',toastOff:'Removed from your selection',designSub:'chosen interventions',designEmpty:'No interventions chosen yet. Click the + next to an intervention to add it to your selection.',cart:'My selection',cartEb:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Watch out for'],none:'No interventions match these filters.',
+  hint:'Click a point',drag:'Drag to rotate · scroll or pinch to zoom',fxTip:'Hover or click to see this in the building',v3d:'3D building',vtab:'Table',allB:'All',allF:'All functions',toTable:'Or view the full table',more:'More details',capF:'Choose heating, cooling or ventilation to see the points in the building.',capH:'Click a + or a part of the building. Drag to rotate, scroll to zoom.',capP:'Hover an intervention to see it in the building. Click to keep it in view.',rStrat:'R-strategy',level:'Level',allCols:'All',pg:{systems:'Circular systems',demand:'Reducing demand',guidelines:'General guidelines'},fxSeen:'Shown in the building',apply:'Apply',applied:'Applied',design:'My design',clearAll:'Clear all',toastOn:'Applied in the building',toastAdd:'Added to your selection',toastOff:'Removed from your selection',designSub:'chosen interventions',designEmpty:'No interventions chosen yet. Click the + next to an intervention to add it to your selection.',cart:'My selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Watch out for'],none:'No interventions match these filters.',
   allParts:'All parts',interventions:'interventions',results:'Search results',noResults:'No interventions found.',
   tagM:'material',tagE:'energy',lgLv:'scale level',lgW:'known side-effect',
   why:'Why this helps',watch:'Watch out for',noWhy:'Not yet described in the framework.',noNeg:'No side-effects recorded in the interviews. That does not mean there are none.',
@@ -1203,11 +1233,11 @@ function frame(){ const st=$('stage'); if(!st) return; const w=st.clientWidth; M
 /* views */
 function draw(){
   const t=L();
-  document.documentElement.lang=S.lang;
+  document.documentElement.lang=S.lang; document.title=t.name;
   $('q').placeholder=t.search; $('q').setAttribute('aria-label',t.search); $('qx').setAttribute('aria-label',t.clear);
   cartBtn(); $('lang').textContent=t.langBtn; $('lang').title=t.langTitle; $('lang').setAttribute('aria-label',t.langTitle);
   $('dlg-x').setAttribute('aria-label',t.close); $('dlg-wl').textContent=t.why; $('dlg-nl').textContent=t.watch;
-  let h=`<header class="phead"><div class="ptxt"><div class="pname">Circular HVAC Design Framework</div><h1>${t.h1}</h1><p class="lead">${t.lead}</p></div></header>`;
+  let h=`<header class="phead">${LOGOS()}<div class="ptxt"><div class="pname">${t.name}</div><h1>${t.h1}</h1></div></header>`;
   if(S.mode==='table'){ drawTableShell(h); return; }
   if(!S.b){
     h+=`<div class="mhead"><div id="sslot" class="sslot"></div></div><div class="choose">`+
@@ -1215,10 +1245,10 @@ function draw(){
     h+=`<button type="button" class="tlink" data-view="table">${t.toTable}<span style="display:flex">${I.arrow}</span></button>`;
   } else {
     h+=`<div class="layout l3d"><aside class="side" id="side"></aside><div class="main">
-      <div class="mhead">${viewSeg('3d')}<div id="sslot" class="sslot"></div>${LOGOS()}</div>
+      <div class="mhead">${viewSeg('3d')}<div id="sslot" class="sslot"></div></div>
       <div class="explore">
         <div class="stage" id="stage"><div id="marks"></div><div class="tip" id="tip" hidden></div><div class="pop" id="pop" hidden></div><div class="hint" id="hint">${t.drag}</div></div>
-      </div></div></div><p class="caption cap3d" id="cap"></p>`;
+      </div></div></div>`;
   }
   h+=`<p class="src">${t.src}</p>`;
   setApp(h);
@@ -1238,7 +1268,7 @@ const viewSeg=m=>{const t=L(); return `<div class="seg vseg" role="group" aria-l
 function drawTableShell(h){
   const t=L();
   h+=`<div class="layout"><aside class="side" id="side"></aside><div class="main">
-    <div class="mhead">${viewSeg('table')}<div id="sslot" class="sslot"></div>${LOGOS()}</div>
+    <div class="mhead">${viewSeg('table')}<div id="sslot" class="sslot"></div></div>
     <nav class="ptabs" id="ptabs"></nav><div id="tbody"></div></div></div>`;
   h+=`<p class="src">${t.src}</p>`;
   setApp(h); drawTable();
@@ -1262,7 +1292,7 @@ function side(){
     <section><div class="sh"><h3>${t.func}</h3></div><div class="pills">${fOpts.map(([k,l])=>pill(tbl?'tf':'f',k,l,tbl?S.tf===k:S.f===k,k==='all'?'':' f-'+k+(!tbl&&!S.f?' pulse':''))).join('')}</div></section>
     <section><div class="sh"><h3>${t.kLv}</h3>${clr('l')}</div><div class="cks">${ALL.l.map(k=>ck('l',k,t.LV[k],nL(k))).join('')}</div></section>
     <section><div class="sh"><h3>${t.kGo}</h3>${clr('g')}</div><div class="cks">${ALL.g.map(k=>ck('g',k,t.GO[k],nG(k))).join('')}</div></section>
-    ${S.l.size||S.g.size?`<button class="rreset" type="button" data-reset>${t.reset}</button>`:''}`;
+    ${S.l.size||S.g.size?`<button class="rreset" type="button" data-reset>${t.reset}</button>`:''}${tbl?'':`<p class="scap" id="cap">${esc(CAPTXT)}</p>`}`;
 }
 function tpass(it){ if(S.ta!=='all'&&!it.a.includes(S.ta)) return false; if(S.tf!=='all'&&it.f!==S.tf) return false; if(!passF(it)) return false;
   if(S.q&&!matchQ(it)) return false; return true; }
@@ -1347,7 +1377,7 @@ function panel(){
   p.dataset.mode=S.h==='gnl'?'gnl':'mk'; p.hidden=false; p.scrollTop=keep; place();
 }
 function place(){ const p=$('pop'); if(!p) return; const dock=!p.hidden&&window.innerWidth>700; S3.setShift(dock?p.offsetWidth/2:0); }
-function cap(s){ const c=$('cap'); if(c) c.textContent=s; }
+let CAPTXT=''; function cap(s){ CAPTXT=s; const c=$('cap'); if(c) c.textContent=s; }
 
 /* events */
 function closeDD(except){document.querySelectorAll('.ddb[aria-expanded="true"]').forEach(b=>{if(b===except)return; b.setAttribute('aria-expanded','false'); $(b.getAttribute('aria-controls')).hidden=true;});}
@@ -1416,7 +1446,7 @@ function cartCSV(){
     const fs=[...new Set(a.map(d=>t.FN[d.f]))].join(', '), ls=lvSort(new Set(a.map(d=>d.l))).map(l=>t.LV[l]).join(', '), as=[...new Set(a.flatMap(d=>d.a))].sort().map(x=>t.AP[x]).join(', '), gl=[...new Set(a.flatMap(d=>d.g))].map(x=>t.GO[x]).join(t.and);
     return [tx(g.src,'t'),t.pg[pgOf(g.s)],t.ST[g.s],t.CO[g.c]||'',fs,ls,as,gl,tx(g.src,'w')||'',tx(g.src,'n')||''].map(q).join(';'); }));
   const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}), u=URL.createObjectURL(blob), a=document.createElement('a');
-  a.href=u; a.download=(S.lang==='nl'?'mijn-selectie':'my-selection')+'-circular-hvac.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000);
+  a.href=u; a.download=(S.lang==='nl'?'mijn-selectie-circulaire-klimaatinstallaties':'my-selection-circular-hvac')+'.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000);
 }
 function cartDoc(){
   const t=L(), rows=cartRows(), nl=S.lang==='nl';
@@ -1436,8 +1466,8 @@ function cartDoc(){
         ${w||ng?`<div class="pv-notes">${w?`<div class="pv-pos"><b>${t.why}</b>${esc(w)}</div>`:''}${ng?`<div class="pv-neg"><b>${t.watch}</b>${esc(ng)}</div>`:''}</div>`:''}
       </div></article>`; }).join('')+`</section>`; }).join('');
   const d=document.createElement('div'); d.className='pvdoc'; d.lang=S.lang;
-  d.innerHTML=`<header class="pv-top"><span></span><div class="pv-name">Circular HVAC Design Framework</div><div class="pv-logos">${logos}</div></header>
-    <div class="pv-hero"><div class="pv-date">${date}</div><h1>${t.cart}</h1><p>${nl?'Circulaire interventies voor installaties':'Circular interventions for HVAC systems'}</p></div>
+  d.innerHTML=`<header class="pv-top"><span></span><div class="pv-name">${t.name}</div><div class="pv-logos">${logos}</div></header>
+    <div class="pv-hero"><div class="pv-date">${date}</div><h1>${t.cart}</h1><p>${nl?'Circulaire interventies voor klimaatinstallaties':'Circular interventions for HVAC systems'}</p></div>
     ${body}<footer class="pv-foot">${t.src}</footer>`;
   return d;
 }

@@ -560,7 +560,7 @@ body{background:#fff}
 .phead h1{margin-bottom:22px}
 /* v17: step instruction inside the filter box, source aligned with the analysis area */
 .layout.l3d .side{display:flex;flex-direction:column}
-.scap{margin:auto 0 0;padding:14px 0 0;border-top:1px solid var(--border2);font-size:12.5px;line-height:1.55;color:var(--text2)}
+.scap{margin:2px 0 0;padding:14px 0 0;border-top:1px solid var(--border2);font-size:12.5px;line-height:1.55;color:var(--text2)}
 .side .rreset{align-self:flex-start;margin-bottom:16px}
 @media (min-width:1001px){.src{margin-left:328px}}
 @media (max-width:1000px){.layout.l3d .side{display:grid}.scap{grid-column:1/-1;margin-top:8px}}
@@ -585,6 +585,9 @@ body{background:#fff}
   .phead .plogos img{height:36px}
 }
 @media (min-width:1001px) and (max-width:1250px){.phead h1{white-space:normal}.phead h1 br{display:inline}.phead h1 em::before{content:none}}
+.apb{padding:0!important;display:grid!important;place-items:center;line-height:0;box-sizing:border-box}
+.apb svg{display:block;margin:0;flex:none}
+.ci-x{padding:0;line-height:0}
 </style>
 
 
@@ -610,8 +613,7 @@ body{background:#fff}
 <dialog id="dlg" aria-labelledby="dlg-t"><div class="dl">
   <div class="dl-h"><div><div class="eb" id="dlg-e"></div><h3 id="dlg-t"></h3></div>
     <button class="dx" type="button" id="dlg-x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <div class="meta" id="dlg-m"></div>
-  <button type="button" class="dlap" id="dlg-ap"></button>
+    <button type="button" class="dlap" id="dlg-ap"></button>
 
   <div class="dsec pos"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><b id="dlg-wl"></b><span id="dlg-w"></span></div>
   <div class="dsec neg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg><b id="dlg-nl"></b><span id="dlg-n"></span></div>
@@ -1503,7 +1505,7 @@ function openDlg(g){
   $('dlg-e').textContent=g.c&&g.c!=='gen_all'?`${strat} · ${t.CO[g.c]}`:strat;
   $('dlg-t').textContent=tx(it,'t');
   const a=DATA.filter(x=>x.t===g.t); const fs=new Set(a.map(x=>x.f)), ls=new Set(a.map(x=>x.l)), as=new Set(a.flatMap(x=>x.a)), gl=new Set(a.flatMap(x=>x.g));
-  $('dlg-m').innerHTML=lvSort(ls).map(l=>`<span class="ct lv">${RN[l]} · ${t.LV[l]}</span>`).join('')+(gl.has('m')?`<span class="ct m">${t.tagM}</span>`:'')+(gl.has('e')?`<span class="ct e">${t.tagE}</span>`:'');
+  if($('dlg-m')) $('dlg-m').innerHTML=lvSort(ls).map(l=>`<span class="ct lv">${RN[l]} · ${t.LV[l]}</span>`).join('')+(gl.has('m')?`<span class="ct m">${t.tagM}</span>`:'')+(gl.has('e')?`<span class="ct e">${t.tagE}</span>`:'');
   const w=tx(it,'w'), n=tx(it,'n');
   $('dlg-w').textContent=w||t.noWhy; $('dlg-w').className=w?'':'na';
   $('dlg-n').textContent=n||t.noNeg; $('dlg-n').className=n?'':'na';

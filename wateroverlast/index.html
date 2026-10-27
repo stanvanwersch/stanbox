@@ -91,7 +91,8 @@ h1,h2,h3{margin:0;font-weight:600}
 .mxl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:3px}
 .form{display:grid;grid-template-columns:1fr 168px;gap:8px 12px;align-items:center;font-size:13.5px}
 .form label{color:var(--text2)}
-.form .sub{padding-left:14px;font-size:13px}
+.form .sub{}
+.form label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .form select,.form input{width:100%;height:34px;border:1px solid var(--border);border-radius:8px;background:#fff;padding:0 8px}
 .form select:hover,.form input:hover{border-color:var(--border2)}
 .pts{width:100%;border-collapse:collapse;font-size:13px}
@@ -120,6 +121,12 @@ details summary{cursor:pointer;color:var(--text2);font-size:12.5px;margin-top:10
 .pitem .n{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pitem .a{font-size:12.5px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pitem .r{grid-row:1/3;grid-column:2;align-self:center;font-size:13px;display:flex;align-items:center;gap:7px;color:var(--text2)}
+.sbar{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px;margin:18px 0 10px;background:#eeebe7}
+.sbar i{display:block;min-width:4px}
+.sleg{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;font-size:12.5px;color:var(--text2)}
+.sleg span{display:flex;align-items:center;gap:7px}
+.sleg b{margin-left:auto;font-weight:600;color:var(--text)}
+.sleg .nul{color:var(--text3)}.sleg .nul b{color:var(--text3);font-weight:400}
 .dist{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:14px 0 6px;text-align:center}
 .dist b{display:block;font-size:18px;font-weight:600}
 .dist span{font-size:11px;color:var(--text3);line-height:1.2;display:block}
@@ -137,7 +144,7 @@ details summary{cursor:pointer;color:var(--text2);font-size:12.5px;margin-top:10
 .legend{position:absolute;right:12px;bottom:150px;z-index:1000;background:#fff;border-radius:14px;box-shadow:var(--shadow);width:236px;font-size:12.5px}
 .legend .lh{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 10px 14px;font-weight:600;font-size:12.5px;border:none;background:none;width:100%;text-align:left}
 .legend .lb{padding:0 14px 12px}
-.legend .li{display:flex;align-items:center;gap:9px;padding:2.5px 0;color:var(--text2)}
+.legend .li{display:flex;align-items:center;gap:9px;padding:2.5px 0;color:var(--text2);white-space:nowrap}
 .legend input[type=range]{width:100%;accent-color:var(--accent)}
 .legend .src{overflow-wrap:anywhere;font-size:11.5px;color:var(--text3);margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
 .legend .src a{color:var(--accent-d);cursor:pointer;text-decoration:underline;overflow-wrap:normal}
@@ -382,7 +389,7 @@ $('#opac').oninput=e=>{S.opac=e.target.value/100;omgLaag.setStyle(f=>f.propertie
 $('#lh').onclick=()=>{const lb=$('#lb');lb.hidden=!lb.hidden;$('#lhp').setAttribute('d',lb.hidden?'m6 9 6 6 6-6':'m6 15 6-6 6 6');};
 
 function legend(){
-  $('#lrows').innerHTML=KL.map(k=>`<div class="li"><i class="sw" style="background:${k.kleur}"></i>${esc(k.naam)}<span style="margin-left:auto;color:var(--text3)">${esc(k.code)}</span></div>`).join('')+`<div class="li"><i class="sw" style="background:${NA}"></i>Onbekend<span style="margin-left:auto;color:var(--text3)">bron ouder dan pand</span></div>`;
+  $('#lrows').innerHTML=KL.map(k=>`<div class="li"><i class="sw" style="background:${k.kleur}"></i>${esc(k.naam)}<span style="margin-left:auto;color:var(--text3)">${esc(k.code)}</span></div>`).join('')+`<div class="li"><i class="sw" style="background:${NA}"></i>Onbekend<span style="margin-left:auto;color:var(--text3)">bron te oud</span></div>`;
   const st=S.status;
   $('#lsrc').innerHTML=!st?'Rekenservice wordt gestart…':st.modus=='gpkg'?`Bron: <a href="https://www.klimaateffectatlas.nl/nl/download-data-waterdiepte-bij-hevige-neerslag" target="_blank" rel="noopener">Klimaateffectatlas, waterdiepte bij hevige neerslag</a>`:`Geen omgevingsdata gevonden (map data ontbreekt). Er worden geen scores getoond. <a id="kies1">Uitleg</a>`;
   const k1=$('#kies1');if(k1)k1.onclick=()=>openView('bron');
@@ -470,12 +477,12 @@ function openView(v){S.view=v;document.querySelectorAll('.rbtn').forEach(b=>b.cl
 
 const KM_VOLGORDE=['ingang','schotIn','kelder','drempel','rooster','schotK','instroom','instroomSchot','riool','klep','inst'];
 const KMDEF={
-  ingang:{l:'Hoogte ingang boven straatpeil',num:'cm'},schotIn:{l:'Waterkering bij ingang',o:{geen:'Geen',lo:'Tot 50 cm',hi:'Hoger dan 50 cm'},sub:1},
+  ingang:{l:'Hoogte ingang (cm)',num:'cm'},schotIn:{l:'Waterkering bij ingang',o:{geen:'Geen',lo:'Tot 50 cm',hi:'Hoger dan 50 cm'},sub:1},
   kelder:{l:'Ondergrondse ruimte',o:{'?':'Onbekend',geen:'Geen',deel:'Gedeeltelijke onderkeldering',vol:'Volledige kelder of souterrain',park:'Parkeerkelder'}},
-  drempel:{l:'Drempel bij toegang',num:'cm',sub:1,if:s=>s.kelder&&s.kelder!='geen'&&s.kelder!='?'},rooster:{l:'Waterrooster voor toegang',o:{0:'Nee',1:'Ja'},sub:1,if:s=>s.kelder&&s.kelder!='geen'&&s.kelder!='?'},
-  schotK:{l:'Waterkering',o:{geen:'Geen',lo:'Tot 50 cm',hi:'Hoger dan 50 cm'},sub:1,if:s=>s.kelder&&s.kelder!='geen'&&s.kelder!='?'},
+  drempel:{l:'Drempel kelder (cm)',num:'cm',sub:1,if:s=>s.kelder&&s.kelder!='geen'&&s.kelder!='?'},rooster:{l:'Waterrooster kelder',o:{0:'Nee',1:'Ja'},sub:1,if:s=>s.kelder&&s.kelder!='geen'&&s.kelder!='?'},
+  schotK:{l:'Waterkering kelder',o:{geen:'Geen',lo:'Tot 50 cm',hi:'Hoger dan 50 cm'},sub:1,if:s=>s.kelder&&s.kelder!='geen'&&s.kelder!='?'},
   instroom:{l:'Overige instroompunten',o:{'?':'Onbekend',nee:'Geen, of hoger dan 50 cm','50':'Tussen 15 en 50 cm','15':'Binnen 15 cm boven maaiveld'}},
-  instroomSchot:{l:'Afgeschermd',o:{0:'Nee',1:'Ja'},sub:1,if:s=>s.instroom=='15'},
+  instroomSchot:{l:'Instroompunten afgeschermd',o:{0:'Nee',1:'Ja'},sub:1,if:s=>s.instroom=='15'},
   riool:{l:'Rioolstelsel',o:{'?':'Onbekend',gemengd:'Gemengd',gescheiden:'Gescheiden'}},klep:{l:'Terugslagklep',o:{0:'Nee',1:'Ja'},sub:1,if:s=>s.riool!='gescheiden'},
   inst:{l:'Technische installaties',o:{'?':'Onbekend',kelder:'Onder straatniveau',bg:'Op de begane grond',hoog:'Verhoogd of op een verdieping'}}};
 const KMSTD={ingang:null,schotIn:'geen',kelder:'?',drempel:null,rooster:0,schotK:'geen',instroom:'?',instroomSchot:0,riool:'?',klep:0,inst:'?'};
@@ -509,7 +516,7 @@ function showPand(laden){
     h+=`<label for="km_${key}" class="${d.sub?'sub':''}">${esc(d.l)}</label>`;
     h+=d.num?`<input id="km_${key}" data-k="${key}" type="number" step="1" inputmode="numeric" placeholder="onbekend" value="${v==null?'':esc(v)}" aria-label="${esc(d.l)} in cm">`
       :`<select id="km_${key}" data-k="${key}">${Object.entries(d.o).map(([c,t])=>`<option value="${esc(c)}"${String(v)==c?' selected':''}>${esc(t)}</option>`).join('')}</select>`;});
-  h+=`</div><div class="note">Hoogtes in cm ten opzichte van het straatpeil. Leeg of onbekend telt als kwetsbaar.</div></div>`;
+  h+=`</div><div class="note">Hoogtes in cm boven het straatpeil. Leeg of onbekend telt als kwetsbaar.</div></div>`;
   if(r){h+=`<div class="sec"><h3>Puntentelling gebouwscore</h3><table class="pts num"><tbody>${r.gebouwscore.punten.map(p=>`<tr><td>${esc(p.onderdeel)}<small>${esc(p.toelichting)}</small></td><td>${fmt(p.punten)} <span style="color:var(--text3)">/ ${p.max}</span></td></tr>`).join('')}</tbody><tfoot><tr><td>Totaal</td><td>${fmt(r.gebouwscore.score)}</td></tr></tfoot></table></div>`;
     const o=r.omgevingsscore;const at=Object.entries(o.attributen||{});
     h+=`<div class="sec"><h3>Omgevingsscore</h3><div class="ptxt">${o.index==null?'Geen bruikbare waterdiepte voor dit pand.':`99e percentiel van de waterdiepte binnen 0,5 m rond het pand bij 70 mm neerslag in 1 uur: <b style="font-weight:600;color:var(--text)">${esc(o.waterdiepte)}</b>.`} Gekoppeld op ${esc(o.wijze)}.</div>
@@ -533,14 +540,16 @@ function drawPortMarkers(){portLaag.clearLayers();S.port.forEach(p=>{if(p.lat==n
 function openItem(p){S.terug='port';S.sel=p;S.view='port';showPand();drawSel();if(p.lat!=null)map.flyTo([p.lat,p.lon],Math.max(map.getZoom(),18),{duration:.6});}
 function showPort(){
   const pb=$('#pbody');const n=S.port.length;const b=S.batch;
-  let h=`<div class="eyebrow">Batch</div><h1 class="ptitle">Portefeuille</h1><div class="psub">${n?`${n} ${n==1?'pand':'panden'}`:'Nog geen panden'}</div>
+  let h=`<h1 class="ptitle">Portefeuille</h1><div class="psub">${n?`${n} ${n==1?'pand':'panden'}`:'Nog geen panden'}</div>
    <div class="row" style="margin-top:14px"><button class="btn pri" id="bUp"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Excel uploaden</button>
    <button class="btn" id="bTpl">Sjabloon</button>${n?`<button class="btn" id="bExp">Exporteren</button>`:''}</div>`;
   if(b&&b.bezig)h+=`<div class="bar"><i style="width:${Math.round(b.klaar/b.totaal*100)}%"></i></div><div class="note" style="margin-top:2px">${b.klaar} van ${b.totaal} berekend… <a href="#" id="bStop" style="color:var(--accent-d)">stoppen</a></div>`;
   if(!n)h+=`<div class="drop" id="drop">Sleep een Excel-bestand hierheen<br><span style="font-size:12.5px;color:var(--text3)">kolommen: adres, postcode, plaats en eventueel gebouwkenmerken</span></div>
     <p class="note">Of klik op een pand op de kaart en kies <i>Toevoegen aan portefeuille</i>.</p>`;
   else{const c=[0,0,0,0,0,0];let na=0;S.port.forEach(p=>{const r=riskOf(p);if(r==null)na++;else c[r]++;});
-    h+=`<div class="dist num">${[1,2,3,4,5,0].map(i=>`<div><b style="color:${c[i]?'var(--text)':'var(--text3)'}">${c[i]}</b><span>${RISICO[i]}</span></div>`).join('')}<div><b style="color:${na?'var(--text)':'var(--text3)'}">${na}</b><span>Onbekend</span></div></div>
+    const seg=[...[0,1,2,3,4,5].map(i=>({n:c[i],l:RISICO[i],k:RISKCOL[i]})),{n:na,l:'Onbekend',k:NA}];const tot=seg.reduce((a,b)=>a+b.n,0)||1;
+    h+=`<div class="sbar" role="img" aria-label="Verdeling klimaatrisico">${seg.filter(x=>x.n).map(x=>`<i style="flex:${x.n};background:${x.k}" title="${x.l}: ${x.n}"></i>`).join('')}</div>
+      <div class="sleg num">${seg.map(x=>`<span class="${x.n?'':'nul'}"><i class="dot" style="background:${x.k}"></i>${x.l}<b>${x.n}</b></span>`).join('')}</div>
     <div class="row" style="justify-content:space-between;margin-top:14px"><span class="eyebrow">Gesorteerd op klimaatrisico</span><button class="btn" id="bClear" style="height:30px;font-size:12.5px;padding:0 12px">Leegmaken</button></div>
     <div class="plist">${[...S.port].sort((a,b)=>(riskOf(b)??-1)-(riskOf(a)??-1)).map(p=>{const r=riskOf(p);
       return `<button class="pitem${S.sel===p?' sel':''}" data-u="${esc(p.uid)}"><span class="n">${esc(p.naam||p.adres||p.id)}</span><span class="a">${esc([p.naam?p.adres:'',p.plaats].filter(Boolean).join(', ')||p.id)}</span>

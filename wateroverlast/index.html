@@ -286,7 +286,7 @@ async function fetchT(u,ms){const c=new AbortController();const t=setTimeout(()=
 
 
 /* ================================================================= kaart */
-const map=L.map('map',{zoomControl:false,preferCanvas:true,minZoom:7,maxZoom:21,attributionControl:true}).setView([52.0885,5.1215],17);
+const map=L.map('map',{zoomControl:false,preferCanvas:true,minZoom:7,maxZoom:21,attributionControl:true}).setView([52.09005445,4.32438683],18);
 map.attributionControl.setPrefix(false);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.control.scale({position:'bottomright',imperial:false}).addTo(map);
@@ -472,9 +472,9 @@ async function zoek(){const v=$('#q').value.trim();if(!v)return;$('#sugg').hidde
 
 /* ============================================================ selectie */
 async function openAdres(a){
-  zichtbaar(a.lat,a.lon,Math.max(map.getZoom(),18));
   const item={adres:a.adres,postcode:a.postcode,plaats:a.plaats,lat:a.lat,lon:a.lon,rd_x:a.rd_x,rd_y:a.rd_y,km:{},pand:null};
   S.sel=item;showPand(true);
+  zichtbaar(a.lat,a.lon,Math.max(map.getZoom(),18));
   item.pand=await bagPand(a.lat,a.lon,3);await reken(item);}
 async function selectAt(ll){
   const item={adres:'',postcode:'',plaats:'',lat:ll.lat,lon:ll.lng,km:{},pand:null,klik:true};
@@ -705,6 +705,9 @@ function showBron(){
 /* ============================================================== start */
 function laadStatus(){S.status={modus:DATA.index?'gpkg':'voorbeeld',gpkg:DATA.index?{bestand:DATA.index.bestand,aantal:DATA.index.aantal,versie:DATA.index.versie}:null,fcab_versie:FCAB_VERSIE,rekenkern_versie:REKENKERN_VERSIE};legend();}
 async function start(){legend();loadPort();drawPortMarkers();await laadIndex();laadStatus();laadLaag();
+  /* standaard geopend adres */
+  $('#q').value='Benoordenhoutseweg 46, 2596BC Den Haag';
+  openAdres({adres:'Benoordenhoutseweg 46',postcode:'2596BC',plaats:'Den Haag',lat:52.09005445,lon:4.32438683,rd_x:82162.733,rd_y:456288.092});
   if(!DATA.index){hint('');$('#nodata').hidden=false;}}
 
 /* ===================================================== mobiel: onderblad */

@@ -286,7 +286,7 @@ async function fetchT(u,ms){const c=new AbortController();const t=setTimeout(()=
 
 
 /* ================================================================= kaart */
-const map=L.map('map',{zoomControl:false,preferCanvas:true,minZoom:7,maxZoom:21,attributionControl:true}).setView([52.09005445,4.32438683],17);/* start: omgeving Benoordenhoutseweg 46, Den Haag */
+const map=L.map('map',{zoomControl:false,zoomSnap:0.5,preferCanvas:true,minZoom:7,maxZoom:21,attributionControl:true}).setView([52.09005445,4.32438683],17.5);/* start: omgeving Benoordenhoutseweg 46, Den Haag */
 map.attributionControl.setPrefix(false);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.control.scale({position:'bottomright',imperial:false}).addTo(map);

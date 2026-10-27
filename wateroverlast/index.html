@@ -81,7 +81,7 @@ h1,h2,h3{margin:0;font-weight:600}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:10px 0 4px}
 .scale i{height:5px;border-radius:3px;background:#eeebe7}
 .scalel{display:flex;justify-content:space-between;font-size:11px;color:var(--text3)}
-.kv{display:grid;grid-template-columns:150px 1fr;gap:7px 12px;font-size:13.5px;margin-top:14px}
+.kv{display:grid;grid-template-columns:170px 1fr;gap:7px 12px;font-size:13.5px;margin-top:14px}
 .kv dt{color:var(--text2)}.kv dd{margin:0;display:flex;align-items:center;gap:8px}
 .sw{width:14px;height:14px;border-radius:3px;border:1px solid #2f2f2f;flex:none}
 .rule{font-size:12.5px;color:var(--text2);margin-top:12px}
@@ -140,7 +140,7 @@ details summary{cursor:pointer;color:var(--text2);font-size:12.5px;margin-top:10
 .legend .li{display:flex;align-items:center;gap:9px;padding:2.5px 0;color:var(--text2)}
 .legend input[type=range]{width:100%;accent-color:var(--accent)}
 .legend .src{overflow-wrap:anywhere;font-size:11.5px;color:var(--text3);margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
-.legend .src a{color:var(--accent-d);cursor:pointer;text-decoration:underline}
+.legend .src a{color:var(--accent-d);cursor:pointer;text-decoration:underline;overflow-wrap:normal}
 .base{position:absolute;left:calc(var(--rail) + var(--panel) + 14px);bottom:24px;z-index:1000;width:76px;height:76px;border-radius:12px;border:2px solid #fff;box-shadow:var(--shadow2);overflow:hidden;padding:0;background:#ccc;transition:left .2s}
 .base img{width:100%;height:100%;object-fit:cover;display:block}
 .base span{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 5px;font-size:11.5px;font-weight:600;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.55));text-align:left}
@@ -384,7 +384,7 @@ $('#lh').onclick=()=>{const lb=$('#lb');lb.hidden=!lb.hidden;$('#lhp').setAttrib
 function legend(){
   $('#lrows').innerHTML=KL.map(k=>`<div class="li"><i class="sw" style="background:${k.kleur}"></i>${esc(k.naam)}<span style="margin-left:auto;color:var(--text3)">${esc(k.code)}</span></div>`).join('')+`<div class="li"><i class="sw" style="background:${NA}"></i>Onbekend<span style="margin-left:auto;color:var(--text3)">bron ouder dan pand</span></div>`;
   const st=S.status;
-  $('#lsrc').innerHTML=!st?'Rekenservice wordt gestart…':st.modus=='gpkg'?`Bron: ${esc(st.gpkg.bestand)}${st.gpkg.aantal?` · ${st.gpkg.aantal.toLocaleString('nl-NL')} objecten`:''}. Pandcontouren: BAG (PDOK).`:`Geen omgevingsdata gevonden (map data ontbreekt). Er worden geen scores getoond. <a id="kies1">Uitleg</a>`;
+  $('#lsrc').innerHTML=!st?'Rekenservice wordt gestart…':st.modus=='gpkg'?`Bron: <a href="https://www.klimaateffectatlas.nl/nl/download-data-waterdiepte-bij-hevige-neerslag" target="_blank" rel="noopener">Klimaateffectatlas, waterdiepte bij hevige neerslag</a>`:`Geen omgevingsdata gevonden (map data ontbreekt). Er worden geen scores getoond. <a id="kies1">Uitleg</a>`;
   const k1=$('#kies1');if(k1)k1.onclick=()=>openView('bron');
   $('#bronlbl').innerHTML=st&&st.modus=='gpkg'?'Databron':'Databron <i class="dot" style="background:#d9573f;vertical-align:1px"></i>';}
 
@@ -487,18 +487,21 @@ function showPand(laden){
   const titel=it.naam||it.adres||(it.pand?'Pand zonder adres':'Geselecteerde locatie');
   const sub=it.naam?[it.adres,it.postcode,it.plaats].filter(Boolean).join(', '):[it.postcode,it.plaats].filter(Boolean).join(' ')||(it.nabij?'Nabij '+it.nabij:'');
   const pid=(r&&r.bag_pand_id)||(it.pand&&it.pand.id);const bj=(r&&r.bouwjaar)||(it.pand&&it.pand.bouwjaar);
-  let h=`<div class="eyebrow">${S.terug=='port'?'Portefeuille · ':''}Pand</div><h1 class="ptitle">${esc(titel)}</h1><div class="psub">${esc(sub)}</div>
+  let h=`${S.terug=='port'?'<div class="eyebrow">Portefeuille</div>':''}<h1 class="ptitle">${esc(titel)}</h1><div class="psub">${esc(sub)}</div>
    <div class="meta num">${pid?'BAG pand '+esc(pid):'Geen BAG-pand gevonden'}${bj?' · bouwjaar '+esc(bj):''}${it.pand&&it.pand.gebruiksdoel?' · '+esc(it.pand.gebruiksdoel):''}</div>`;
   if(it.fout){h+=`<div class="warn">${esc(it.fout)}</div>`;}
   if(!r&&!it.fout){h+=`<div class="sec"><span class="spin"></span></div>`;pb.innerHTML=CLOSE+h;return;}
   if(r){const o=r.omgevingsscore,k=r.klimaatrisico;const kc=k.score==null?NA:RISKCOL[k.score];
+    const nOnb=r.herleiding.onbekende_kenmerken.length;
+    const zin=o.index==null?'Voor dit pand is geen waterdiepte bekend. Het klimaatrisico kan daarom niet worden bepaald.'
+      :`Bij een bui van 70 mm in 1 uur staat er ${o.index==0?'vrijwel geen water':esc(o.waterdiepte)+' water'} rond het pand. Het gebouw scoort ${fmt(r.gebouwscore.score)} van 100 op kwetsbaarheid.`;
     h+=`<div class="sec"><h3>Klimaatrisico wateroverlast</h3><div class="risk"><b>${esc(k.klasse)}</b></div>
-      <div class="scale">${[1,2,3,4,5].map(i=>`<i style="${k.score!=null&&i<=k.score?'background:'+kc:''}"></i>`).join('')}</div><div class="scalel"><span>Zeer laag</span><span>Zeer hoog</span></div>
-      <dl class="kv"><dt>Omgevingsscore</dt><dd><i class="sw" style="background:${o.kleur}"></i>${esc(o.klasse||'Onbekend')}${o.waterdiepte&&o.index!=null?` <span style="color:var(--text3)">${esc(o.waterdiepte)}</span>`:''}</dd>
-      <dt>Gebouwscore</dt><dd class="num">${fmt(r.gebouwscore.score)} <span style="color:var(--text3)">van 100</span></dd></dl>
-      <div class="rule">${esc(r.herleiding.regel)}</div>`;
-    if(o.index!=null)h+=`<div class="mx" aria-label="Risicomatrix">${WOM[o.index].split('').map((c,i)=>`<i class="${i==r.gebouwscore.kolom?'hit':''}" style="background:${RISKCOL[+c]}"></i>`).join('')}</div><div class="mxl"><span>gebouwscore 0</span><span>100</span></div>`;
-    if(r.herleiding.onbekende_kenmerken.length)h+=`<div class="note">${r.herleiding.onbekende_kenmerken.length} van 5 kenmerken onbekend; die tellen als kwetsbaar. Vul ze hieronder aan voor een preciezere score.</div>`;
+      ${o.index==null?`<p class="ptxt" style="margin:6px 0 0">${zin}</p>`:''}
+      <dl class="kv"><dt>Water rond het pand</dt><dd><i class="sw" style="background:${o.kleur}"></i>${o.index!=null?esc(o.waterdiepte):'onbekend'}</dd>
+      <dt>Kwetsbaarheid gebouw</dt><dd class="num">${fmt(r.gebouwscore.score)} van 100</dd></dl>
+      ${nOnb?`<div class="note">${nOnb} van 5 gebouwkenmerken ${nOnb==1?'is':'zijn'} onbekend en ${nOnb==1?'telt':'tellen'} als kwetsbaar.</div>`:''}
+      ${o.index!=null?`<details><summary>Hoe is dit bepaald?</summary><div class="rule">Waterdiepteklasse ${esc(o.klasse.toLowerCase())} en kwetsbaarheid ${fmt(r.gebouwscore.score)} geven samen in de FCAB-risicomatrix het klimaatrisico ${esc(k.klasse.toLowerCase())}. De gemarkeerde cel hieronder is dit pand; links is het gebouw weinig kwetsbaar, rechts zeer kwetsbaar.</div>
+        <div class="mx" aria-label="Risicomatrix">${WOM[o.index].split('').map((c,i)=>`<i class="${i==r.gebouwscore.kolom?'hit':''}" style="background:${RISKCOL[+c]}"></i>`).join('')}</div><div class="mxl"><span>kwetsbaarheid 0</span><span>100</span></div></details>`:''}`;
     h+=`</div>`;}
   const s={...KMSTD,...it.km};
   h+=`<div class="sec"><h3>Gebouwkenmerken</h3><div class="form">`;

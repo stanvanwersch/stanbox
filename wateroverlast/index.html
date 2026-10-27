@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FCAB Rekenkern Wateroverlast</title>
+<title>FCAB - Wateroverlast</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../deel%201/wateroverlast/leaflet.css">
@@ -215,7 +215,7 @@ code{font-size:12px;background:#f3f1ee;padding:1px 5px;border-radius:4px;word-br
 <div id="gate">
   <div class="g-body">
     <div class="g-brand" aria-hidden="true"><i style="background:#E8B84B">F</i><i style="background:#C0392B">C</i><i style="background:#4BAE8A">A</i><i style="background:#E8710A">B</i></div>
-    <div class="g-name">Rekenkern Wateroverlast</div>
+    <div class="g-name">FCAB - Wateroverlast</div>
     <form class="g-card" id="g-form" autocomplete="off">
       <input type="password" id="g-in" placeholder="Toegangscode" aria-label="Toegangscode" autofocus>
       <button type="submit">Ontgrendelen</button>
@@ -286,7 +286,7 @@ async function fetchT(u,ms){const c=new AbortController();const t=setTimeout(()=
 
 
 /* ================================================================= kaart */
-const map=L.map('map',{zoomControl:false,preferCanvas:true,minZoom:7,maxZoom:21,attributionControl:true}).setView([52.09005445,4.32438683],18);
+const map=L.map('map',{zoomControl:false,preferCanvas:true,minZoom:7,maxZoom:21,attributionControl:true}).setView([52.09005445,4.32438683],16);/* start: omgeving Benoordenhoutseweg 46, Den Haag */
 map.attributionControl.setPrefix(false);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.control.scale({position:'bottomright',imperial:false}).addTo(map);
@@ -662,7 +662,7 @@ function exporteer(){
       pt('ingang'),pt('kelder'),pt('instroom'),pt('riool'),pt('inst'),...KM_VOLGORDE.map(k=>s[k]==null?'':s[k]),r?r.herleiding.regel:'',p.fout||'',p.lat??'',p.lon??''];});
   const ws=XLSX.utils.aoa_to_sheet([kop,...rows]);ws['!cols']=kop.map((k,i)=>({wch:i==kop.length-4?80:Math.max(10,Math.min(28,k.length+2))}));ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:rows.length,c:kop.length-1}})};
   XLSX.utils.book_append_sheet(wb,ws,'Resultaten');
-  const st=S.status||{};const t=[['FCAB Rekenkern Wateroverlast'],['Berekend op',new Date().toLocaleString('nl-NL')],['Methodiek',st.fcab_versie||''],['Rekenkern',st.rekenkern_versie||''],
+  const st=S.status||{};const t=[['FCAB - Wateroverlast'],['Berekend op',new Date().toLocaleString('nl-NL')],['Methodiek',st.fcab_versie||''],['Rekenkern',st.rekenkern_versie||''],
     ['Omgevingsscore',st.gpkg?st.gpkg.bestand:'geen (databron ontbreekt)'],['Bui','70 mm in 1 uur'],['Maat','99e percentiel van de waterdiepte binnen 0,5 m rond het BAG-pand (10 m rond het adrespunt zonder BAG-pand)'],
     ['Gebouwscore','FCAB-2 wateroverlast: ingang (max 40), ondergrondse ruimte (15), instroompunten (20), riool (5), installaties (20)'],['Klimaatrisico','Risicomatrix omgevingsklasse × gebouwscore (kolommen van 5 punten)'],[],['Klasse','Waterdiepte'],...KL.map(k=>[k.naam,k.code]),['Onbekend','Brondata ouder dan gebouw']];
   const wt=XLSX.utils.aoa_to_sheet(t);wt['!cols']=[{wch:18},{wch:100}];XLSX.utils.book_append_sheet(wb,wt,'Toelichting');
@@ -705,9 +705,6 @@ function showBron(){
 /* ============================================================== start */
 function laadStatus(){S.status={modus:DATA.index?'gpkg':'voorbeeld',gpkg:DATA.index?{bestand:DATA.index.bestand,aantal:DATA.index.aantal,versie:DATA.index.versie}:null,fcab_versie:FCAB_VERSIE,rekenkern_versie:REKENKERN_VERSIE};legend();}
 async function start(){legend();loadPort();drawPortMarkers();await laadIndex();laadStatus();laadLaag();
-  /* standaard geopend adres */
-  $('#q').value='Benoordenhoutseweg 46, 2596BC Den Haag';
-  openAdres({adres:'Benoordenhoutseweg 46',postcode:'2596BC',plaats:'Den Haag',lat:52.09005445,lon:4.32438683,rd_x:82162.733,rd_y:456288.092});
   if(!DATA.index){hint('');$('#nodata').hidden=false;}}
 
 /* ===================================================== mobiel: onderblad */

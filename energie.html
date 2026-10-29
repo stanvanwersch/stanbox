@@ -574,7 +574,7 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
             <button type="button" class="msec-head" aria-expanded="false"><span>Bron van de kentallen en gebouwtypen</span><span class="msec-chev">›</span></button>
             <div class="msec-body">
               <p>TNO Energiekentallen Utiliteitsbouw 2020 tot en met 2024 (in opdracht van RVO), per zichtjaar. Dit zijn landelijke benchmarkcijfers over de Nederlandse gebouwvoorraad en geen WEii-metingen van specifieke DGBC-panden. Alle kentallen in dit dashboard zijn <strong>gewogen gemiddelden</strong>, op twee niveaus: (1) TNO's eigen "Gewogen gemiddelde kental" per gebouwtype wordt gebruikt (oppervlakte-gewogen), niet het ongewogen "Gemiddelde kental"; (2) de 65 TNO-gebouwtypen zijn volgens de koppeling onder Settings samengevoegd tot gebruikstypen, met het <strong>geschatte gebouwoppervlak</strong> als weegfactor (aantal panden x gemiddeld oppervlak per pand, afgeleid uit de TNO-oppervlakteklassen), en niet met het aantal panden. Het oppervlak per pand is een schatting (klassemidden van de TNO-oppervlakteklassen) tenzij onder Settings het door TNO opgegeven gemiddelde is ingevuld; de onderliggende TNO-gebouwtypen staan bij elk gebouwtype vermeld.</p>
-              <p>Het dashboard toont alle 25 WEii-gebruikstypen uit het protocol. Het <strong>landelijk gemiddelde</strong> is oppervlak-gewogen over 14 daarvan: alle gebruikstypen behalve Café, Sauna, Medische (groeps) praktijk, Opvang zonder overnachting, Garage/showroom, Vakantiepark, Sportaccommodatie binnen en buiten, Winkel met warenkoeling, Grondgebonden woningen en Appartementen. Een aantal TNO-gebouwtypen is aan twee gebruikstypen gekoppeld (bijvoorbeeld Winkelpand aan Winkel met en zonder warenkoeling); zouden alle 25 meetellen, dan telde hun oppervlak dubbel.</p>
+              <p>Het dashboard toont 23 gebruikstypen: de 25 WEii-gebruikstypen uit het protocol, waarbij <strong>winkel met en zonder warenkoeling</strong> (Winkel*) en <strong>café en restaurant</strong> (Café/restaurant**) elk als één gebruikstype zijn samengevoegd. TNO publiceert voor deze paren geen afzonderlijke kentallen, dus er is ook geen afzonderlijke data. De klassegrenzen en het Paris Proof-pad van Winkel* en Café/restaurant** zijn het gewogen gemiddelde van de twee samengevoegde gebruikstypen, met een weging naar oppervlak uit de routekaarten: 20% met en 80% zonder warenkoeling, en 23% café en 77% restaurant. Het <strong>landelijk gemiddelde</strong> is oppervlak-gewogen over 14 van deze 23: alle gebruikstypen behalve Sauna, Medische (groeps) praktijk, Opvang zonder overnachting, Garage/showroom, Vakantiepark, Sportaccommodatie binnen en buiten, Grondgebonden woningen en Appartementen. Een aantal TNO-gebouwtypen is aan twee gebruikstypen gekoppeld (bijvoorbeeld Winkelpand aan Winkel met en zonder warenkoeling); zouden alle 25 meetellen, dan telde hun oppervlak dubbel.</p>
               <p>Voor <strong>Sauna, Garage/showroom, Sportaccommodatie buiten en Appartementen</strong> is in de standaardkoppeling geen TNO-gebouwtype beschikbaar; ze zijn wel te selecteren en tonen dan geen kentallen (gemarkeerd als "geen TNO-data"). Wie zelf een TNO-gebouwtype koppelt onder Settings, ziet direct de kentallen. Bij gebruikstypen waarvan het protocol de klassegrenzen maar deels geeft (Zeer zuinig, Zuinig en Paris Proof uit de routekaart) is de klasse boven de laatste bekende grens "onbekend".</p>
             </div>
           </div>
@@ -591,7 +591,7 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
           <div class="msec">
             <button type="button" class="msec-head" aria-expanded="false"><span>Het Paris Proof-pad</span><span class="msec-chev">›</span></button>
             <div class="msec-body">
-              <p>Het Paris Proof-pad toont het volledige, officiële DGBC-routekaartpad per gebouwtype ("Paris Proof paden energie – prognose 2025"), niet een eigen benadering: het pad is piecewise-lineair tussen de ankerjaren 2020, 2025 (Zuinig), 2030 (Zeer zuinig) en 2040 (Paris Proof), en loopt vlak door tot 2050. De routekaart bevat een pad voor alle 25 gebruikstypen. Voor 24 van de 25 komt de 2040-waarde exact overeen met de Paris Proof-klassegrens; alleen bij <strong>Winkel zonder warenkoeling</strong> geeft de routekaart op 2040 een waarde van 80 kWh/m² terwijl protocol Tabel 4 een klassegrens van 100 kWh/m² aanhoudt – dit is een verschil tussen de twee brondocumenten zelf en geen keuze van dit dashboard.</p>
+              <p>Het Paris Proof-pad toont het volledige, officiële DGBC-routekaartpad per gebouwtype ("Paris Proof paden energie – prognose 2025"), niet een eigen benadering: het pad is piecewise-lineair tussen de ankerjaren 2020, 2025 (Zuinig), 2030 (Zeer zuinig) en 2040 (Paris Proof), en loopt vlak door tot 2050. De routekaart bevat een pad voor alle 25 gebruikstypen; voor <strong>Winkel*</strong> en <strong>Café/restaurant**</strong> is het pad het gewogen gemiddelde van de twee samengevoegde gebruikstypen (dezelfde weging als bij de klassegrenzen). Voor alle gebruikstypen komt de 2040-waarde exact overeen met de Paris Proof-klassegrens. Alleen bij Winkel* wijkt het ankerjaar 2025 af: de routekaart geeft daar (gewogen) 185 kWh/m², terwijl de Zuinig-grens 192 kWh/m² is – dit is een verschil tussen de brondocumenten zelf en geen keuze van dit dashboard.</p>
               <p>Let ook op dat het 2020-basisjaar van dit officiële pad niet gelijk is aan de werkelijke, uit de TNO-kentallen berekende WEii voor 2020 die in dit dashboard wordt getoond: voor de meeste gebouwtypen ligt de routekaart-2020-waarde hoger (ongunstiger) dan het TNO-gemeten 2020-gemiddelde, vermoedelijk door een verschil in onderliggende bronmethodiek tussen de DGBC-routekaart en de TNO-benchmark.</p>
             </div>
           </div>
@@ -744,12 +744,40 @@ const CATS = DATA.categories;
 // gebruikstypen zijn gekoppeld (bv. Winkelpand, Zorginstelling) zouden anders
 // dubbel meetellen.
 const AGG_IDS = new Set(CATS.map(c=>c.id));
+// Samengevoegde gebruikstypen. TNO publiceert voor "winkel met en zonder
+// warenkoeling" en voor "café en restaurant" geen afzonderlijke kentallen: het
+// is dezelfde data. Deze paren worden daarom als één gebruikstype getoond, met
+// gewogen klassegrenzen (weging naar oppervlak uit de routekaarten: 20% met /
+// 80% zonder warenkoeling, 23% café / 77% restaurant). parts[0] is het
+// gebruikstype waarvan het kental komt; parts[1] wordt niet apart getoond.
+const MERGED = [
+  {id:'Winkel', label:'Winkel*', parts:['Winkel zonder warenkoeling','Winkel met warenkoeling'], ppKeys:['Winkel','Winkel met warenkoeling'], w:[0.8,0.2],
+   thr:[94,115,192,337,601],
+   note:'* Samenvoeging van de gebruikstypen winkel met en winkel zonder warenkoeling; er is geen afzonderlijke data. De WEii-klassegrenzen zijn gebaseerd op het gewogen gemiddelde van beide gebruikstypen (20% met, 80% zonder warenkoeling).',
+   short:'* Winkel met en zonder warenkoeling samengevoegd; gewogen klassegrenzen.'},
+  {id:'Restaurant/café', label:'Café/restaurant**', parts:['Restaurant','Café'], ppKeys:['Restaurant/café','Café'], w:[0.77,0.23],
+   thr:[170,229,352,593,931],
+   note:'** Samenvoeging van de gebruikstypen café en restaurant; er is geen afzonderlijke data. De WEii-klassegrenzen zijn gebaseerd op het gewogen gemiddelde van beide gebruikstypen (23% café, 77% restaurant).',
+   short:'** Café en restaurant samengevoegd; gewogen klassegrenzen.'}
+];
+const MERGED_SECOND = new Set(MERGED.map(m=>m.parts[1]));
+const MERGED_BY_FIRST = {}; MERGED.forEach(m=>{ MERGED_BY_FIRST[m.parts[0]] = m; });
 (function addExtraCats(){
-  const LABELS = {'Restaurant/café':'Restaurant', 'Winkel':'Winkel zonder warenkoeling'};
-  CATS.forEach(c=>{ if(LABELS[c.id]) c.label = LABELS[c.id]; });
+  // gewogen Paris Proof-pad voor de samengevoegde gebruikstypen (zelfde weging als de klassegrenzen)
+  MERGED.forEach(m=>{
+    const a = DATA.pp_pathway[m.ppKeys[0]], b = DATA.pp_pathway[m.ppKeys[1]];
+    if(!a || !b) return;
+    const o = {};
+    Object.keys(a).forEach(y=>{ o[y] = Math.round((m.w[0]*a[y] + m.w[1]*b[y])*100)/100; });
+    DATA.pp_pathway[m.id] = o;
+  });
+  CATS.forEach(c=>{
+    const m = MERGED.find(x=>x.id===c.id);
+    if(m){ c.label = m.label; c.thresholds = [0].concat(m.thr, [null]); c.partial = false; c.merged = true; }
+  });
   const have = new Set(Object.keys(DATA.cat_weii).map(k=>DATA.cat_weii[k]));
   Object.keys(DATA.weii_info).forEach(w=>{
-    if(have.has(w)) return;
+    if(have.has(w) || MERGED_SECOND.has(w)) return;
     const info = DATA.weii_info[w];
     DATA.cat_weii[w] = w;
     CATS.push({id:w, label:w, weii_type:w, sources:[], weer_aandeel:{gas:0, elek:0},
@@ -1121,6 +1149,13 @@ function renderCatDropdownList(){
     item.addEventListener('click', (e)=>{ e.stopPropagation(); toggleSelect(cat.id); });
     listWrap.appendChild(item);
   });
+  MERGED.filter(m=>list.some(c=>c.id===m.id)).forEach(m=>{
+    const f = document.createElement('div');
+    f.className = 'cat-dropdown-empty';
+    f.style.cssText = 'padding:6px 8px 0;font-size:11px;line-height:1.35;';
+    f.textContent = m.short;
+    listWrap.appendChild(f);
+  });
 }
 
 // ---------- grafiekveld: modus-schakelaar (trendlijn / staafdiagram) ----------
@@ -1143,6 +1178,17 @@ function renderChart(){
   renderChartLegend();
   if(state.mode === 'staaf') renderBarPanels(holder, noteEl);
   else renderTrendPanels(holder, noteEl);
+  // voetnoten bij samengevoegde gebruikstypen (Winkel*, Café/restaurant**) die in beeld zijn
+  let shown;
+  if(state.mode === 'staaf'){ const ks = selectedMetricKeys(); shown = sortedBarSubjects(ks, ks.length>1); }
+  else shown = Array.from(state.selectedIds).map(catById).filter(Boolean);
+  MERGED.filter(m=>shown.some(c=>c.id===m.id)).forEach(m=>{
+    const d = document.createElement('div');
+    d.className = 'merged-note';
+    d.style.marginTop = '6px';
+    d.textContent = m.note;
+    noteEl.appendChild(d);
+  });
 }
 
 // ---------- staafdiagram per jaar: alle gebouwtypen van één jaar, gerangschikt ----------
@@ -2245,17 +2291,20 @@ function weerRows(){
   return typesShown.map(w=>{
     const a = SETTINGS.weer[w] || {};
     const f = v => (v && v>0) ? String(Math.round(v*1000)/10) : '';
-    return '<tr><td>'+esc(w)+'</td>'
+    const mg = MERGED_BY_FIRST[w];
+    return '<tr><td>'+esc(mg ? mg.label : w)+'</td>'
       + '<td><span class="set-pct"><input type="number" class="set-input'+(a.gas>0?' filled':'')+'" min="0" max="100" step="1" placeholder="0" data-weer="'+esc(w)+'" data-kind="gas" value="'+f(a.gas)+'" aria-label="Aandeel gas voor ruimteverwarming, '+esc(w)+'"><span>%</span></span></td>'
       + '<td><span class="set-pct"><input type="number" class="set-input'+(a.elek>0?' filled':'')+'" min="0" max="100" step="1" placeholder="0" data-weer="'+esc(w)+'" data-kind="elek" value="'+f(a.elek)+'" aria-label="Aandeel elektriciteit voor ruimteverwarming, '+esc(w)+'"><span>%</span></span></td></tr>';
   }).join('');
 }
 function klasseRows(){
   const fmt = v => (v===null||v===undefined) ? '–' : nlInt(v);
-  return WEII_TYPES.map(w=>{
-    const info = WEII_INFO[w];
-    const names = []; MODEL.types.forEach((t,i)=>{ const m = SETTINGS.map[i]; if(m[0]===w || m[1]===w) names.push(t.name); });
-    return '<tr><td>'+esc(w)+(info.partial?'<span class="set-tag">grenzen deels</span>':'')+'</td>'
+  return WEII_TYPES.filter(w=>!MERGED_SECOND.has(w)).map(w=>{
+    const mg = MERGED_BY_FIRST[w];
+    const info = mg ? {thr:mg.thr, partial:false} : WEII_INFO[w];
+    const set = mg ? mg.parts : [w];
+    const names = []; MODEL.types.forEach((t,i)=>{ const m = SETTINGS.map[i]; if(set.indexOf(m[0])>=0 || set.indexOf(m[1])>=0) names.push(t.name); });
+    return '<tr><td>'+esc(mg ? mg.label : w)+(info.partial?'<span class="set-tag">grenzen deels</span>':'')+'</td>'
       + '<td class="num" data-count-for="'+esc(w)+'" title="'+esc(names.join('\n'))+'">'+names.length+'</td>'
       + info.thr.map(v=>'<td class="num">'+fmt(v)+'</td>').join('')+'</tr>';
   }).join('');
@@ -2290,7 +2339,7 @@ function buildSettings(){
     + '<div class="set-toolbar" style="margin-top:10px;"><button type="button" class="set-btn primary" id="set-download">Download Excelbestand</button></div></div>'
 
     + '<div class="kader"><div class="set-h">1. Koppeling TNO-gebouwtype met WEii-gebruikstype</div>'
-    + '<p class="set-sub">Kies per TNO-gebouwtype de WEii-gebruiksfunctie. Gebruik de tweede kolom alleen als één TNO-type bij twee gebruiksfuncties hoort (bijvoorbeeld Restaurant én Café): beide krijgen dan hetzelfde kental. "n.v.t." betekent dat het type niet meetelt. Het landelijk gemiddelde in het dashboard is het naar oppervlak gewogen gemiddelde over 14 gebruikstypen (alle gebruikstypen behalve Café, Sauna, Medische (groeps) praktijk, Opvang zonder overnachting, Garage/showroom, Vakantiepark, Sportaccommodatie binnen en buiten, Winkel met warenkoeling, Grondgebonden woningen en Appartementen). Zo tellen TNO-gebouwtypen die aan twee gebruikstypen zijn gekoppeld niet dubbel mee.</p>'
+    + '<p class="set-sub">Kies per TNO-gebouwtype de WEii-gebruiksfunctie. Gebruik de tweede kolom alleen als één TNO-type bij twee gebruiksfuncties hoort (bijvoorbeeld Restaurant én Café): beide krijgen dan hetzelfde kental. "n.v.t." betekent dat het type niet meetelt. Het landelijk gemiddelde in het dashboard is het naar oppervlak gewogen gemiddelde over 14 gebruikstypen (alle gebruikstypen behalve Sauna, Medische (groeps) praktijk, Opvang zonder overnachting, Garage/showroom, Vakantiepark, Sportaccommodatie binnen en buiten, Grondgebonden woningen en Appartementen). Zo tellen TNO-gebouwtypen die aan twee gebruikstypen zijn gekoppeld niet dubbel mee. In grafieken en tabellen worden Winkel met en zonder warenkoeling samen getoond als Winkel* en Café en Restaurant samen als Café/restaurant**: TNO publiceert daarvoor geen afzonderlijke kentallen.</p>'
     + '<div class="set-scroll"><table class="set-table"><thead><tr><th>TNO-gebouwtype</th><th>WEii-gebruikstype</th><th>2e gebruikstype (optioneel)</th><th class="num">Panden '+LATEST_YEAR+'</th></tr></thead><tbody id="set-kop-body">'+koppelingRows()+'</tbody></table></div></div>'
 
     + '<div class="kader"><div class="set-h">2. Weercorrectie: aandeel ruimteverwarming</div>'
@@ -2298,8 +2347,9 @@ function buildSettings(){
     + '<div class="set-scroll nomax"><table class="set-table"><thead><tr><th>WEii-gebruikstype</th><th>Aandeel gas</th><th>Aandeel elektriciteit</th></tr></thead><tbody id="set-weer-body">'+weerRows()+'</tbody></table></div></div>'
 
     + '<div class="kader"><div class="set-h">3. WEii-gebruikstypen en klassegrenzen (kWh/m², alleen-lezen)</div>'
-    + '<p class="set-sub">Bovengrens per klasse (WEii ≤ grens). De grenzen liggen vast. Voor 14 gebruikstypen komen ze uit protocol Tabel 4. Bij gebruikstypen met het label "grenzen deels" zijn Paris Proof, Zeer zuinig en Zuinig overgenomen uit de routekaart (2040, 2030 en 2025); boven Zuinig is de klasse daar "onbekend". De kolom "TNO" toont hoeveel TNO-gebouwtypen gekoppeld zijn (beweeg eroverheen voor de namen).</p>'
-    + '<div class="set-scroll nomax"><table class="set-table"><thead><tr><th>WEii-gebruikstype</th><th class="num">TNO</th>'+['Paris Proof','Zeer zuinig','Zuinig','Gemiddeld','Onzuinig'].map(h=>'<th class="num">'+h+'</th>').join('')+'</tr></thead><tbody id="set-klasse-body">'+klasseRows()+'</tbody></table></div></div>'
+    + '<p class="set-sub">Bovengrens per klasse (WEii ≤ grens). De grenzen liggen vast. Voor 14 gebruikstypen komen ze uit protocol Tabel 4. Bij gebruikstypen met het label "grenzen deels" zijn Paris Proof, Zeer zuinig en Zuinig overgenomen uit de routekaart (2040, 2030 en 2025); boven Zuinig is de klasse daar "onbekend". De kolom "TNO" toont hoeveel TNO-gebouwtypen gekoppeld zijn (beweeg eroverheen voor de namen). Winkel* en Café/restaurant** zijn samengevoegde gebruikstypen met gewogen klassegrenzen; zie de voetnoten onder de tabel.</p>'
+    + '<div class="set-scroll nomax"><table class="set-table"><thead><tr><th>WEii-gebruikstype</th><th class="num">TNO</th>'+['Paris Proof','Zeer zuinig','Zuinig','Gemiddeld','Onzuinig'].map(h=>'<th class="num">'+h+'</th>').join('')+'</tr></thead><tbody id="set-klasse-body">'+klasseRows()+'</tbody></table></div>'
+    + '<div class="set-notes" style="margin-top:10px;font-size:12px;line-height:1.45;color:var(--text3);">'+MERGED.map(m=>'<p style="margin:0 0 4px;">'+esc(m.note)+'</p>').join('')+'</div></div>'
 
     + '<div class="kader"><div class="set-h">4. Gemiddeld oppervlak per pand (m²)</div>'
     + '<p class="set-sub">Vul het gemiddelde gebruiksoppervlak per pand in dat TNO per gebouwtype en jaar opgeeft. Een lege cel betekent dat de schatting uit de TNO-oppervlakteklassen wordt gebruikt (grijs weergegeven). Ingevulde waarden kleuren groen. Heeft TNO een totaaloppervlak gegeven? Deel dat dan door het aantal panden. Dit oppervlak bepaalt, samen met het aantal panden, hoe zwaar elk TNO-gebouwtype meeweegt. Voor zonnestroom wordt het oppervlak van de elektriciteitspopulatie gebruikt.</p>'

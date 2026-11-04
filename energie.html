@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Paris Proof Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
@@ -451,9 +447,6 @@ li{margin-bottom:5px;color:var(--text2);font-weight:300;}
   .cat-dropdown-panel{width:calc(100vw - 56px);}
 }
 </style>
-</head>
-<body>
-
 
 <div class="bg-photo"></div>
 
@@ -810,10 +803,10 @@ const METRICS = [
    title:'De hoofdmeter-gebaseerde WEii-score (exclusief eigenverbruik zonnestroom) waarop de klassegrenzen (WENG t/m Zeer onzuinig, incl. Paris Proof) zijn gedefinieerd.'},
   {key:'finaal', label:'WEii-finaal', unit:'kWh/m²', group:'kwh', color:'#1d5fa8',
    title:'Overige indicator uit het protocol (§8.1): het finale energiegebruik, WEii plus de lokale zonopwek per m². Ontbreekt voor gebouwtypen/jaren zonder betrouwbaar zonopwek-kental.'},
-  {key:'gas', label:'WEii-gas', unit:'kWh/m²', group:'kwh', color:'#b21d9c', title:''},
+  {key:'gas', label:'WEii-gas', unit:'kWh/m²', group:'kwh', color:'#0f8b8d', title:''},
   {key:'zon', label:'Zonne-opwek', unit:'kWh/m²', group:'kwh', color:'#c98a00',
    title:'Gewogen gemiddelde zonnestroomproductie per m² uit de TNO-kentallenset. Voor sommige gebouwtypen/jaren ontbreekt een betrouwbaar kental omdat te weinig panden in de steekproef zonnestroom hadden.'},
-  {key:'co2', label:'WEii-CO₂', unit:'kg CO₂/m²', group:'co2', color:'#d90000',
+  {key:'co2', label:'WEii-CO₂', unit:'kg CO₂/m²', group:'co2', color:'#4a5568',
    title:'Overige indicator uit het protocol (§8.3): de CO₂-emissie per m² die hoort bij het werkelijke energiegebruik. Berekend met de jaarlijks vastgestelde CO₂-emissiefactoren voor aardgas en elektriciteit (WEii.nl) - deze dalen van jaar op jaar doordat de elektriciteitsmix schoner wordt.'},
   {key:'dekkingsgraad', label:'WEii-dekkingsgraad', unit:'%', group:'pct', color:'#1a6e3c',
    title:'Overige indicator uit het protocol (§8.5): het aandeel van het finale energiegebruik dat wordt gedekt door zelf opgewekte en direct verbruikte zonnestroom (eigenverbruik ÷ WEii-finaal x 100%). Ontbreekt voor gebouwtypen/jaren zonder betrouwbaar zonopwek-kental.'},
@@ -1232,7 +1225,7 @@ function barTooltipHTML(cat, keys){
     const v = metricValueForKey(cat, y, key);
     h += '<div class="tt-row"><span>'+m.label+'</span><span class="tt-strong">'+(hasVal(v) ? formatValueForKey(key, v)+' '+m.unit : 'geen kental beschikbaar')+'</span></div>';
   });
-  if(sy && sy.klasse) h += '<div class="tt-row"><span>Klasse</span><span class="tt-strong">'+sy.klasse+'</span></div>';
+  if(sy && sy.klasse && keys.includes('weii')) h += '<div class="tt-row"><span>Klasse</span><span class="tt-strong">'+sy.klasse+'</span></div>';
   if(sy && hasVal(sy.gas_kental_m3)) h += '<div class="tt-row"><span>Gas</span><span class="tt-strong">'+nl1(sy.gas_kental_m3)+' m³/m²</span></div>';
   if(sy && hasVal(sy.elek_kental_kwh)) h += '<div class="tt-row"><span>Elektriciteit</span><span class="tt-strong">'+nl1(sy.elek_kental_kwh)+' kWh/m²</span></div>';
   keys.forEach(key=>{
@@ -1249,8 +1242,8 @@ function renderBarPanels(holder, noteEl){
   const y = state.year;
   const notes = [];
   if(subjects.length===0) notes.push('Er zijn geen gebouwtypen met kentallen om te tonen. Voeg een gebouwtype toe of vink het landelijk gemiddelde aan.');
-  if(multi) notes.push('Alles van één gebouwtype staat bij elkaar. Elke indicator heeft een eigen schaal (kWh/m², kg CO₂/m² of %); indicatoren met dezelfde eenheid delen één schaal.');
-  else if(keys[0]!=='weii') notes.push('De kleur van een balk is de WEii-klasse van het gebouwtype (de klassegrenzen zijn op WEii gedefinieerd), ook bij deze indicator.');
+  if(multi) notes.push('Alles van één gebouwtype staat bij elkaar. Elke indicator heeft een eigen schaal (kWh/m², kg CO₂/m² of %); indicatoren met dezelfde eenheid delen één schaal.' + (keys.includes('weii') ? ' De WEii-balken hebben de kleur van de WEii-klasse; de andere indicatoren hebben elk een eigen kleur, omdat alleen WEii in klassen is ingedeeld.' : ''));
+  else if(keys[0]!=='weii') notes.push('Alleen WEii heeft klassen (WENG t/m Zeer onzuinig). Bij deze indicator hebben alle balken daarom dezelfde kleur.');
   if(keys.some(k=>k==='zon' || k==='finaal' || k==='dekkingsgraad' || k==='benuttingsfactor')){
     notes.push('Een gestippeld streepje aan de basislijn betekent dat TNO voor dat jaar/gebouwtype geen betrouwbaar zonopwek-kental publiceert (te weinig panden met zonnestroom), waardoor WEii-finaal, WEii-dekkingsgraad en WEii-benuttingsfactor daar dan ook niet te berekenen zijn.');
   }
@@ -1264,8 +1257,16 @@ function renderBarPanels(holder, noteEl){
   // legenda boven het diagram
   const legendEl = document.getElementById('chart-legend');
   legendEl.innerHTML = '';
-  if(multi){
-    keys.forEach(k=>{ const m = METRIC_BY_KEY[k]; legendEl.insertAdjacentHTML('beforeend', legendItemHTML(m.color, m.label+' <span style="color:var(--text3)">('+m.unit+')</span>', ';border-radius:2px')); });
+  if(multi || keys[0]!=='weii'){
+    keys.forEach(k=>{
+      const m = METRIC_BY_KEY[k];
+      if(k==='weii'){
+        // WEii heeft klassen: de balken krijgen de kleur van de WEii-klasse
+        legendEl.insertAdjacentHTML('beforeend', '<span class="legend-item" style="font-weight:500"><span>WEii <span style="color:var(--text3);font-weight:400">('+m.unit+')</span>:</span></span>');
+        KLASSE_ORDER.forEach(kl=>legendEl.insertAdjacentHTML('beforeend', legendItemHTML(klasseColor(kl), kl)));
+        if(subjects.some(c=>{ const sc = seriesAt(c, y); return sc && sc.klasse==='Onbekend'; })) legendEl.insertAdjacentHTML('beforeend', legendItemHTML(klasseColor('Onbekend'), 'Onbekend'));
+      } else legendEl.insertAdjacentHTML('beforeend', legendItemHTML(m.color, m.label+' <span style="color:var(--text3)">('+m.unit+')</span>', ';border-radius:2px'));
+    });
   } else {
     KLASSE_ORDER.forEach(k=>legendEl.insertAdjacentHTML('beforeend', legendItemHTML(klasseColor(k), k)));
     if(subjects.some(c=>{ const s = seriesAt(c, y); return s && s.klasse==='Onbekend'; })){
@@ -1353,7 +1354,7 @@ function renderBarPanels(holder, noteEl){
       const sc = scales[m.group];
       const v = metricValueForKey(cat, y, key);
       const by = gy + labelH + ki*(barH+barGap);
-      const fill = multi ? m.color : (isAgg ? AGG_BAR_FILL : klasseColor(sy && sy.klasse));
+      const fill = isAgg ? (multi ? m.color : AGG_BAR_FILL) : (key==='weii' ? klasseColor(sy && sy.klasse) : m.color);
       if(hasVal(v)){
         const w = Math.max(3, v/sc.xMax*plotW);
         g.appendChild(svgEl('rect', {x:baseX, y:by, width:w, height:barH, rx:Math.min(5, barH/2), fill:fill, 'fill-opacity':isAgg&&!multi ? 0.85 : 1, class:'bar-rect'}));
@@ -1402,7 +1403,7 @@ function buildCompareTable(cats, metricKey){
       // De klassekleur-stip is altijd op de WEii-klassegrenzen gebaseerd
       // (die zijn immers op WEii gedefinieerd), ongeacht welke indicator in
       // deze kolom getoond wordt - identiek aan het oorspronkelijke gedrag.
-      const dot = s.klasse ? ' <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:'+klasseColor(s.klasse)+';margin-left:4px;"></span>' : '';
+      const dot = (s.klasse && metricKey==='weii') ? ' <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:'+klasseColor(s.klasse)+';margin-left:4px;"></span>' : '';
       row += '<td>'+formatValueForKey(metricKey, val)+dot+'</td>';
     });
     const v0 = metricValueForKey(cat, YEARS[0], metricKey), vLast = metricValueForKey(cat, lastYear, metricKey);
@@ -2532,5 +2533,5 @@ renderAll();
 
 </script>
 
-</body>
-</html>
+
+</body></html>

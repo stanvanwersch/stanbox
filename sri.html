@@ -70,9 +70,12 @@ h1.logo-name{margin:0;}
 .kader + .kader{margin-top:14px;}
 .k-title{font-size:15.5px;font-weight:600;margin-bottom:4px;}
 .k-sub{font-size:13px;color:var(--text3);margin-bottom:14px;}
-.note{border-radius:var(--r);border-left:3px solid var(--accent);background:var(--accent-s);padding:12px 16px;margin-bottom:14px;font-size:13.5px;color:var(--text2);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.note.warn{border-left-color:var(--amber);background:var(--amber-s);}
-.note .grow{flex:1;min-width:200px;}
+.note{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:0;margin-bottom:14px;font-size:13.5px;color:var(--text2);}
+.load-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.load-row .grow{flex:1;min-width:240px;}
+.load-row .msg:empty{display:none;}
+.note .grow{flex:1;min-width:220px;display:flex;gap:10px;align-items:flex-start;}
+.note .ico{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--amber);color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;}
 
 /* formulier */
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 16px;}
@@ -426,7 +429,7 @@ function sriClass(p){
 var SRI_URL='https://energy.ec.europa.eu/topics/energy-efficiency/energy-efficient-buildings/smart-readiness-indicator_en';
 var TXT={
 en:{
- steps:['Building','Assessment','Results','Certificate'],cvSub:'The SRI rates how well a building’s technology supports its users, saves energy and responds smartly to the energy grid.',cvStart:'Start your assessment',cvCont:'Continue your assessment',site:'Official SRI website',
+ steps:['Building','Assessment','Results','Save'],cvSub:'The SRI rates how well a building’s technology supports its users, saves energy and responds smartly to the energy grid.',cvStart:'Start your assessment',cvCont:'Continue your assessment',site:'Official SRI website',
  dom:{H:'Heating',DHW:'Domestic hot water',C:'Cooling',V:'Ventilation',L:'Lighting',DE:'Dynamic building envelope',E:'Electricity',EV:'Electric vehicle charging',MC:'Monitoring and control'},
  imp:['Energy efficiency','Energy flexibility and storage','Comfort','Convenience','Health, well-being and accessibility','Maintenance and fault prediction','Information to occupants'],
  impShort:['Energy efficiency','Flexibility and storage','Comfort','Convenience','Health and well-being','Maintenance and faults','Information to occupants'],
@@ -437,10 +440,10 @@ en:{
  exTitle:'Filled-in example.',exBody:'This fictional office shows how the tool works. Edit the details or start with an empty form.',exBtn:'Start empty form',exConfirm:'Click again to clear',
  bTitle:'Building details',bSub:'Building type, use and country determine which weighting factors the EU framework applies.',
  fName:'Building name',fNamePh:'e.g. Station Square office',fAddr:'Address',fPost:'Postcode',fCity:'City',fCountry:'Country',fZone:'Climate zone (automatic)',fType:'Building type',fUsage:'Use',fArea:'Useful floor area (m²)',fAreaPh:'e.g. 2,500',fYear:'Year of construction',fYearPh:'e.g. 1998',fState:'Building state',fDesc:'Short description',
- mTitle:'Assessment method',mSub:'Method A is meant for smaller, simple buildings; method B for larger and more complex buildings.',
+ loadTitle:'Continue an earlier assessment',loadSub:'Load an assessment you saved before (.json) and pick up where you left off.',mTitle:'Assessment method',mSub:'Method A is meant for smaller, simple buildings; method B for larger and more complex buildings.',
  mA:'Method A · simplified',mAd:'27 services. Homes and small non-residential buildings.',mB:'Method B · detailed',mBd:'54 services. Larger non-residential buildings and complex systems.',
- aTitle:'Assessor',aSub:'These details appear on the certificate.',aName:'Name',aOrg:'Organisation',aEmail:'Email',aDate:'Assessment date',
- toAssess:'Go to assessment',toCert:'Go to certificate',
+ aTitle:'Assessor',aSub:'These details appear on the saved results.',aName:'Name',aOrg:'Organisation',aEmail:'Email',aDate:'Assessment date',
+ toAssess:'Go to assessment',toCert:'Save results',
  progress:'{0} of {1} applicable services assessed · method {2}',expand:'Expand all',collapse:'Collapse all',
  nServices:'{0} services · {1}/{2} assessed',absent:'absent',absentMand:'absent, mandatory',open:'{0} open',
  presQ:'Is this domain present in the building?',pres:[['1','Present'],['0','Absent, not mandatory'],['2','Absent, but mandatory for new buildings']],
@@ -448,22 +451,22 @@ en:{
  presOff:'This domain is left out; the weighting factors of the other domains are scaled up proportionally.',
  always:'always counts',alwaysTip:'Triage: this service counts towards the maximum score even when it does not apply.',
  applicable:'Applicable',partial:'This level only applies to part of the building',shareMain:'Share at main level',restLvl:'Rest of the building at level',lvlAria:'Functionality level',notYet:'to assess',
- openWarn:'{0} services have not been assessed yet.',openWarn2:'They currently count as level 0, so the score is provisional.',openBtn:'Go to the first open service',
+ openWarn:'{0} services have not been assessed yet.',openWarn2:'They currently count as level 0, so the score is provisional.',openBtn:'Go to the first open service',noneWarn:'No services have been assessed yet.',noneWarn2:'Start the assessment to see a score.',noneBtn:'Go to assessment',unnamedCap:'Unnamed building',
  sriScore:'SRI score',unnamed:'unnamed building',
  impTitle:'Impact criteria',impSub:'Weight in the total score in brackets',domTitle:'Technical domains',domSub:'Domain score, weighted across the impact criteria',
  matTitle:'Detailed scores',matSub:'Score per domain and impact criterion (achieved ÷ maximum achievable)',matNote:'“–” means that no service in this domain contributes to this criterion, or that the domain is absent.',na:'n/a',
- saveTitle:'Save certificate',saveSub:'Save the certificate as a PDF. Also keep the assessment as a file, so you can load and edit it later.',
- btnPdf:'Save certificate (PDF)',btnJson:'Save assessment (.json)',btnLoad:'Load assessment',
- draftEx:'This is the example building. ',draftOpen:'{0} services have not been assessed yet. ',draftMsg:'The certificate is marked as a <strong>draft</strong> until the assessment is complete',draftMsgEx:' and the example has been replaced by your own building',
- draftBand:'Draft · assessment incomplete',certKicker:'Indicative certificate',certClass:'SRI class',
- cAddr:'Address',cType:'Building type',cArea:'Useful floor area',cYear:'Year of construction',cZone:'Climate zone',cMethod:'Method',cNo:'Certificate number',cDate:'Assessment date',cAssessor:'Assessor',cFramework:'Framework',cFrameworkV:'EU SRI v4.6, default weighting',
+ saveTitle:'Save results',saveSub:'Save the results as a PDF. Also save the assessment as a file, so you can load it later and continue where you left off.',
+ btnPdf:'Save results (PDF)',btnJson:'Save assessment (.json)',btnLoad:'Load assessment',
+ draftEx:'This is the example building. ',draftOpen:'{0} services have not been assessed yet. ',draftMsg:'The results are marked as a <strong>draft</strong> until the assessment is complete',draftMsgEx:' and the example has been replaced by your own building',
+ draftBand:'Draft · assessment incomplete',certKicker:'Results',certClass:'SRI class',
+ cAddr:'Address',cType:'Building type',cArea:'Useful floor area',cYear:'Year of construction',cZone:'Climate zone',cMethod:'Method',cNo:'Reference number',cDate:'Assessment date',cAssessor:'Assessor',cFramework:'Framework',cFrameworkV:'EU SRI v4.6, default weighting',
  methA:'A (simplified)',methB:'B (detailed)',
- disc:'Indicative assessment based on the calculation method of Commission Delegated Regulation (EU) 2020/2155 and the SRI calculation sheet v4.6. This document is not an official SRI certificate issued by an EU Member State. The score shows how well the building uses smart technology to improve energy performance, respond to the needs of its users and react to signals from the energy grid.',
+ disc:'Indicative results based on the calculation method of Commission Delegated Regulation (EU) 2020/2155 and the SRI calculation sheet v4.6. This document is not an official SRI certificate issued by an EU Member State. The score shows how well the building uses smart technology to improve energy performance, respond to the needs of its users and react to signals from the energy grid.',
  madeWith:'Created with the Stanbox SRI tool',
  months:['January','February','March','April','May','June','July','August','September','October','November','December'],
  msgNoDl:'Saving is not available in this view. Open the tool on claude.ai to save files.',msgConfirm:'Confirm the save in the window that appears…',msgSaved:'Saved: {0}',msgCancel:'Save cancelled.',msgBusy:'A save window is already open. Try again in a moment.',msgFail:'Saving did not work ({0}).',
  msgLoaded:'Assessment loaded: {0}',msgBadFile:'This file is not an SRI assessment from this tool. Choose a .json file you saved here earlier.',msgNoPdf:'The PDF module could not load. Check your internet connection and reload the page.',
- fileCert:'sri-certificate',fileAss:'sri-assessment',fileDraft:'-draft',
+ fileCert:'sri-results',fileAss:'sri-assessment',fileDraft:'-draft',
  mHead:'Method and sources',
  meth:function(W,zn,bt,m){return '<h4>What the SRI measures</h4><p>The Smart Readiness Indicator rates how well a building uses smart technology to (1) optimise energy performance and operation, (2) adapt to the needs of its users and (3) respond to signals from the grid. For each service the assessor selects the functionality level present; each level has fixed impact scores on seven criteria.</p>'+
   '<h4>Calculation</h4><ul><li>Per domain and criterion: sum of the impact scores of the assessed services ÷ sum of the maximum achievable scores.</li><li>Per criterion: domains weighted with the domain weighting factors (depending on climate zone, building type and method).</li><li>SRI score: weighted average of the seven criteria; each of the three key functionalities weighs one third.</li><li>Partly present: the level counts in proportion to floor area, with a second level for the rest.</li><li>Triage: services that do not apply drop out, except services that always count towards the maximum score.</li></ul>'+
@@ -474,7 +477,7 @@ en:{
  src:'<h4>Sources</h4><p>Commission Delegated Regulation (EU) 2020/2155; Practical Guide SRI calculation framework v4.6 and SRI3 calculation sheet v4.6 (VITO, Waide Strategic Efficiency Europe, R2M Solution, for the European Commission, September 2026). Dutch translation of the service catalogue by Stanbox; the English text prevails.</p>'
 },
 nl:{
- steps:['Gebouw','Beoordeling','Resultaat','Certificaat'],cvSub:'De SRI beoordeelt hoe goed de technologie in een gebouw de gebruiker ondersteunt, energie bespaart en slim inspeelt op het energienet.',cvStart:'Start je beoordeling',cvCont:'Ga verder met je beoordeling',site:'Officiële SRI-website',
+ steps:['Gebouw','Beoordeling','Resultaat','Opslaan'],cvSub:'De SRI beoordeelt hoe goed de technologie in een gebouw de gebruiker ondersteunt, energie bespaart en slim inspeelt op het energienet.',cvStart:'Start je beoordeling',cvCont:'Ga verder met je beoordeling',site:'Officiële SRI-website',
  dom:{H:'Verwarming',DHW:'Warm tapwater',C:'Koeling',V:'Ventilatie',L:'Verlichting',DE:'Dynamische gebouwschil',E:'Elektriciteit',EV:'Laden elektrische voertuigen',MC:'Monitoring en regeling'},
  imp:['Energie-efficiëntie','Energieflexibiliteit en -opslag','Comfort','Gemak','Gezondheid, welzijn en toegankelijkheid','Onderhoud en storingsvoorspelling','Informatie aan gebruikers'],
  impShort:['Energie-efficiëntie','Flexibiliteit en opslag','Comfort','Gemak','Gezondheid en welzijn','Onderhoud en storingen','Informatie gebruikers'],
@@ -485,10 +488,10 @@ nl:{
  exTitle:'Ingevuld voorbeeld.',exBody:'Dit fictieve kantoor laat zien hoe de tool werkt. Pas de gegevens aan of begin met een leeg formulier.',exBtn:'Leeg formulier starten',exConfirm:'Klik nogmaals om te wissen',
  bTitle:'Gebouwgegevens',bSub:'Gebouwtype, gebruik en land bepalen welke wegingsfactoren het EU-rekenkader toepast.',
  fName:'Naam gebouw',fNamePh:'Bijv. Kantoor Stationsplein',fAddr:'Adres',fPost:'Postcode',fCity:'Plaats',fCountry:'Land',fZone:'Klimaatzone (automatisch)',fType:'Gebouwtype',fUsage:'Gebruik',fArea:'Gebruiksoppervlak (m²)',fAreaPh:'Bijv. 2.500',fYear:'Bouwjaar',fYearPh:'Bijv. 1998',fState:'Staat',fDesc:'Korte omschrijving',
- mTitle:'Beoordelingsmethode',mSub:'Methode A is bedoeld voor kleinere, eenvoudige gebouwen; methode B voor grotere en complexere gebouwen.',
+ loadTitle:'Eerdere beoordeling verder invullen',loadSub:'Laad een eerder opgeslagen beoordeling (.json) in en ga verder waar je was gebleven.',mTitle:'Beoordelingsmethode',mSub:'Methode A is bedoeld voor kleinere, eenvoudige gebouwen; methode B voor grotere en complexere gebouwen.',
  mA:'Methode A · vereenvoudigd',mAd:'27 diensten. Woningen en kleine utiliteitsgebouwen.',mB:'Methode B · gedetailleerd',mBd:'54 diensten. Grotere utiliteitsgebouwen en complexe installaties.',
- aTitle:'Beoordelaar',aSub:'Deze gegevens komen op het certificaat.',aName:'Naam',aOrg:'Organisatie',aEmail:'E-mail',aDate:'Datum beoordeling',
- toAssess:'Naar beoordeling',toCert:'Naar certificaat',
+ aTitle:'Beoordelaar',aSub:'Deze gegevens komen op de opgeslagen resultaten.',aName:'Naam',aOrg:'Organisatie',aEmail:'E-mail',aDate:'Datum beoordeling',
+ toAssess:'Naar beoordeling',toCert:'Resultaten opslaan',
  progress:'{0} van {1} toepasselijke diensten beoordeeld · methode {2}',expand:'Alles uitklappen',collapse:'Alles inklappen',
  nServices:'{0} diensten · {1}/{2} beoordeeld',absent:'afwezig',absentMand:'afwezig, verplicht',open:'{0} open',
  presQ:'Is dit domein aanwezig in het gebouw?',pres:[['1','Aanwezig'],['0','Afwezig, niet verplicht'],['2','Afwezig, wel verplicht bij nieuwbouw']],
@@ -496,22 +499,22 @@ nl:{
  presOff:'Dit domein telt niet mee; de wegingsfactoren van de overige domeinen worden naar rato opgeschaald.',
  always:'telt altijd mee',alwaysTip:'Triage: deze dienst telt mee in de maximaal haalbare score, ook als hij niet van toepassing is.',
  applicable:'Van toepassing',partial:'Niveau geldt maar voor een deel van het gebouw',shareMain:'Aandeel hoofdniveau',restLvl:'Overig deel op niveau',lvlAria:'Functionaliteitsniveau',notYet:'te beoordelen',
- openWarn:'{0} diensten zijn nog niet beoordeeld.',openWarn2:'Die tellen nu mee als niveau 0. De score is daardoor voorlopig.',openBtn:'Naar eerste open dienst',
+ openWarn:'{0} diensten zijn nog niet beoordeeld.',openWarn2:'Die tellen nu mee als niveau 0. De score is daardoor voorlopig.',openBtn:'Naar eerste open dienst',noneWarn:'Er zijn nog geen diensten beoordeeld.',noneWarn2:'Start de beoordeling om een score te zien.',noneBtn:'Naar beoordeling',unnamedCap:'Naamloos gebouw',
  sriScore:'SRI-score',unnamed:'naamloos gebouw',
  impTitle:'Impactcriteria',impSub:'Weging in de totaalscore tussen haakjes',domTitle:'Technische domeinen',domSub:'Domeinscore, gewogen over de impactcriteria',
  matTitle:'Gedetailleerde scores',matSub:'Score per domein en impactcriterium (behaald ÷ maximaal haalbaar)',matNote:'“–” betekent dat geen enkele dienst in dit domein bijdraagt aan dit criterium, of dat het domein afwezig is.',na:'n.v.t.',
- saveTitle:'Certificaat opslaan',saveSub:'Sla het certificaat op als pdf. Bewaar ook de beoordeling als bestand; die kun je later weer inladen en aanpassen.',
- btnPdf:'Certificaat opslaan (pdf)',btnJson:'Beoordeling opslaan (.json)',btnLoad:'Beoordeling inladen',
- draftEx:'Dit is het voorbeeldgebouw. ',draftOpen:'{0} diensten zijn nog niet beoordeeld. ',draftMsg:'Het certificaat krijgt de markering <strong>concept</strong> tot de beoordeling compleet is',draftMsgEx:' en het voorbeeld is vervangen door een eigen gebouw',
- draftBand:'Concept · beoordeling niet compleet',certKicker:'Indicatief certificaat',certClass:'SRI-klasse',
- cAddr:'Adres',cType:'Gebouwtype',cArea:'Gebruiksoppervlak',cYear:'Bouwjaar',cZone:'Klimaatzone',cMethod:'Methode',cNo:'Certificaatnummer',cDate:'Datum beoordeling',cAssessor:'Beoordelaar',cFramework:'Rekenkader',cFrameworkV:'EU SRI v4.6, standaardweging',
+ saveTitle:'Resultaten opslaan',saveSub:'Sla de resultaten op als pdf. Bewaar ook de beoordeling als bestand, zodat je die later weer kunt inladen en verder kunt waar je was gebleven.',
+ btnPdf:'Resultaten opslaan (pdf)',btnJson:'Beoordeling opslaan (.json)',btnLoad:'Beoordeling inladen',
+ draftEx:'Dit is het voorbeeldgebouw. ',draftOpen:'{0} diensten zijn nog niet beoordeeld. ',draftMsg:'De resultaten krijgen de markering <strong>concept</strong> tot de beoordeling compleet is',draftMsgEx:' en het voorbeeld is vervangen door een eigen gebouw',
+ draftBand:'Concept · beoordeling niet compleet',certKicker:'Resultaten',certClass:'SRI-klasse',
+ cAddr:'Adres',cType:'Gebouwtype',cArea:'Gebruiksoppervlak',cYear:'Bouwjaar',cZone:'Klimaatzone',cMethod:'Methode',cNo:'Referentienummer',cDate:'Datum beoordeling',cAssessor:'Beoordelaar',cFramework:'Rekenkader',cFrameworkV:'EU SRI v4.6, standaardweging',
  methA:'A (vereenvoudigd)',methB:'B (gedetailleerd)',
- disc:'Indicatieve beoordeling volgens de rekenmethode van Gedelegeerde Verordening (EU) 2020/2155 en het SRI-rekenblad v4.6. Dit document is geen officieel SRI-certificaat van een EU-lidstaat. De score geeft aan in hoeverre het gebouw met slimme technologie de energieprestatie verbetert, inspeelt op de gebruiker en reageert op signalen van het energienet.',
+ disc:'Indicatieve resultaten volgens de rekenmethode van Gedelegeerde Verordening (EU) 2020/2155 en het SRI-rekenblad v4.6. Dit document is geen officieel SRI-certificaat van een EU-lidstaat. De score geeft aan in hoeverre het gebouw met slimme technologie de energieprestatie verbetert, inspeelt op de gebruiker en reageert op signalen van het energienet.',
  madeWith:'Opgesteld met de Stanbox SRI-tool',
  months:['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'],
  msgNoDl:'Opslaan is in deze weergave niet beschikbaar. Open de tool op claude.ai om bestanden op te slaan.',msgConfirm:'Bevestig het opslaan in het venster dat verschijnt…',msgSaved:'Opgeslagen: {0}',msgCancel:'Opslaan geannuleerd.',msgBusy:'Er staat al een opslagvenster open. Probeer het zo opnieuw.',msgFail:'Opslaan lukte niet ({0}).',
  msgLoaded:'Beoordeling ingeladen: {0}',msgBadFile:'Dit bestand is geen SRI-beoordeling uit deze tool. Kies een .json-bestand dat je hier eerder hebt opgeslagen.',msgNoPdf:'De pdf-module kon niet laden. Controleer de internetverbinding en herlaad de pagina.',
- fileCert:'sri-certificaat',fileAss:'sri-beoordeling',fileDraft:'-concept',
+ fileCert:'sri-resultaten',fileAss:'sri-beoordeling',fileDraft:'-concept',
  mHead:'Methodiek en bronnen',
  meth:function(W,zn,bt,m){return '<h4>Wat de SRI meet</h4><p>De Smart Readiness Indicator beoordeelt hoe goed een gebouw met slimme technologie (1) de energieprestatie en bedrijfsvoering optimaliseert, (2) zich aanpast aan de gebruiker en (3) reageert op signalen van het net. De beoordelaar kiest per dienst het aanwezige functionaliteitsniveau; elk niveau heeft vaste impactscores op zeven criteria.</p>'+
   '<h4>Rekenregel</h4><ul><li>Per domein en criterium: som van de impactscores van de beoordeelde diensten ÷ som van de maximaal haalbare scores.</li><li>Per criterium: domeinen gewogen met de domeinwegingsfactoren (afhankelijk van klimaatzone, gebouwtype en methode).</li><li>SRI-score: gewogen gemiddelde van de zeven criteria; drie sleutelfuncties krijgen elk een derde.</li><li>Deels aanwezig: het niveau telt naar rato van het vloeroppervlak, met een tweede niveau voor de rest.</li><li>Triage: niet-toepasselijke diensten vallen weg, behalve diensten die altijd meetellen in de maximale score.</li></ul>'+
@@ -557,7 +560,7 @@ function emptyState(){
     assessor:{name:'',org:'',email:'',date:today()},present:presentAll(),svc:{}};
 }
 function migrate(o){var s=o.building.state;if(s==='Origineel')o.building.state='original';if(s==='Gerenoveerd')o.building.state='renovated';delete o.catLang;return o;}
-function load(){try{var s=localStorage.getItem(KEY)||localStorage.getItem(OLDKEY);if(s){var o=JSON.parse(s);if(o&&o.v===1&&o.building)return migrate(o);}}catch(e){}return exampleState();}
+function load(){try{var s=localStorage.getItem(KEY)||localStorage.getItem(OLDKEY);if(s){var o=JSON.parse(s);if(o&&o.v===1&&o.building&&!o.example)return migrate(o);}}catch(e){}return emptyState();}
 var EX_TXT={en:{name:'De Werf office (example)',address:'Example Street 12',desc:'Fictional example: office building with a heat pump, mechanical ventilation with heat recovery and solar panels.'},nl:{name:'Kantoor De Werf (voorbeeld)',address:'Voorbeeldstraat 12',desc:'Fictief voorbeeld: kantoorgebouw met warmtepomp, mechanische ventilatie met WTW en zonnepanelen.'}};
 function localizeExample(){if(st&&st.example){var e=EX_TXT[lang];st.building.name=e.name;st.building.address=e.address;st.building.desc=e.desc;}}
 var VIEWS_K=['gebouw','beoordeling','resultaat','certificaat'];
@@ -578,7 +581,10 @@ function zone(){return SRI_ZONE[st.building.country]||'W';}
 function countryName(k){return lang==='nl'?(COUNTRY_NL[k]||k):k;}
 function areaStr(a){var n=parseFloat(String(a).replace(/[.\s]/g,'').replace(',','.'));if(isNaN(n))return a;return n.toLocaleString(lang==='nl'?'nl-NL':'en-GB');}
 function icon(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS[d]+'</svg>';}
-function compute(){R=sriCompute(D,st);R.cls=sriClass(R.sri);return R;}
+function compute(){R=sriCompute(D,st);
+  var done=0;SRI_DOMAINS.forEach(function(d){done+=R.cnt[d].done;});R.none=done===0;
+  if(R.none){R.sri=null;R.kf=[null,null,null];R.imp=R.imp.map(function(){return null;});SRI_DOMAINS.forEach(function(d){R.dom[d]=null;R.mat[d]=R.mat[d].map(function(){return null;});});}
+  R.cls=sriClass(R.sri);return R;}
 
 /* ---------- static chrome ---------- */
 function renderChrome(){
@@ -597,14 +603,13 @@ function fld(id,label,val,x){x=x||{};return '<div class="fld'+(x.wide?' wide':''
 function viewGebouw(){
   var t=L(),b=st.building,a=st.assessor;
   var countries=Object.keys(SRI_ZONE).map(function(k){return [k,countryName(k)];}).sort(function(x,y){return x[1].localeCompare(y[1],lang);});
-  var h='';
-  if(st.example)h+='<div class="note"><div class="grow"><strong>'+t.exTitle+'</strong> '+t.exBody+'</div><button type="button" class="btn" data-act="reset-empty">'+t.exBtn+'</button></div>';
+  var h='<section class="kader load-row"><div class="grow"><h2 class="k-title">'+t.loadTitle+'</h2><div class="k-sub" style="margin-bottom:0">'+t.loadSub+'</div><div class="msg" id="msg" role="status"></div></div><label class="btn" for="imp-file" style="cursor:pointer">'+t.btnLoad+'</label><input type="file" id="imp-file" accept=".json,application/json" hidden></section>';
   h+='<section class="kader"><h2 class="k-title">'+t.bTitle+'</h2><div class="k-sub">'+t.bSub+'</div><div class="fgrid">'+
     fld('b.name',t.fName,b.name,{wide:true,ph:t.fNamePh})+
     fld('b.address',t.fAddr,b.address)+fld('b.postcode',t.fPost,b.postcode)+fld('b.city',t.fCity,b.city)+
     '<div class="fld"><label for="b.country">'+t.fCountry+'</label><select class="inp" id="b.country" data-bind="b.country">'+opt(countries,b.country)+'</select></div>'+
     fld('zone',t.fZone,t.zone[zone()],{ro:true})+
-    '<div class="fld"><label>'+t.fType+'</label><div class="seg"><button type="button" data-act="btype" data-v="nonres" class="'+(b.type==='nonres'?'on':'')+'">'+t.nonres+'</button><button type="button" data-act="btype" data-v="res" class="'+(b.type==='res'?'on':'')+'">'+t.res+'</button></div></div>'+
+    '<div class="fld"><label for="b.type">'+t.fType+'</label><select class="inp" id="b.type" data-act="btype-sel">'+opt([['nonres',t.nonres],['res',t.res]],b.type)+'</select></div>'+
     '<div class="fld"><label for="b.usage">'+t.fUsage+'</label><select class="inp" id="b.usage" data-bind="b.usage">'+opt(t.usage[b.type],b.usage)+'</select></div>'+
     fld('b.area',t.fArea,b.area,{ph:t.fAreaPh})+fld('b.year',t.fYear,b.year,{ph:t.fYearPh})+
     '<div class="fld"><label for="b.state">'+t.fState+'</label><select class="inp" id="b.state" data-bind="b.state">'+opt([['original',t.original],['renovated',t.renovated]],b.state)+'</select></div>'+
@@ -662,13 +667,14 @@ function rangeLbl(ix,c){return ix===0?'≥ 90%':ix===6?'< 20%':c[1]+'–'+c[2]+'
 function scaleHTML(){return '<div class="scale">'+CLASSES.map(function(c,ix){var cur=c[0]===R.cls;return '<div class="s'+(cur?' cur':'')+'" style="'+(cur?'color:'+clsColor(c[0]):'')+'"><div class="bar" style="background:'+clsColor(c[0])+';width:'+(38+ix*9)+'%">'+c[0]+'</div><span>'+rangeLbl(ix,c)+'</span></div>';}).join('')+'</div>';}
 function viewResultaat(){
   var t=L(),h='';
-  if(R.open.length)h+='<div class="note warn"><div class="grow"><strong>'+f(t.openWarn,R.open.length)+'</strong> '+t.openWarn2+'</div><button type="button" class="btn" data-act="goto-open">'+t.openBtn+'</button></div>';
+  if(R.none)h+='<div class="note"><div class="grow"><span class="ico">!</span><span><strong>'+t.noneWarn+'</strong> '+t.noneWarn2+'</span></div><button type="button" class="btn" data-act="goto" data-v="beoordeling">'+t.noneBtn+'</button></div>';
+  else if(R.open.length)h+='<div class="note"><div class="grow"><span class="ico">!</span><span><strong>'+f(t.openWarn,R.open.length)+'</strong> '+t.openWarn2+'</span></div><button type="button" class="btn" data-act="goto-open">'+t.openBtn+'</button></div>';
   h+='<section class="kader"><div class="hero"><div><div class="big"><div class="lab">'+t.sriScore+' · '+esc(st.building.name||t.unnamed)+'</div><div class="num">'+(R.sri===null?'–':num(R.sri*100,1))+'<small>%</small></div>'+(R.cls?'<div class="clsbig" style="background:'+clsColor(R.cls)+'">'+R.cls+'</div>':'')+'</div>'+scaleHTML()+'</div>'+
     '<div class="kfs">'+R.kf.map(function(v,k){return '<div class="kf"><div class="h"><span>'+(k+1)+'. '+t.kf[k][0]+'</span><span>'+pct(v)+'</span></div><div class="d">'+t.kf[k][1]+'</div>'+bar(v)+'</div>';}).join('')+'</div></div></section>';
   h+='<div class="two"><section class="kader"><h2 class="k-title">'+t.impTitle+'</h2><div class="k-sub">'+t.impSub+'</div><div class="hbars">'+
-    R.imp.map(function(v,k){return '<div class="hb"><span class="n">'+t.imp[k]+' <span class="w">('+num(R.W.imp[k]*100,1)+'%)</span></span>'+bar(v)+'<span class="v'+(v===null?' na':'')+'">'+(v===null?t.na:pct(v,0))+'</span></div>';}).join('')+'</div></section>'+
+    R.imp.map(function(v,k){return '<div class="hb"><span class="n">'+t.imp[k]+' <span class="w">('+num(R.W.imp[k]*100,1)+'%)</span></span>'+bar(v)+'<span class="v'+(v===null?' na':'')+'">'+(v===null?(R.none?'–':t.na):pct(v,0))+'</span></div>';}).join('')+'</div></section>'+
     '<section class="kader"><h2 class="k-title">'+t.domTitle+'</h2><div class="k-sub">'+t.domSub+'</div><div class="hbars">'+
-    SRI_DOMAINS.map(function(d){var v=R.dom[d];return '<div class="hb"><span class="n">'+t.dom[d]+'</span>'+bar(v)+'<span class="v'+(v===null?' na':'')+'">'+(v===null?t.na:pct(v,0))+'</span></div>';}).join('')+'</div></section></div>';
+    SRI_DOMAINS.map(function(d){var v=R.dom[d];return '<div class="hb"><span class="n">'+t.dom[d]+'</span>'+bar(v)+'<span class="v'+(v===null?' na':'')+'">'+(v===null?(R.none?'–':t.na):pct(v,0))+'</span></div>';}).join('')+'</div></section></div>';
   h+='<section class="kader"><h2 class="k-title">'+t.matTitle+'</h2><div class="k-sub">'+t.matSub+'</div><div class="mat-wrap"><table class="mat"><colgroup><col class="c0">'+t.impShort.map(function(){return '<col>';}).join('')+'</colgroup><thead><tr><th></th>'+t.impShort.map(function(n){return '<th>'+n+'</th>';}).join('')+'</tr></thead><tbody>'+
     SRI_DOMAINS.map(function(d){return '<tr><td>'+t.dom[d]+'</td>'+R.mat[d].map(function(v){if(v===null)return '<td class="na">–</td>';var a=Math.round(8+Math.max(0,v)*62);return '<td style="background:color-mix(in srgb,var(--navy) '+a+'%,var(--white));'+(a>45?'color:var(--on-accent)':'')+'">'+pct(v,0)+'</td>';}).join('')+'</tr>';}).join('')+
     '</tbody></table></div><div class="legend-note">'+t.matNote+'</div>'+
@@ -686,7 +692,7 @@ function usageLabel(){var t=L(),u=t.usage[st.building.type].filter(function(x){r
 function fmtDate(s){if(!s)return '–';var p=s.split('-'),m=L().months[+p[1]-1];return lang==='nl'?(+p[2])+' '+m+' '+p[0]:(+p[2])+' '+m+' '+p[0];}
 function certData(){
   var t=L(),b=st.building;
-  return {no:certNo(),name:b.name||t.unnamed,addr:[b.address,[b.postcode,b.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')||'–',
+  return {no:certNo(),name:b.name||t.unnamedCap,addr:[b.address,[b.postcode,b.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')||'–',
     usage:usageLabel(),area:b.area?areaStr(b.area)+' m²':'–',year:b.year||'–',state:b.state==='renovated'?t.renovated:t.original,zone:t.zone[zone()]+' ('+countryName(b.country)+')',
     method:st.method==='A'?t.methA:t.methB,date:fmtDate(st.assessor.date),assessor:[st.assessor.name,st.assessor.org].filter(Boolean).join(', ')||'–'};
 }
@@ -694,7 +700,7 @@ function viewCertificaat(){
   var t=L(),c=certData(), draft=R.open.length>0||st.example;
   var h='<section class="kader"><h2 class="k-title">'+t.saveTitle+'</h2><div class="k-sub">'+t.saveSub+'</div>'+
     '<div class="row-actions" style="margin-top:4px"><button type="button" class="btn primary" data-act="pdf">'+t.btnPdf+'</button><button type="button" class="btn" data-act="export">'+t.btnJson+'</button><label class="btn" for="imp-file" style="cursor:pointer">'+t.btnLoad+'</label><input type="file" id="imp-file" accept=".json,application/json" hidden></div><div class="msg" id="msg" role="status"></div></section>';
-  if(draft)h+='<div class="note warn"><div class="grow">'+(st.example?t.draftEx:'')+(R.open.length?f(t.draftOpen,R.open.length):'')+t.draftMsg+(st.example?t.draftMsgEx:'')+'.</div></div>';
+  if(draft)h+='<div class="note"><div class="grow"><span class="ico">!</span><span>'+(st.example?t.draftEx:'')+(R.open.length?f(t.draftOpen,R.open.length):'')+t.draftMsg+(st.example?t.draftMsgEx:'')+'.</span></div></div>';
   h+='<div class="cert-wrap"><div class="cert">'+(draft?'<div class="c-draft">'+t.draftBand+'</div>':'')+
     '<div class="c-band"><div><div class="k">'+t.certKicker+'</div><div class="t">Smart Readiness Indicator</div></div><img src="'+LOGO_INV+'" alt="Stanbox"></div>'+
     '<div class="c-body"><div class="c-bld"><div class="nm">'+esc(c.name)+'</div>'+
@@ -708,7 +714,7 @@ function viewCertificaat(){
   return h;
 }
 function kv(k,v){return '<div class="c-kv"><span>'+k+'</span><span>'+esc(v)+'</span></div>';}
-function crow(n,v){return '<div class="c-row'+(v===null?' na':'')+'"><span>'+n+'</span><div class="b"><i style="width:'+(v===null?0:Math.max(0,v)*100)+'%"></i></div><span class="p">'+(v===null?L().na:pct(v,0))+'</span></div>';}
+function crow(n,v){return '<div class="c-row'+(v===null?' na':'')+'"><span>'+n+'</span><div class="b"><i style="width:'+(v===null?0:Math.max(0,v)*100)+'%"></i></div><span class="p">'+(v===null?(R.none?'–':L().na):pct(v,0))+'</span></div>';}
 
 /* ---------- method ---------- */
 function renderMethod(){
@@ -761,6 +767,7 @@ V.addEventListener('change',function(e){
   else if(a==='add'){svcState(c).add=+el.value;}
   else if(a==='share'){render(true);return;}
   else if(a==='presence'){st.present[c]=+el.value;}
+  else if(a==='btype-sel'){st.building.type=el.value;st.building.usage=L().usage[el.value][0][0];}
   else return;
   touch();render(true);
 });
@@ -840,7 +847,7 @@ function savePDF(){
   function col(x,title,rows){T(title,x,y,{s:8.5,b:1,c:INK2});rows.forEach(function(r,ix){var yy=y+6+ix*5.6;T(r[0],x,yy,{s:8,c:r[1]===null?INK2:INK});
       var bx=x+cw-34;doc.setFillColor.apply(doc,SOFT);doc.roundedRect(bx,yy-2.2,22,2.2,1.1,1.1,'F');
       if(r[1]!==null&&r[1]>0){doc.setFillColor.apply(doc,NAVY);doc.roundedRect(bx,yy-2.2,Math.max(2.2,22*Math.min(1,r[1])),2.2,1.1,1.1,'F');}
-      T(r[1]===null?t.na:pct(r[1],0),x+cw,yy,{s:8,b:r[1]!==null,c:r[1]===null?INK2:INK,al:'right'});});}
+      T(r[1]===null?(R.none?'-':t.na):pct(r[1],0),x+cw,yy,{s:8,b:r[1]!==null,c:r[1]===null?INK2:INK,al:'right'});});}
   col(M,t.impTitle,R.imp.map(function(v,k){return [t.impShort[k],v];}));
   col(M+cw+10,t.domTitle,SRI_DOMAINS.map(function(d){return [t.dom[d],R.dom[d]];}));
   y+=6+9*5.6+3;doc.line(M,y,W-M,y);y+=7;
@@ -856,6 +863,7 @@ function savePDF(){
 }
 
 /* ---------- start screen ---------- */
+function hasProgress(){var b=st.building;if(b.name||b.address||b.city)return true;for(var k in st.svc){var i=st.svc[k];if(i&&i.lvl!=null)return true;}return false;}
 var CV={sri:86.4,cls:'B',kf:[88.2,86.1,84.9]};
 var coverOpen=true;
 function renderCover(){
@@ -865,7 +873,7 @@ function renderCover(){
   var widths=[42,49,56,63,70,77,84];
   el.innerHTML='<div class="cv-lang" role="group" aria-label="Language / Taal"><button type="button" data-cl="en" class="'+(lang==='en'?'on':'')+'">EN</button><button type="button" data-cl="nl" class="'+(lang==='nl'?'on':'')+'">NL</button></div>'+
    '<div class="cv-in"><div><img class="cv-wm" src="'+WM_WHITE+'" alt="Stanbox"><h1 class="cv-h">Smart Readiness<br><em>Indicator</em></h1><p class="cv-p">'+t.cvSub+'</p>'+
-   '<button type="button" class="cv-cta" id="cv-start">'+(st.example?t.cvStart:t.cvCont)+'</button></div>'+
+   '<button type="button" class="cv-cta" id="cv-start">'+(hasProgress()?t.cvCont:t.cvStart)+'</button></div>'+
    '<div class="cv-card" aria-hidden="true"><div class="cv-row"><div class="cv-num">'+num(CV.sri,1)+'<small>%</small></div><div class="cv-cls">'+CV.cls+'</div></div><div class="cv-scale">'+
    CLASSES.map(function(c,ix){return '<div class="cv-s'+(c[0]===CV.cls?' cur':'')+'"><div class="b" style="background:'+CLS_CERT[c[0]]+';width:'+widths[ix]+'%">'+c[0]+'</div><span>'+rangeLbl(ix,c)+'</span></div>';}).join('')+
    '</div><div class="cv-kfs">'+CV.kf.map(function(v,k){return '<div class="cv-kf"><div class="h"><span>'+t.kf[k][0]+'</span><span>'+num(v,1)+'%</span></div><div class="t"><i style="width:'+v+'%"></i></div></div>';}).join('')+'</div></div></div>';

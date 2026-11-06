@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAT 01 Watercalculator — BREEAM-NL</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGNsaXBQYXRoIGlkPSJjIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIxMSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxyZWN0IHg9IjgiIHk9IjgiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgcng9IjExIiBmaWxsPSIjZmZmIi8+PGcgY2xpcC1wYXRoPSJ1cmwoI2MpIj48cGF0aCBkPSJNMCAzMyBDMTAgMzAgMTggMzEgMjYgMzUgUzQ0IDM3IDY0IDMyIFY2NCBIMFoiIGZpbGw9IiNlMWI0NjgiLz48cGF0aCBkPSJNMCA0NCBDMTIgNDIgMjIgNDIgMzIgNDUgUzUwIDQ1IDY0IDQyIFY2NCBIMFoiIGZpbGw9IiNjYjk5NGMiLz48L2c+PHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE3MjEzYiIgc3Ryb2tlLXdpZHRoPSI2Ii8+PC9zdmc+Cg==">
+<title>WAT 01 Watercalculator · BREEAM-NL</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -245,6 +246,120 @@ input:focus,select:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px
   .wizard-nav{position:sticky;bottom:0;z-index:5;}
 }
 </style>
+<style>
+.lang-toggle{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.08);flex:0 0 auto;}
+.lang-toggle button{border:none;background:transparent;font:600 11.5px/1 Inter,system-ui,sans-serif;letter-spacing:.3px;padding:6px 10px;border-radius:999px;cursor:pointer;color:#5a5650;}
+.lang-toggle button.on{background:#3d3730;color:#fff;}
+.topbar .lang-toggle{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);} .topbar .lang-toggle button{color:rgba(255,255,255,.85);} .topbar .lang-toggle button.on{background:#fff;color:#0b3c6f;}</style>
+<script>
+/* ===== NL / EN language switch =====
+   The page is written in Dutch. In English mode every visible Dutch text
+   (also text the app renders later) is swapped for its English version via
+   DICT (exact strings) and RULES (strings with numbers or composed parts).
+   The original Dutch is remembered per node, so switching back is lossless. */
+(function(){
+  var DICT = {"(max. 8)": "(max. 8)", "Aantal": "Number", "Aantal gebruikers": "Number of occupants", "Aantal geïnstalleerd": "Number installed", "Aantal verschillende types": "Number of different types", "Afdrukken / PDF": "Print / PDF", "Afvalverwerker (commerciële keuken)": "Waste disposal unit (commercial kitchen)", "Afvalwaterzuivering": "Wastewater treatment", "Alleen relevant als hierboven water wordt opgevangen": "Only relevant if water is collected above", "Alleen voor CO₂-rapportage": "For CO₂ reporting only", "Andere bron van hergebruikt water?": "Other source of reused water?", "BREEAM-NL Assessor": "BREEAM-NL Assessor", "BREEAM-NL Expert": "BREEAM-NL Expert", "BREEAM-NL punten": "BREEAM-NL credits", "Bad": "Bath", "Basic approach (oppervlak × neerslag)": "Basic approach (area × rainfall)", "Behaald": "Achieved", "Niet behaald": "Not achieved", "nog niet": "not yet", "✓ EP behaald": "✓ EP achieved", "Bekijk resultaten →": "View results →", "Bepaalt gebruiksfrequenties, bezettingsdagen en -uren (BRE Wat 01-activiteitendatabase).": "Determines usage frequencies, occupied days and hours (BRE Wat 01 activity database).", "Berekeningsmethode": "Calculation method", "Bezette dagen/jaar": "Occupied days/year", "Bibliotheek, museum of galerie": "Library, museum or gallery", "Buurt- of dagcentrum": "Community or day centre", "CO₂-impact": "CO₂ impact", "CO₂-impact water": "CO₂ impact of water", "Commerciële keuken": "Commercial kitchen", "Commerciële vaatwasser": "Commercial dishwasher", "Commerciële/industriële wasmachine": "Commercial/industrial washing machine", "Detailed approach (directe jaaropvang in liter)": "Detailed approach (direct annual collection in litres)", "Douche": "Shower", "Douche / bad": "Shower / bath", "Douche ≤ 8 l/min": "Shower ≤ 8 l/min", "EP-Score (≥85%)": "EP score (≥85%)", "EU-Taxonomie minimumeisen (EUT)": "EU Taxonomy minimum requirements (EUT)", "Gebouwtype": "Building type", "Gebruik van hergebruikt water": "Use of reused water", "Geloosd op rioolnetwerk": "Discharged to sewer", "Gesloten instelling (bv. justitieel)": "Secure institution (e.g. custodial)", "Grijs- en zwartwater": "Grey and black water", "Grijs-/zwartwater beschikbaar": "Grey/black water available", "Hergebruikt water": "Reused water", "Hergebruikt water gebruikt voor WC-spoeling?": "Reused water used for WC flushing?", "Hergebruikt water voor urinoirs (sensor)?": "Reused water for urinals (sensor)?", "Hergebruikt water voor urinoirs (tijdgestuurd)?": "Reused water for urinals (timed)?", "Hotel": "Hotel", "Huisartsenpraktijk / eerstelijnszorg": "GP practice / primary care", "Huishoudelijke vaatwasser": "Domestic dishwasher", "Huishoudelijke wasmachine": "Domestic washing machine", "Hulpdiensten (brandweer/politie)": "Emergency services (fire/police)", "Hydraulisch rendement filter (%)": "Hydraulic filter efficiency (%)", "Industrie": "Industrial", "Invoer": "Input", "Ja": "Yes", "Nee": "No", "Jaarlijks hergebruikt (m³/jaar)": "Reused per year (m³/year)", "Jaarlijkse neerslag (mm/jaar)": "Annual rainfall (mm/year)", "Jaarlijkse regenwateropvang (liter)": "Annual rainwater collection (litres)", "Kantoor": "Office", "Kernvereisten EUT water behaald (WC + urinoirs)": "Core EUT water requirements met (WC + urinals)", "Keukenkraan (pantry)": "Kitchen tap (pantry)", "Keukenkraan (pantry) ≤ 6 l/min": "Kitchen tap (pantry) ≤ 6 l/min", "Keukenkraan restaurant (pre-rinse)": "Restaurant kitchen tap (pre-rinse)", "Nachtclub": "Nightclub", "Netwerkwater": "Mains water", "Netwerkwaterverbruik": "Mains water consumption", "Niet-netwerkwater (overige bron)": "Non-mains water (other source)", "Omschrijving bron": "Source description", "Onderdeel": "Component", "Opbrengstcoëfficiënt (%)": "Yield coefficient (%)", "Opdrachtgever": "Client", "Opslag / magazijn": "Storage / warehouse", "Opvang en hergebruik per voorziening": "Collection and reuse per fixture", "Opvangoppervlak (m²)": "Collection area (m²)", "Overige hergebruikte waterbron": "Other reused water source", "Passagiersterminal (luchthaven/station)": "Passenger terminal (airport/station)", "Per persoon per dag": "Per person per day", "Per voorziening: aanwezig? hoeveel types? aantallen en volumes": "Per fixture: present? how many types? numbers and volumes", "Project- en gebouwgegevens": "Project and building details", "Projectinfo optioneel, gebouwgegevens verplicht": "Project info optional, building details required", "Projectnaam": "Project name", "Rechtbank": "Court", "Regenwater": "Rainwater", "Regenwater beschikbaar": "Rainwater available", "Regenwater wordt opgevangen?": "Is rainwater collected?", "Registratienummer": "Registration number", "Restaurants, cafés en afhaalzaken": "Restaurants, cafés and takeaways", "Resultaten": "Results", "Riolering": "Sewerage", "School (niet-residentieel)": "School (non-residential)", "Schoolinternaat": "Boarding school", "Sportcentrum (droge sporten)": "Sports centre (dry sports)", "Systeem conform BS EN 16941-1:2018?": "System compliant with BS EN 16941-1:2018?", "Theater": "Theatre", "Totaal": "Total", "Totaal waterverbruik": "Total water consumption", "Universiteiten en hogescholen": "Universities and colleges", "Urinoir met sensorspoeling": "Urinal with sensor flush", "Urinoir met tijdgestuurde spoeling": "Urinal with timed flush", "Urinoir sensorgestuurd ≤ 1 l/spoeling": "Sensor-controlled urinal ≤ 1 l/flush", "Urinoir tijdgestuurd ≤ 2 l/bak/uur": "Timed urinal ≤ 2 l/bowl/hour", "Verbetering t.o.v. baseline": "Improvement vs. baseline", "Verzorgingshuis": "Care home", "Vloeroppervlak (m²)": "Floor area (m²)", "Voldoet": "Compliant", "Voldoet niet": "Not compliant", "Volgende →": "Next →", "← Vorige": "← Previous", "Voorziening": "Fixture", "WC": "WC", "WC & urinoirs": "WC & urinals", "WC: gemiddelde spoeling ≤ 3,5 l": "WC: average flush ≤ 3.5 l", "WC: volledige spoeling ≤ 6 l": "WC: full flush ≤ 6 l", "Wastafelkraan": "Washbasin tap", "Wastafelkraan ≤ 6 l/min": "Washbasin tap ≤ 6 l/min", "Waterbalans bij werkelijke bezetting": "Water balance at actual occupancy", "Watercalculator (WAT 01)": "Water calculator (WAT 01)", "Waterlevering": "Water supply", "Waterloos urinoir": "Waterless urinal", "Waterloos urinoir (geen watergebruik, n.v.t.)": "Waterless urinal (no water use, n/a)", "Waterverbruikende voorzieningen": "Water-consuming fixtures", "Winkel": "Retail", "Winkel met diensten (bv. kapper, reisbureau)": "Retail with services (e.g. hairdresser, travel agent)", "Wissen": "Clear", "Woongebouw": "Residential building", "Ziekenhuis": "Hospital", "Zwembad / ijsbaan": "Swimming pool / ice rink", "kg CO₂e / jaar": "kg CO₂e / year", "kg CO₂e/jaar": "kg CO₂e/year", "l/m²/dag": "l/m²/day", "l/persoon/dag": "l/person/day", "liter": "litres", "m³ / jaar": "m³ / year", "m³/jaar": "m³/year", "% opgevangen": "% collected", "% urinoirs": "% of urinals", "% van WC's": "% of WCs", "Volledige spoeling": "Full flush", "Bespaarspoeling": "Reduced flush", "Spoelvolume": "Flush volume", "Debiet": "Flow rate", "Vulvolume": "Fill volume", "Verbruik": "Consumption", "l per bak per uur": "l per bowl per hour", "l per spoeling": "l per flush", "l/cyclus": "l/cycle", "l/min": "l/min", "l/rack": "l/rack", "l/kg": "l/kg", "l": "l", "Alle ingevoerde gegevens wissen?": "Clear all entered data?", "WAT 01 Watercalculator · BREEAM-NL": "WAT 01 Water calculator · BREEAM-NL"};
+  var RULES = [
+ [/^Stap (\d+) van (\d+)$/, function(m){return 'Step '+m[1]+' of '+m[2];}],
+ [/^Type (\d+)$/, function(m){return 'Type '+m[1];}],
+ [/^(\d) pt$/, function(m){return m[1]+' pt';}],
+ [/^(.+): (grijs|zwart)water opgevangen\?$/, function(m,t){var a=t(m[1]);return a==null?null:a+': '+(m[2]==='grijs'?'grey':'black')+' water collected?';}],
+ [/^boven EUT-eis van (.+)$/, function(m,t){var p=m[1].match(/^([\d.,]+) (.+)$/);return 'above EUT requirement of '+(p?p[1]+' '+(t(p[2])||p[2]):m[1]);}],
+ [/^Baseline \(ongereguleerd\): (.+?) l\/persoon\/dag\s+→\s+Werkelijk: (.+?) l\/persoon\/dag$/, function(m){return 'Baseline (unregulated): '+m[1]+' l/person/day  →  Actual: '+m[2]+' l/person/day';}],
+ [/^Bezettingsdichtheid gebruikt voor de berekening: (.+?) persoon\/m²\. Referentie-bezettingsdagen \(standaard-scenario\) voor dit gebouwtype: (.+?) dagen\/jaar\.$/, function(m){return 'Occupancy density used in the calculation: '+m[1]+' person/m². Reference occupied days (standard scenario) for this building type: '+m[2]+' days/year.';}],
+ [/^(.+) \(([^()]+)\)$/, function(m,t){var a=t(m[1]),b=t(m[2]);return a==null?null:a+' ('+(b==null?m[2]:b)+')';}]
+];
+  var KEY = 'stanbox-lang';
+  var lang = null;
+  try { lang = localStorage.getItem(KEY); } catch(e) {}
+  if (lang !== 'nl' && lang !== 'en') lang = /^nl\b/i.test(navigator.language || '') ? 'nl' : 'en';
+
+  function trCore(s){
+    if (Object.prototype.hasOwnProperty.call(DICT, s)) return DICT[s];
+    for (var i = 0; i < RULES.length; i++){
+      var m = s.match(RULES[i][0]);
+      if (m) return RULES[i][1](m, trCore);
+    }
+    return null;
+  }
+  function tr(s){
+    if (lang !== 'en' || !s) return s;
+    var m = s.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if (!m[2]) return s;
+    var out = trCore(m[2]);
+    return out == null ? s : m[1] + out + m[3];
+  }
+
+  var srcText = new WeakMap(), setText = new WeakMap();
+  var srcAttr = new WeakMap();
+  var ATTRS = ['placeholder', 'title', 'aria-label'];
+  function skip(el){ return !el || el.closest('script,style,[data-no-i18n]'); }
+  function doText(n){
+    if (skip(n.parentElement)) return;
+    var cur = n.nodeValue;
+    if (setText.get(n) !== cur) srcText.set(n, cur);
+    var out = tr(srcText.get(n));
+    if (out !== cur) n.nodeValue = out;
+    setText.set(n, out);
+  }
+  function doAttrs(el){
+    if (skip(el)) return;
+    var store = srcAttr.get(el); if (!store){ store = {}; srcAttr.set(el, store); }
+    ATTRS.forEach(function(a){
+      if (!el.hasAttribute(a)) return;
+      var cur = el.getAttribute(a), rec = store[a];
+      if (!rec || rec.set !== cur) rec = store[a] = { src: cur };
+      var out = tr(rec.src);
+      if (out !== cur) el.setAttribute(a, out);
+      rec.set = out;
+    });
+  }
+  function apply(root){
+    if (!root) return;
+    if (root.nodeType === 3){ doText(root); return; }
+    if (root.nodeType !== 1) return;
+    doAttrs(root);
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT), n;
+    while ((n = w.nextNode())){ if (n.nodeType === 3) doText(n); else doAttrs(n); }
+  }
+
+  var baseTitle = document.title;
+  function setLang(l){
+    lang = l;
+    try { localStorage.setItem(KEY, l); } catch(e) {}
+    document.documentElement.lang = l;
+    document.title = tr(baseTitle);
+    document.querySelectorAll('.lang-toggle button').forEach(function(b){ b.classList.toggle('on', b.dataset.l === l); });
+    window.dispatchEvent(new CustomEvent('langchange', { detail: l }));
+    apply(document.body);
+  }
+  window.i18n = { tr: tr, get lang(){ return lang; }, setLang: setLang };
+
+  var nativeConfirm = window.confirm.bind(window);
+  window.confirm = function(msg){ return nativeConfirm(tr(msg)); };
+
+  function init(){
+    var host = document.querySelector('.topbar-right');
+    if (host){
+      var t = document.createElement('div');
+      t.className = 'lang-toggle'; t.setAttribute('data-no-i18n', '');
+      t.innerHTML = '<button type="button" data-l="nl">NL</button><button type="button" data-l="en">EN</button>';
+      t.addEventListener('click', function(e){ var b = e.target.closest('button'); if (b && b.dataset.l !== lang) setLang(b.dataset.l); });
+      host.insertBefore(t, host.firstChild);
+    }
+    new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if (m.type === 'childList') m.addedNodes.forEach(apply);
+        else if (m.type === 'characterData') doText(m.target);
+        else if (m.type === 'attributes') doAttrs(m.target);
+      });
+    }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+    setLang(lang);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+</script>
 </head>
 <body>
 <div id="app">
@@ -658,10 +773,9 @@ function computeAll(){
 }
 
 /* ============ Formatting ============ */
-const nf1 = new Intl.NumberFormat('nl-NL',{maximumFractionDigits:1, minimumFractionDigits:0});
-const nf2 = new Intl.NumberFormat('nl-NL',{maximumFractionDigits:2, minimumFractionDigits:0});
-const nf0 = new Intl.NumberFormat('nl-NL',{maximumFractionDigits:0});
-function fmt(n,d){ if(n==null||isNaN(n)) return '–'; return (d===2?nf2:d===0?nf0:nf1).format(n); }
+// number format follows the chosen language (26,76 in Dutch, 26.76 in English)
+function nfFor(d){ const loc = (window.i18n && i18n.lang==='en') ? 'en-GB' : 'nl-NL'; return new Intl.NumberFormat(loc,{maximumFractionDigits:d, minimumFractionDigits:0}); }
+function fmt(n,d){ if(n==null||isNaN(n)) return '–'; return nfFor(d===2?2:d===0?0:1).format(n); }
 
 /* ============ KPI bar ============ */
 function dropGauge(p){
@@ -727,7 +841,7 @@ function renderResults(r){
 
   const html = `
     <div class="res-section">
-      <h3>Waterbalans — werkelijke bezetting</h3>
+      <h3>Waterbalans bij werkelijke bezetting</h3>
       <table class="rtable">
         <tr><th>Voorziening</th><th>l/persoon/dag</th><th>l/m²/dag</th><th>m³/jaar</th></tr>
         ${rowsHtml}
@@ -753,8 +867,8 @@ function renderResults(r){
     <div class="res-section">
       <h3>EU-Taxonomie minimumeisen (EUT)</h3>
       <div class="eut-list">
-        ${eutItem('WC — volledige spoeling ≤ 6 l', r.eut.wcFull)}
-        ${eutItem('WC — gemiddelde spoeling ≤ 3,5 l', r.eut.wcReduced)}
+        ${eutItem('WC: volledige spoeling ≤ 6 l', r.eut.wcFull)}
+        ${eutItem('WC: gemiddelde spoeling ≤ 3,5 l', r.eut.wcReduced)}
         ${eutItem('Urinoir tijdgestuurd ≤ 2 l/bak/uur', r.eut.urinalTimed)}
         ${eutItem('Urinoir sensorgestuurd ≤ 1 l/spoeling', r.eut.urinalSensor)}
         ${eutItem('Douche ≤ 8 l/min', r.eut.shower)}
@@ -881,7 +995,7 @@ function greyBlackRow(fx){
     return `<div class="gb-row"><div class="gb-label">${fx.label} (geen watergebruik, n.v.t.)</div><div></div><div></div></div>`;
   }
   return `<div class="gb-row">
-    <div class="gb-label">${fx.label} — ${wording} opgevangen?</div>
+    <div class="gb-label">${fx.label}: ${wording} opgevangen?</div>
     ${ynButtons('greyBlack.'+fx.key+'.yes', gb.yes, ['Ja','Nee'])}
     <input type="number" min="0" max="100" step="1" placeholder="% opgevangen" data-path="greyBlack.${fx.key}.pct" value="${gb.pct||0}" style="${gb.yes?'':'visibility:hidden;'}">
   </div>`;
@@ -1086,6 +1200,7 @@ function initApp(){
 }
 
 initApp();
+window.addEventListener('langchange', ()=>{ renderFormPanel(); refresh(); });
 
 </script>
 </body>

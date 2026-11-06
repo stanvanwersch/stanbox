@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGNsaXBQYXRoIGlkPSJjIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIxMSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxyZWN0IHg9IjgiIHk9IjgiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgcng9IjExIiBmaWxsPSIjZmZmIi8+PGcgY2xpcC1wYXRoPSJ1cmwoI2MpIj48cGF0aCBkPSJNMCAzMyBDMTAgMzAgMTggMzEgMjYgMzUgUzQ0IDM3IDY0IDMyIFY2NCBIMFoiIGZpbGw9IiNlMWI0NjgiLz48cGF0aCBkPSJNMCA0NCBDMTIgNDIgMjIgNDIgMzIgNDUgUzUwIDQ1IDY0IDQyIFY2NCBIMFoiIGZpbGw9IiNjYjk5NGMiLz48L2c+PHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE3MjEzYiIgc3Ryb2tlLXdpZHRoPSI2Ii8+PC9zdmc+Cg==">
 <title>Meetlat · Stanbox</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -372,6 +373,115 @@
   .sidebar-footer{margin-top:auto;padding-top:12px;}
   .bg-scene{opacity:.5;}
 </style>
+<style>
+.lang-toggle{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.08);flex:0 0 auto;}
+.lang-toggle button{border:none;background:transparent;font:600 11.5px/1 Inter,system-ui,sans-serif;letter-spacing:.3px;padding:6px 10px;border-radius:999px;cursor:pointer;color:#5a5650;}
+.lang-toggle button.on{background:#3d3730;color:#fff;}
+header .lang-toggle{position:absolute;left:0;top:14px;} @media (max-width:700px){header .lang-toggle{position:static;}}</style>
+<script>
+/* ===== NL / EN language switch =====
+   The page is written in Dutch. In English mode every visible Dutch text
+   (also text the app renders later) is swapped for its English version via
+   DICT (exact strings) and RULES (strings with numbers or composed parts).
+   The original Dutch is remembered per node, so switching back is lossless. */
+(function(){
+  var DICT = {"Afbeelding kiezen": "Choose image", "Afbeelding laden": "Load image", "Afbeelding": "Image", "Alles wissen": "Clear all", "Annuleren": "Cancel", "Bevestigen": "Confirm", "Exporteren": "Export", "Gereedschap": "Tools", "Kalibratie": "Calibration", "Kalibreren": "Calibrate", "Laad een afbeelding, kalibreer en meet lijnen en vlakken": "Load an image, calibrate and measure lines and areas", "Laad een plattegrond of foto om te beginnen met meten": "Load a floor plan or photo to start measuring", "Lijn meten": "Measure line", "Vlak meten": "Measure area", "Metingen": "Measurements", "Nog geen afbeelding geladen": "No image loaded yet", "Nog geen lijnen of vlakken getekend.": "No lines or areas drawn yet.", "Nog niet gekalibreerd, meet in pixels": "Not calibrated yet, measuring in pixels", "Wat is de werkelijke lengte van de lijn die je zojuist getekend hebt?": "What is the real length of the line you just drew?", "bestand": "file", "schaal": "scale", "datum": "date", "afbeelding": "image", "niet gekalibreerd": "not calibrated", "bv. 80": "e.g. 80", "Verwijderen": "Delete", "✓ Voltooien": "✓ Finish", "↺ Laatste punt": "↺ Last point", "✕ Annuleren": "✕ Cancel", "Klik twee punten op een bekende maat (bv. de breedte van een deur).": "Click two points on a known dimension (e.g. the width of a door).", "Klik het beginpunt en eindpunt van de lijn die je wilt meten.": "Click the start and end point of the line you want to measure.", "Weet je zeker dat je alle metingen en de kalibratie wilt wissen?": "Are you sure you want to clear all measurements and the calibration?", "Meetlat · Stanbox": "Meetlat · Stanbox"};
+  var RULES = [
+ [/^Klik de hoekpunten van het vlak \((\d+) geplaatst\)\. Klik op "Voltooien" als je klaar bent\.$/, function(m){return 'Click the corner points of the area ('+m[1]+' placed). Click "Finish" when you are done.';}],
+ [/^Gekalibreerd: (.+)$/, function(m){return 'Calibrated: '+m[1];}],
+ [/^(.+):$/, function(m,t){var a=t(m[1]);return a==null?null:a+':';}]
+];
+  var KEY = 'stanbox-lang';
+  var lang = null;
+  try { lang = localStorage.getItem(KEY); } catch(e) {}
+  if (lang !== 'nl' && lang !== 'en') lang = /^nl\b/i.test(navigator.language || '') ? 'nl' : 'en';
+
+  function trCore(s){
+    if (Object.prototype.hasOwnProperty.call(DICT, s)) return DICT[s];
+    for (var i = 0; i < RULES.length; i++){
+      var m = s.match(RULES[i][0]);
+      if (m) return RULES[i][1](m, trCore);
+    }
+    return null;
+  }
+  function tr(s){
+    if (lang !== 'en' || !s) return s;
+    var m = s.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if (!m[2]) return s;
+    var out = trCore(m[2]);
+    return out == null ? s : m[1] + out + m[3];
+  }
+
+  var srcText = new WeakMap(), setText = new WeakMap();
+  var srcAttr = new WeakMap();
+  var ATTRS = ['placeholder', 'title', 'aria-label'];
+  function skip(el){ return !el || el.closest('script,style,[data-no-i18n]'); }
+  function doText(n){
+    if (skip(n.parentElement)) return;
+    var cur = n.nodeValue;
+    if (setText.get(n) !== cur) srcText.set(n, cur);
+    var out = tr(srcText.get(n));
+    if (out !== cur) n.nodeValue = out;
+    setText.set(n, out);
+  }
+  function doAttrs(el){
+    if (skip(el)) return;
+    var store = srcAttr.get(el); if (!store){ store = {}; srcAttr.set(el, store); }
+    ATTRS.forEach(function(a){
+      if (!el.hasAttribute(a)) return;
+      var cur = el.getAttribute(a), rec = store[a];
+      if (!rec || rec.set !== cur) rec = store[a] = { src: cur };
+      var out = tr(rec.src);
+      if (out !== cur) el.setAttribute(a, out);
+      rec.set = out;
+    });
+  }
+  function apply(root){
+    if (!root) return;
+    if (root.nodeType === 3){ doText(root); return; }
+    if (root.nodeType !== 1) return;
+    doAttrs(root);
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT), n;
+    while ((n = w.nextNode())){ if (n.nodeType === 3) doText(n); else doAttrs(n); }
+  }
+
+  var baseTitle = document.title;
+  function setLang(l){
+    lang = l;
+    try { localStorage.setItem(KEY, l); } catch(e) {}
+    document.documentElement.lang = l;
+    document.title = tr(baseTitle);
+    document.querySelectorAll('.lang-toggle button').forEach(function(b){ b.classList.toggle('on', b.dataset.l === l); });
+    window.dispatchEvent(new CustomEvent('langchange', { detail: l }));
+    apply(document.body);
+  }
+  window.i18n = { tr: tr, get lang(){ return lang; }, setLang: setLang };
+
+  var nativeConfirm = window.confirm.bind(window);
+  window.confirm = function(msg){ return nativeConfirm(tr(msg)); };
+
+  function init(){
+    var host = document.querySelector('header');
+    if (host){
+      var t = document.createElement('div');
+      t.className = 'lang-toggle'; t.setAttribute('data-no-i18n', '');
+      t.innerHTML = '<button type="button" data-l="nl">NL</button><button type="button" data-l="en">EN</button>';
+      t.addEventListener('click', function(e){ var b = e.target.closest('button'); if (b && b.dataset.l !== lang) setLang(b.dataset.l); });
+      host.appendChild(t);
+    }
+    new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if (m.type === 'childList') m.addedNodes.forEach(apply);
+        else if (m.type === 'characterData') doText(m.target);
+        else if (m.type === 'attributes') doAttrs(m.target);
+      });
+    }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+    setLang(lang);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+</script>
 </head>
 <body>
 <div class="bg-scene" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
@@ -591,7 +701,7 @@
 
       <h2>Kalibratie</h2>
       <div class="calib-box" id="calibBox">
-        <div class="calib-status"><span class="dot" id="calibDot"></span><span id="calibText">Nog niet gekalibreerd — meet in pixels</span></div>
+        <div class="calib-status"><span class="dot" id="calibDot"></span><span id="calibText">Nog niet gekalibreerd, meet in pixels</span></div>
       </div>
 
       <h2>Metingen</h2>
@@ -847,7 +957,7 @@
         id: 'shape_'+shapeCounter,
         type: mode,
         points: currentPoints.slice(),
-        name: mode==='line' ? `Lijn ${shapeCounter}` : `Vlak ${shapeCounter}`,
+        name: (window.i18n && i18n.lang==='en') ? (mode==='line' ? `Line ${shapeCounter}` : `Area ${shapeCounter}`) : (mode==='line' ? `Lijn ${shapeCounter}` : `Vlak ${shapeCounter}`),
         color
       };
       shapes.push(shape);
@@ -908,7 +1018,7 @@
     } else {
       calibBox.classList.remove('set');
       calibDot.classList.remove('on');
-      calibText.textContent = 'Nog niet gekalibreerd — meet in pixels';
+      calibText.textContent = 'Nog niet gekalibreerd, meet in pixels';
     }
   }
 

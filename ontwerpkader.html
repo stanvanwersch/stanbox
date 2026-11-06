@@ -651,6 +651,12 @@ body{background:#fff}
 /* v23: beta styled like info and language */
 .mhead .beta{height:38px;min-width:38px;padding:0 12px;border:1px solid var(--accent);border-radius:4px;background:var(--white);color:var(--accent);font:700 10.5px/1 var(--sans);letter-spacing:.2px;font-style:normal;display:inline-flex!important;align-items:center;justify-content:center}
 .mhead .beta[hidden]{display:none!important}
+/* v24: 'Voor wie?' as a plain list */
+.inf-who{display:flex;flex-direction:column;gap:10px;grid-template-columns:none}
+.inf-w{background:none;border-radius:0;padding:0;display:block;font-size:14px;line-height:1.6}
+.inf-w b{font-size:14px;font-weight:600;color:var(--text)}
+.inf-w b::after{content:": "}
+.inf-w span{font-size:14px;color:var(--text2)}
 </style>
 
 
@@ -1220,7 +1226,7 @@ const T={
    h3:'Schaalniveaus',p3:'Daarnaast kunnen bij het circulair ontwerpen van HVAC-systemen verschillende schaalniveaus worden beschouwd: het systeem-, product- en componentniveau, maar ook een breder perspectief waarbij gekeken wordt naar het gebouw en de omgeving.',
    lvx:{context:['Zonnestraling','Groene omgeving','Schaduw'],building:['Isolatie','Oriëntatie en indeling','Zonwering'],system:['Samenstelling van installatieproducten'],product:['Bijv. een warmtepomp, ventilatiekanaal of radiator'],component:['Onderdelen in producten, bijv. een motor']},
    h4:'Voor wie?',p4:'Welk schaalniveau het meest relevant is, verschilt per gebruiker.',
-   who:[['Installatieadviseurs','Naar verwachting vooral het systeem- en productniveau.',['system','product']],['HVAC-fabrikanten','Met name het componentniveau.',['component']],['Architecten','Waarschijnlijk het gebouw- en contextniveau.',['building','context']],['Vastgoedeigenaren','Alle schaalniveaus kunnen relevant zijn.',['*']]],
+   who:[['Installatieadviseurs','naar verwachting vooral het systeem- en productniveau.',['system','product']],['HVAC-fabrikanten','met name het componentniveau.',['component']],['Architecten','waarschijnlijk het gebouw- en contextniveau.',['building','context']],['Vastgoedeigenaren','alle schaalniveaus kunnen relevant zijn.',['*']]],
    src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Mijn selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Let op'],none:'Geen interventies bij deze filters.',
   allParts:'Alle onderdelen',interventions:'interventies',results:'Zoekresultaten',noResults:'Geen interventies gevonden.',
   tagM:'materiaal',tagE:'energie',lgLv:'schaalniveau',lgW:'bekend neveneffect',
@@ -1256,7 +1262,7 @@ const T={
    h3:'Scale levels',p3:'Also, different scale levels can be considered in circular HVAC design: including the system, product and component level, but also a more zoomed out perspective can be considered at the building and contextual level.',
    lvx:{context:['Solar radiation','Green surroundings','Shade'],building:['Insulation','Orientation and layout','Sun shading'],system:['Composition of installation products'],product:['E.g. a heat pump, ventilation duct or radiator'],component:['Parts within products, e.g. a motor']},
    h4:'Who is it for?',p4:'Which scale level is most relevant differs per stakeholder.',
-   who:[['Installation consultants','The system and product level are expected to be the most relevant.',['system','product']],['HVAC manufacturers','The component level is expected to be the most relevant.',['component']],['Architects','The building and contextual level probably offer the most relevant insights.',['building','context']],['Property owners','All levels could be relevant.',['*']]],
+   who:[['Installation consultants','the system and product level are expected to be the most relevant.',['system','product']],['HVAC manufacturers','the component level is expected to be the most relevant.',['component']],['Architects','the building and contextual level probably offer the most relevant insights.',['building','context']],['Property owners','all levels could be relevant.',['*']]],
    src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'My selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Watch out for'],none:'No interventions match these filters.',
   allParts:'All parts',interventions:'interventions',results:'Search results',noResults:'No interventions found.',
   tagM:'material',tagE:'energy',lgLv:'scale level',lgW:'known side-effect',

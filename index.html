@@ -119,9 +119,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
   box-shadow:0 22px 50px -10px rgba(23,33,59,.35);
   overflow:hidden;cursor:pointer;
 }
-.sandbox:not(.expanded){transition:transform .25s var(--ease);}
+.sandbox{transition:transform .25s var(--ease),border-width .45s var(--ease),border-color .45s,border-radius .45s var(--ease),box-shadow .45s;}
 .sandbox:not(.expanded):hover{transform:scale(1.03) rotate(-1deg);}
-.sandbox.expanded{z-index:401;cursor:default;border-width:6px;border-radius:34px;box-shadow:0 40px 100px rgba(10,14,28,.45);}
+/* open: a quiet white panel like the round buttons above it, no heavy frame */
+.sandbox.expanded{z-index:401;cursor:default;border-width:1px;border-color:rgba(23,33,59,.08);border-radius:28px;box-shadow:0 10px 40px rgba(0,0,0,.22);}
 .dunes{position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;}
 .sandbox.expanded .dunes{height:150px;}
 .dunes svg{position:absolute;left:0;bottom:0;width:200%;height:100%;}

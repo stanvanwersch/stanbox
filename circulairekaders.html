@@ -681,6 +681,34 @@ body{background:#fff}
 /* same widths in both tool rows */
 .sslot{flex:0 1 300px!important;max-width:300px!important}
 #cartBtn{min-width:150px;justify-content:center}
+/* Ontwerpkader: side panel slides away to the right */
+#app .stage .pop{transition:transform .22s ease}
+#app .stage.pc .pop{transform:translateX(100%);visibility:hidden;transition:transform .22s ease,visibility 0s .22s}
+.pgrip{position:absolute;top:50%;right:340px;transform:translateY(-50%);z-index:7;width:22px;height:64px;padding:0;border:1px solid var(--border);border-right:0;border-radius:6px 0 0 6px;background:var(--white);color:var(--text2);display:grid;place-items:center;cursor:pointer;box-shadow:-3px 2px 10px rgba(0,0,0,.06);transition:right .22s ease}
+.pgrip[hidden]{display:none}
+.pgrip:hover{color:var(--accent);border-color:var(--accent)}
+.pgrip svg{transition:transform .22s}
+#app .stage.pc .pgrip{right:0}
+#app .stage.pc .pgrip svg{transform:rotate(180deg)}
+@media (max-width:700px){.pgrip{display:none!important}#app .stage.pc .pop{transform:none;visibility:visible}}
+/* filter column: tighter, never a scrollbar */
+#app .side{scrollbar-width:none;overflow-x:hidden}
+#app .side::-webkit-scrollbar{display:none}
+#app .side section{padding-bottom:12px}
+#app .side .sh{margin-bottom:7px}
+#app .side .ck{padding:4px 0}
+#app .side .ck .bx{width:20px;height:20px}
+#app .side .pills{gap:6px}
+#app .side .pill{padding:5px 12px;font-size:13px}
+#app .side .sideh{margin-bottom:10px}
+#app .scap{padding-top:10px}
+/* collapsed-state buttons equally wide in both tools */
+#app .layout.sc .oksb{width:140px;justify-content:center}
+/* function buttons ask for attention until one is chosen */
+#app .side .pill.pulse{border-color:color-mix(in srgb,var(--fc) 40%,var(--border));animation:fnpulse 3s ease-in-out infinite}
+@keyframes fnpulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--fc) 0%,transparent)}50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--fc) 10%,transparent)}}
+@media (prefers-reduced-motion:reduce){#app .side .pill.pulse{animation:none}}
+
 /* both tools: stage at the same height, side column ends level with it */
 @media (min-width:1001px){
   #app .layout.l3d .stage{height:clamp(600px,calc(100vh - 230px),760px)!important;flex:none!important;min-height:0!important;max-height:none!important}
@@ -762,14 +790,19 @@ button.cv-sq:hover{background:var(--accent-s)}
 .cv-card .t b{font-size:15px;font-weight:600}
 .cv-card .t span{font-size:12px;color:var(--text3)}
 .cv-card .v{border-radius:8px;overflow:hidden;background:linear-gradient(#fdfcf9,#f4f1ea);border:1px solid var(--border);aspect-ratio:16/10;display:grid;place-items:center}
+.cv-card .v{position:relative}
 .cv-card .v img{width:100%;height:100%;object-fit:cover;display:block}
+.cvm{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;pointer-events:none}
+.cvm i{width:22px;height:22px;border-radius:50%;background:#e8b62a;color:#fff;font:700 15px/22px var(--sans);font-style:normal;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.25),0 0 0 3px rgba(255,255,255,.6)}
+.cvm b{font:600 11px/1 var(--sans);color:var(--text);background:var(--white);border:1px solid var(--border);border-radius:4px;padding:4px 7px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.08)}
 .cv-card .v svg{width:82%;height:auto}
 .cv-foot{margin-top:40px;font-size:12.5px;color:var(--text3);max-width:540px;line-height:1.6}
 body.cv-open{overflow:hidden}
 @media (max-width:900px){.cv-in{grid-template-columns:minmax(0,1fr);gap:40px}.cv-cards{height:auto;display:grid;gap:16px}.cv-card{position:static;width:100%;transform:none!important}.cover{align-items:flex-start;padding-top:72px}.cv-logos{margin-bottom:32px}.cv-logos img{height:36px}}
 @media (prefers-reduced-motion:reduce){.cv-card,.cv-b{transition:none}}
 
-@media (min-width:1001px) and (max-width:1340px){.uhead h1{white-space:normal;font-size:24px}}
+@media (min-width:1181px) and (max-width:1340px){.uhead h1{font-size:21px}}
+@media (min-width:1001px) and (max-width:1180px){.uhead h1{white-space:normal;font-size:22px}}
 @media (max-width:1000px){
   .uhead{grid-template-columns:minmax(0,1fr) auto;row-gap:16px;padding-top:18px}
   .uhead h1{grid-column:1/-1;grid-row:2;white-space:normal;font-size:26px}
@@ -874,7 +907,7 @@ h1 em{font-style:normal;font-weight:700;color:var(--accent)}
 .src{transition:margin-left .6s var(--ease,ease)}
 .layout.sc + .src{margin-left:0}
 #sideB{max-width:0;opacity:0;padding:0;border-width:0;margin-right:-12px;overflow:hidden;transition:max-width .5s var(--ease),opacity .3s ease,padding .5s var(--ease),margin .5s var(--ease)}
-.layout.sc #sideB{max-width:170px;opacity:1;padding:0 12px;border-width:1px;margin-right:0;transition:max-width .5s var(--ease) .15s,opacity .35s ease .3s,padding .5s var(--ease) .15s,margin .5s var(--ease) .15s}
+.layout.sc #sideB{width:140px;justify-content:center;max-width:170px;opacity:1;padding:0 12px;border-width:1px;margin-right:0;transition:max-width .5s var(--ease) .15s,opacity .35s ease .3s,padding .5s var(--ease) .15s,margin .5s var(--ease) .15s}
 @media (prefers-reduced-motion:reduce){.layout,.layout .side,#sideB,.src{transition:none!important}}
 .main{min-width:0}
 
@@ -1202,6 +1235,20 @@ button.sqb:hover{background:var(--accent-s)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .confirm{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:9;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--text);background:var(--white);border:1px solid var(--border);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:8px 10px 8px 14px;max-width:calc(100% - 28px)}
 .extag{font-size:11px;font-weight:600;color:var(--comf-t);background:var(--comf);border-radius:3px;padding:1px 7px;white-space:nowrap}
+
+/* stage in flow: chips, radar, category buttons stacked; panel and table stay on top */
+.stage{display:flex;flex-direction:column}
+.stage .chips{position:relative;left:auto;top:auto;right:auto;padding:14px 14px 0;flex:none;transition:margin-right .2s}
+.stage .rwrap{position:relative;left:auto;right:auto;top:auto;bottom:auto;flex:1;min-height:0;margin:6px 0 4px;transition:margin-right .2s}
+.stage .cats{position:relative;left:auto;bottom:auto;flex:none;max-width:none;padding:0 14px 12px;transition:margin-right .2s}
+.stage.po .chips,.stage.po .rwrap,.stage.po .cats{margin-right:var(--pw);right:auto;max-width:none}
+.stage.pc .chips,.stage.pc .rwrap,.stage.pc .cats{margin-right:0}
+.cnh{display:flex;align-items:center;gap:8px}
+.pen{width:28px;height:28px;flex:none;border-radius:4px;border:1px solid var(--border);background:var(--white);color:var(--text3);display:grid;place-items:center;cursor:pointer}
+.pen:hover,.pen.on{color:var(--accent);border-color:var(--accent)}
+.cdesc{margin:0;padding:2px 20px 4px;font-size:12.5px;line-height:1.55;color:var(--text2)}
+.side{scrollbar-width:none;overflow-x:hidden}
+.side::-webkit-scrollbar{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 #fileB{min-width:150px;justify-content:center}
@@ -1728,8 +1775,10 @@ function showIcon(kind,label,pos,col){ const sc=scene; if(icon){ icon.parent&&ic
   const m=new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true,toneMapped:false}); const sp=new THREE.Sprite(m);
   const h=1.15, w=h*c.width/c.height; sp.center.set(64/640*0+.0,0.5); sp.center.set(.06,.5); sp.userData.full=[w,h]; sp.scale.set(.01,.01,1); sp.position.copy(pos).add(new THREE.Vector3(0,1.25,0)); sp.renderOrder=999; sp.userData.t0=t; sc.add(sp); icon=sp; }
 function animIcon(){ if(!icon||icon.userData.t0==null) return; const p=Math.min(1,(t-icon.userData.t0)/.45); const e=1-Math.pow(1-p,3); const [w,h]=icon.userData.full; icon.scale.set(w*e,h*e,1); if(p>=1) icon.userData.t0=null; }
+function thumbFx(b,w,h,keys,f){ ensureR(); setEffects(b,new Set(keys),false); const u=thumb(b,w,h,f); const pts={};
+  keys.forEach(k=>{ const c=fxCenter(b,k); if(c){ const v=c.clone().project(cam); pts[k]=[(v.x+1)/2,(1-v.y)/2]; } }); setEffects(b,new Set(),false); return {u,pts}; }
 function hover(hk){ if(hk===hovKey) return; hovKey=hk; if(cur) apply(cur); }
-return {thumb,mount,setFn,project,resize,get,restyle,flyTo,hover,setEffects,flashFx,fxCenter,setMute,setShift,showIcon,setValid:v=>{valid=new Set(v);},onPick:f=>{onPick=f;},onHover:f=>{onHover=f;},anchors:b=>get(b).anchors};
+return {thumbFx,thumb,mount,setFn,project,resize,get,restyle,flyTo,hover,setEffects,flashFx,fxCenter,setMute,setShift,showIcon,setValid:v=>{valid=new Set(v);},onPick:f=>{onPick=f;},onHover:f=>{onHover=f;},anchors:b=>get(b).anchors};
 })();
 
 </script>
@@ -1775,7 +1824,7 @@ const T={
   H:{ctx:['Omgeving','Schaduw, groen en zon rond het gebouw'],bld:['Gebouwschil','Isolatie, glas, zonwering en indeling'],gen:['Opwekking','Warmtepomp, ketel, WTW-unit of LBK'],dist:['Distributie','Leidingen, kanalen en pompen'],term:['Afgifte','Radiatoren, vloer, klimaatplafond en roosters'],ctrl:['Regeling','Thermostaten, sensoren en software'],gnl:['Algemeen','Ontwerprichtlijnen en afspraken met leveranciers']},
   pickF:'Kies hierboven verwarming, koeling of ventilatie om de klikbare punten te zien.',
   pickH:'Klik op een gele + of direct op een onderdeel in het gebouw om de maatregelen te zien.',
-  hint:'Klik op een punt',drag:'Sleep om te draaien · scroll of knijp om te zoomen',fxTip:'Beweeg of klik om dit in het gebouw te zien',v3d:'3D-gebouw',vtab:'Tabel',allB:'Alle',allF:'Alle functies',toTable:'Of bekijk de volledige tabel',more:'Meer details',capF:'Kies verwarming, koeling of ventilatie om de punten in het gebouw te zien.',capH:'Klik op een + of op een onderdeel. Sleep om te draaien, scroll om te zoomen.',capP:'Beweeg over een maatregel om hem in het gebouw te zien. Klik om hem vast te zetten.',rStrat:'R-strategie',level:'Niveau',allCols:'Alle',pg:{systems:'Circulaire systemen',demand:'Installatiebehoefte beperken',guidelines:'Algemene richtlijnen'},fxSeen:'Zichtbaar in het gebouw',apply:'Toepassen',applied:'Toegepast',design:'Mijn ontwerp',clearAll:'Alles wissen',toastOn:'Toegepast in het gebouw',toastAdd:'Toegevoegd aan je selectie',toastOff:'Verwijderd uit je selectie',designSub:'gekozen maatregelen',designEmpty:'Nog geen maatregelen gekozen. Klik op de + naast een maatregel om hem aan je selectie toe te voegen.',info:'info',infoT:'Over dit ontwerpkader',
+  hint:'Klik op een punt',drag:'Sleep om te draaien, scroll of knijp om te zoomen',fxTip:'Beweeg of klik om dit in het gebouw te zien',v3d:'3D-gebouw',vtab:'Tabel',allB:'Alle',allF:'Alle functies',toTable:'Of bekijk de volledige tabel',more:'Meer details',capF:'Kies verwarming, koeling of ventilatie om de punten in het gebouw te zien.',capH:'Klik op een + of op een onderdeel. Sleep om te draaien, scroll om te zoomen.',capP:'Beweeg over een maatregel om hem in het gebouw te zien. Klik om hem vast te zetten.',rStrat:'R-strategie',level:'Niveau',allCols:'Alle',pg:{systems:'Circulaire systemen',demand:'Installatiebehoefte beperken',guidelines:'Algemene richtlijnen'},fxSeen:'Zichtbaar in het gebouw',apply:'Toepassen',applied:'Toegepast',design:'Mijn ontwerp',clearAll:'Alles wissen',toastOn:'Toegepast in het gebouw',toastAdd:'Toegevoegd aan je selectie',toastOff:'Verwijderd uit je selectie',designSub:'gekozen maatregelen',designEmpty:'Nog geen maatregelen gekozen. Klik op de + naast een maatregel om hem aan je selectie toe te voegen.',info:'info',infoT:'Over dit ontwerpkader',
   fnote:'Kies eerst een <b>functie</b> in het filtervak om de punten in het gebouw te zien',
   gNote:'Algemene ontwerprichtlijnen en organisatorische maatregelen gelden voor alle gebouwen, functies en schaalniveaus. Je ziet ze daarom altijd allemaal, zonder filters.',
   IN:{lead:'Deze website biedt informatie over hoe klimaatinstallaties op een meer circulaire manier kunnen worden ontworpen. De informatie wordt op verschillende abstractie- en schaalniveaus aangeboden, zodat deze voor verschillende gebruikers relevante inzichten biedt, zoals installatieadviseurs, HVAC-fabrikanten, architecten en vastgoedeigenaren.',
@@ -1787,7 +1836,7 @@ const T={
    lvx:{context:['Zonnestraling','Groene omgeving','Schaduw'],building:['Isolatie','Oriëntatie en indeling','Zonwering'],system:['Samenstelling van installatieproducten'],product:['Bijv. een warmtepomp, ventilatiekanaal of radiator'],component:['Onderdelen in producten, bijv. een motor']},
    h4:'Voor wie?',p4:'Welk schaalniveau het meest relevant is, verschilt per gebruiker.',
    who:[['Installatieadviseurs','naar verwachting vooral het systeem- en productniveau.',['system','product']],['HVAC-fabrikanten','met name het componentniveau.',['component']],['Architecten','waarschijnlijk het gebouw- en contextniveau.',['building','context']],['Vastgoedeigenaren','alle schaalniveaus kunnen relevant zijn.',['*']]],
-   src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',toConcept:'Maak er een concept van',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',foldF:'Filter inklappen',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Let op'],none:'Geen interventies bij deze filters.',
+   src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',toConcept:'Maak er een concept van',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',foldF:'Filter inklappen',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Let op'],none:'Geen interventies bij deze filters.',
   allParts:'Alle onderdelen',interventions:'interventies',results:'Zoekresultaten',noResults:'Geen interventies gevonden.',
   tagM:'materiaal',tagE:'energie',lgLv:'schaalniveau',lgW:'bekend neveneffect',
   why:'Waarom dit helpt',watch:'Let op',noWhy:'Nog niet beschreven in het kader.',noNeg:'Geen neveneffecten genoemd in de interviews. Dat betekent niet dat ze er niet zijn.',
@@ -1811,7 +1860,7 @@ const T={
   H:{ctx:['Surroundings','Shade, greenery and sun around the building'],bld:['Building envelope','Insulation, glazing, shading and layout'],gen:['Generation','Heat pump, boiler, heat recovery unit or AHU'],dist:['Distribution','Pipes, ducts and pumps'],term:['Terminal units','Radiators, floors, climate ceilings and grilles'],ctrl:['Control','Thermostats, sensors and software'],gnl:['General','Design guidelines and agreements with suppliers']},
   pickF:'Choose heating, cooling or ventilation above to see the clickable points.',
   pickH:'Click a yellow + or a part of the building to see the interventions.',
-  hint:'Click a point',drag:'Drag to rotate · scroll or pinch to zoom',fxTip:'Hover or click to see this in the building',v3d:'3D building',vtab:'Table',allB:'All',allF:'All functions',toTable:'Or view the full table',more:'More details',capF:'Choose heating, cooling or ventilation to see the points in the building.',capH:'Click a + or a part of the building. Drag to rotate, scroll to zoom.',capP:'Hover an intervention to see it in the building. Click to keep it in view.',rStrat:'R-strategy',level:'Level',allCols:'All',pg:{systems:'Circular systems',demand:'Reducing demand',guidelines:'General guidelines'},fxSeen:'Shown in the building',apply:'Apply',applied:'Applied',design:'My design',clearAll:'Clear all',toastOn:'Applied in the building',toastAdd:'Added to your selection',toastOff:'Removed from your selection',designSub:'chosen interventions',designEmpty:'No interventions chosen yet. Click the + next to an intervention to add it to your selection.',info:'info',infoT:'About this framework',
+  hint:'Click a point',drag:'Drag to rotate, scroll or pinch to zoom',fxTip:'Hover or click to see this in the building',v3d:'3D building',vtab:'Table',allB:'All',allF:'All functions',toTable:'Or view the full table',more:'More details',capF:'Choose heating, cooling or ventilation to see the points in the building.',capH:'Click a + or a part of the building. Drag to rotate, scroll to zoom.',capP:'Hover an intervention to see it in the building. Click to keep it in view.',rStrat:'R-strategy',level:'Level',allCols:'All',pg:{systems:'Circular systems',demand:'Reducing demand',guidelines:'General guidelines'},fxSeen:'Shown in the building',apply:'Apply',applied:'Applied',design:'My design',clearAll:'Clear all',toastOn:'Applied in the building',toastAdd:'Added to your selection',toastOff:'Removed from your selection',designSub:'chosen interventions',designEmpty:'No interventions chosen yet. Click the + next to an intervention to add it to your selection.',info:'info',infoT:'About this framework',
   fnote:'First choose a <b>function</b> in the filter panel to see the points in the building',
   gNote:'General design guidelines and organisational interventions apply to all buildings, functions and scale levels. That is why you always see all of them, without filters.',
   IN:{lead:'This website aims to provide information on how HVAC systems can be designed in a more circular manner. Information is provided on different levels of abstraction and scope, to offer different approaches that could be relevant for different stakeholders, such as installation consultants, HVAC manufacturers, architects and property owners.',
@@ -1823,7 +1872,7 @@ const T={
    lvx:{context:['Solar radiation','Green surroundings','Shade'],building:['Insulation','Orientation and layout','Sun shading'],system:['Composition of installation products'],product:['E.g. a heat pump, ventilation duct or radiator'],component:['Parts within products, e.g. a motor']},
    h4:'Who is it for?',p4:'Which scale level is most relevant differs per stakeholder.',
    who:[['Installation consultants','the system and product level are expected to be the most relevant.',['system','product']],['HVAC manufacturers','the component level is expected to be the most relevant.',['component']],['Architects','the building and contextual level probably offer the most relevant insights.',['building','context']],['Property owners','all levels could be relevant.',['*']]],
-   src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'Selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',toConcept:'Turn into a concept',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',foldF:'Collapse filter',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Watch out for'],none:'No interventions match these filters.',
+   src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'Selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',toConcept:'Turn into a concept',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',foldF:'Collapse filter',hideP:'Slide panel to the right',showP:'Show panel',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Watch out for'],none:'No interventions match these filters.',
   allParts:'All parts',interventions:'interventions',results:'Search results',noResults:'No interventions found.',
   tagM:'material',tagE:'energy',lgLv:'scale level',lgW:'known side-effect',
   why:'Why this helps',watch:'Watch out for',noWhy:'Not yet described in the framework.',noNeg:'No side-effects recorded in the interviews. That does not mean there are none.',
@@ -1862,7 +1911,7 @@ function group(list){
 }
 const lvSort=a=>[...a].sort((x,y)=>ALL.l.indexOf(x)-ALL.l.indexOf(y));
 const REG=[];
-let MK=[]; const THUMB={}; let LASTFLY=null; let APK=[]; let PANELKEY='';
+let MK=[]; const THUMB={}; let COVER=null; let LASTFLY=null; let APK=[]; let PANELKEY='';
 const AP={r:new Set(),c:new Set()}; let HOVFX=null; let SHOWN='';
 let HOVG=null;
 const KIND={reuse:'reuse',repair_on:'repair',repair_off:'repair',repurpose:'repurpose',reconsider:'design',g_design:'design',g_org:'org',d_context:'env',d_building:'env'};
@@ -1886,7 +1935,7 @@ function toggleAp(txt){ const on=!CART.has(txt); on?CART.add(txt):CART.delete(tx
   const in3d=S.mode!=='table'&&S.b&&$('stage');
   if(in3d){ SHOWN=''; refreshFx(); }
   const k=fxOf(txt);
-  if(on&&k&&in3d&&DATA.some(d=>d.t===txt&&d.a.includes(S.b))){ S3.flashFx(S.b,k); toast('✓ '+t.toastAdd+' · '+t.toastOn.toLowerCase()); } else toast(on?'✓ '+t.toastAdd:t.toastOff);
+  if(on&&k&&in3d&&DATA.some(d=>d.t===txt&&d.a.includes(S.b))){ S3.flashFx(S.b,k); toast('✓ '+t.toastAdd+'. '+t.toastOn); } else toast(on?'✓ '+t.toastAdd:t.toastOff);
   cartBtn(); if(!$('cart').hidden) renderCart();
   if(S.b||S.mode==='table') update(); if(dlg.open&&DLG&&DLG.t===txt) dlgAp(); }
 
@@ -2006,7 +2055,7 @@ function update(){ if(S.mode==='table'){ drawTable(); return; }
   S3.setValid(S.f&&!S.q?HK.filter(k=>MK.some(m=>m.k===k)):[]);
   const flyKey=S.b+'|'+S.f+'|'+S.h;
   if(flyKey!==LASTFLY){ const an=S.f?S3.anchors(S.b)[S.f]:{}; const p=S.h&&an[S.h]&&an[S.h]!=='fixed'?an[S.h]:null; if(LASTFLY!==null) S3.flyTo(p); LASTFLY=flyKey; }
-  panel(); side();
+  panel(); side(); okGrip();
 }
 
 function ivHTML(g,showFn){
@@ -2045,7 +2094,7 @@ function panel(){
   cap(t.capP);
   tip.hidden=true;
   const P=pool();
-  const eb=`${t.B[S.b][0]} · ${t.FN[S.f]}`;
+  const eb=`${t.B[S.b][0]}, ${t.FN[S.f]}`;
   const items=P.filter(it=>inHot(it,S.h));
   const keys=S.h==='gnl'?['g_design','g_org']:S.h==='ctx'?['d_context']:S.h==='bld'?['d_building']:RS;
   const gs=group(items);
@@ -2054,7 +2103,10 @@ function panel(){
   const pk=S.b+S.f+S.h; const keep=pk===PANELKEY?p.scrollTop:0; PANELKEY=pk;
   p.dataset.mode=S.h==='gnl'?'gnl':'mk'; p.hidden=false; p.scrollTop=keep; place();
 }
-function place(){ const p=$('pop'); if(!p) return; const dock=!p.hidden&&window.innerWidth>700; S3.setShift(dock?p.offsetWidth/2:0); }
+function place(){ const p=$('pop'); if(!p) return; const dock=!p.hidden&&!S.popMin&&window.innerWidth>700; S3.setShift(dock?p.offsetWidth/2:0); okGrip(); }
+function okGrip(){ const st=$('stage'), p=$('pop'); if(!st||!p) return; let g=$('okgrip');
+  if(!g){ g=document.createElement('button'); g.type='button'; g.id='okgrip'; g.className='pgrip'; g.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'; st.appendChild(g); }
+  const on=!p.hidden; g.hidden=!on; st.classList.toggle('pc',on&&!!S.popMin); const t=L(); g.title=S.popMin?t.showP:t.hideP; g.setAttribute('aria-label',g.title); }
 let CAPTXT=''; function cap(s){ CAPTXT=s; const c=$('cap'); if(c) c.textContent=s; }
 
 /* events */
@@ -2063,6 +2115,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('cart').hidden&&
 document.addEventListener('click',e=>{
   const el=e.target;
   if(el.closest&&el.closest('#ev-host,.uhead')) return;
+  if(el.closest('#okgrip')){ S.popMin=!S.popMin; place(); return; }
   if(el.closest('[data-okfold]')){ S.sideMin=true; okSide(); return; }
   if(el.closest('.fnote')&&S.sideMin&&window.innerWidth>1000){ S.sideMin=false; okSide(); return; }
   if(el.closest('[data-okunfold]')){ S.sideMin=false; okSide(); return; }
@@ -2081,7 +2134,7 @@ document.addEventListener('click',e=>{
   if(el.closest('[data-reset]')){S.l=new Set();S.g=new Set();update();return;}
   const b=el.closest('[data-b]'); if(b){ S.pin=null; S.pinG=null; SHOWN=''; const nb=b.dataset.b; if(S.b!==nb){S.b=nb;S.h=null;} draw(); window.scrollTo({top:0,behavior:'smooth'}); return;}
   const f=el.closest('[data-f]'); if(f&&f.tagName==='BUTTON'&&!f.classList.contains('ivr')){ S.pin=null; S.pinG=null;S.f=f.dataset.f; S.h=null; draw(); return;}
-  const hh=el.closest('[data-h]'); if(hh){const k=hh.dataset.h||null; S.view=null; S.pin=null; S.pinG=null; S.h=(k&&S.h===k)?null:k; update(); return;}
+  const hh=el.closest('[data-h]'); if(hh){const k=hh.dataset.h||null; S.view=null; S.pin=null; S.pinG=null; S.popMin=false; S.h=(k&&S.h===k)?null:k; update(); return;}
   const ab=el.closest('[data-ap]'); if(ab){toggleAp(REG[+ab.dataset.ap].t); return;}
   if(el.closest('#design')){ S.view=S.view==='design'?null:'design'; S.h=null; update(); return;}
   if(el.closest('#clr')){ CART.clear(); saveAP(); cartBtn(); renderCart(); SHOWN=''; if(S.b&&S.mode!=='table'&&$('stage')) refreshFx(); toast(L().toastOff); if(S.b||S.mode==='table') update(); return;}
@@ -2115,8 +2168,8 @@ function renderCart(){
   $('cart-b').innerHTML=TPAGES.map(p=>{ const sub=rows.filter(r=>pgOf(r.g.s)===p.id); if(!sub.length) return '';
     return `<div class="grp-t">${t.pg[p.id]} <span>${sub.length}</span></div>`+sub.map(r=>{ const id=CREG.push(r)-1;
       const fs=[...new Set(r.a.map(d=>d.f))].map(f=>t.FN[f]).join(', '), as=[...new Set(r.a.flatMap(d=>d.a))].sort().map(b=>t.B[b][0]).join(', ');
-      const cat=r.g.c&&r.g.c!=='gen_all'&&RS.includes(r.g.s)?`${t.ST[r.g.s]} · ${t.CO[r.g.c]}`:t.ST[r.g.s];
-      return `<div class="ci"><div class="ci-c"><button type="button" class="ci-t" data-copen="${id}">${esc(tx(r.g.src,'t'))}</button><div class="ci-m">${esc(cat)}</div><div class="ci-m">${esc(fs)} · ${esc(as)}</div></div><button type="button" class="ci-x" data-crm="${id}" aria-label="${t.rmAria}" title="${t.rmAria}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`; }).join(''); }).join('');
+      const cat=r.g.c&&r.g.c!=='gen_all'&&RS.includes(r.g.s)?`${t.ST[r.g.s]}, ${t.CO[r.g.c]}`:t.ST[r.g.s];
+      return `<div class="ci"><div class="ci-c"><button type="button" class="ci-t" data-copen="${id}">${esc(tx(r.g.src,'t'))}</button><div class="ci-m">${esc(cat)}</div><div class="ci-m">${esc(fs)}</div><div class="ci-m">${esc(as)}</div></div><button type="button" class="ci-x" data-crm="${id}" aria-label="${t.rmAria}" title="${t.rmAria}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`; }).join(''); }).join('');
   $('cart-f').innerHTML=(window.EV&&EV.addConcept?`<button type="button" class="cbtn pri" id="ctoev">${t.toConcept}</button>`:'')+`<button type="button" class="cbtn" id="cprint">${t.print}</button><button type="button" class="cbtn" id="ccsv">${t.csv}</button><button type="button" class="clr" id="clr">${t.clearAll}</button>`;
 }
 let CARTRET=null;
@@ -2141,11 +2194,11 @@ function cartDoc(){
   const body=TPAGES.map(p=>{ const sub=rows.filter(r=>pgOf(r.g.s)===p.id); if(!sub.length) return '';
     return `<section class="pv-sec"><h2>${t.pg[p.id]}</h2>`+sub.map(r=>{ n++; const g=r.g,a=r.a;
       const fs=[...new Set(a.map(d=>d.f))], ls=lvSort(new Set(a.map(d=>d.l))), as=[...new Set(a.flatMap(d=>d.a))].sort(), gl=[...new Set(a.flatMap(d=>d.g))];
-      const cat=g.c&&g.c!=='gen_all'&&RS.includes(g.s)?`${t.ST[g.s]} · ${t.CO[g.c]}`:t.ST[g.s];
+      const cat=g.c&&g.c!=='gen_all'&&RS.includes(g.s)?`${t.ST[g.s]}, ${t.CO[g.c]}`:t.ST[g.s];
       const w=tx(g.src,'w'), ng=tx(g.src,'n');
       const kv=[[t.kFn,fs.map(f=>t.FN[f]).join(', ')],[t.kLv,ls.map(l=>t.LV[l]).join(', ')],[t.kAp,as.map(x=>t.AP[x]).join(', ')]];
       if(gl.length) kv.push([t.kGo,gl.map(x=>t.GO[x]).join(t.and)]);
-      return `<article class="pv-it"><div class="pv-n">${String(n).padStart(2,'0')}</div><div class="pv-c">
+      return `<article class="pv-it"><div class="pv-c">
         <div class="pv-eb">${esc(cat)}</div><h3>${esc(tx(g.src,'t'))}</h3>
         <dl class="pv-kv">${kv.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
         ${w||ng?`<div class="pv-notes">${w?`<div class="pv-pos"><b>${t.why}</b>${esc(w)}</div>`:''}${ng?`<div class="pv-neg"><b>${t.watch}</b>${esc(ng)}</div>`:''}</div>`:''}
@@ -2209,10 +2262,10 @@ $('cart').addEventListener('click',e=>{ const el=e.target;
 function openDlg(g){
   const t=L(), it=g.src; DLG=g;
   const strat=t.ST[g.s];
-  $('dlg-e').textContent=g.c&&g.c!=='gen_all'?`${strat} · ${t.CO[g.c]}`:strat;
+  $('dlg-e').textContent=g.c&&g.c!=='gen_all'?`${strat}, ${t.CO[g.c]}`:strat;
   $('dlg-t').textContent=tx(it,'t');
   const a=DATA.filter(x=>x.t===g.t); const fs=new Set(a.map(x=>x.f)), ls=new Set(a.map(x=>x.l)), as=new Set(a.flatMap(x=>x.a)), gl=new Set(a.flatMap(x=>x.g));
-  if($('dlg-m')) $('dlg-m').innerHTML=lvSort(ls).map(l=>`<span class="ct lv">${RN[l]} · ${t.LV[l]}</span>`).join('')+(gl.has('m')?`<span class="ct m">${t.tagM}</span>`:'')+(gl.has('e')?`<span class="ct e">${t.tagE}</span>`:'');
+  if($('dlg-m')) $('dlg-m').innerHTML=lvSort(ls).map(l=>`<span class="ct lv">${RN[l]}, ${t.LV[l]}</span>`).join('')+(gl.has('m')?`<span class="ct m">${t.tagM}</span>`:'')+(gl.has('e')?`<span class="ct e">${t.tagE}</span>`:'');
   const w=tx(it,'w'), n=tx(it,'n');
   $('dlg-w').textContent=w||t.noWhy; $('dlg-w').className=w?'':'na';
   $('dlg-n').textContent=n||t.noNeg; $('dlg-n').className=n?'':'na';
@@ -2231,7 +2284,8 @@ document.addEventListener('mouseover',e=>{ const r=e.target.closest&&e.target.cl
 const m=e.target.closest&&e.target.closest('.mk,.gnl'); if(m&&m.dataset.h&&m.dataset.h!=='gnl') S3.hover(m.dataset.h);});
 document.addEventListener('mouseout',e=>{const m=e.target.closest&&e.target.closest('.mk'); if(m&&!(e.relatedTarget&&m.contains(e.relatedTarget))) S3.hover(null);});
 try{THUMB.r=S3.thumb('r',960,600);THUMB.c=S3.thumb('c',960,600);}catch(e){}
-window.OK={itemName:k=>{ const a=DATA.filter(d=>d.t===k); return a.length?tx(group(a)[0].src,'t'):k; },openItem:k=>{ const a=DATA.filter(d=>d.t===k); if(a.length) openDlg(group(a)[0]); },openFor:(label,kw)=>{ S.mode='3d'; if(!S.b) S.b='r'; S.qa=kw; S.q=label; $('q').value=label; $('qx').hidden=false; S.h=null; S.pin=null; S.pinG=null; draw(); },thumb:k=>THUMB[k]||'',side:()=>!!S.sideMin,setSide:v=>{ if(!!S.sideMin!==!!v){ S.sideMin=!!v; okSide(); } },lang:()=>S.lang,setLang:l=>{ if(S.lang!==l){ S.lang=l; save(); draw(); } },h1:()=>L().h1,name:()=>L().name,home:()=>$('home').click(),refresh:()=>{ if($('stage')){ S3.resize(); frame(); } }};
+try{COVER=S3.thumbFx('r',960,600,['sedum','shade','trees','pipeins'],'heating');}catch(e){}
+window.OK={itemName:k=>{ const a=DATA.filter(d=>d.t===k); return a.length?tx(group(a)[0].src,'t'):k; },openItem:k=>{ const a=DATA.filter(d=>d.t===k); if(a.length) openDlg(group(a)[0]); },openFor:(label,kw)=>{ S.mode='3d'; if(!S.b) S.b='r'; S.qa=kw; S.q=label; $('q').value=label; $('qx').hidden=false; S.h=null; S.pin=null; S.pinG=null; draw(); },cover:()=>COVER,thumb:k=>THUMB[k]||'',side:()=>!!S.sideMin,setSide:v=>{ if(!!S.sideMin!==!!v){ S.sideMin=!!v; okSide(); } },lang:()=>S.lang,setLang:l=>{ if(S.lang!==l){ S.lang=l; save(); draw(); } },h1:()=>L().h1,name:()=>L().name,home:()=>$('home').click(),refresh:()=>{ if($('stage')){ S3.resize(); frame(); } }};
 draw();
 addEventListener('resize',()=>{S3.resize();frame();});
 const setH=()=>document.documentElement.style.setProperty('--head-h',($('head').offsetHeight+8)+'px');
@@ -2288,14 +2342,14 @@ const T={
   all:'Toon alles',ref:'Referentie',alt:'Alternatief',avgL:'gemiddeld',scored:n=>n+'/'+N+' gescoord',
   name:'Naam',desc:'Beschrijving',descPh:'Wat wordt geplaatst, behouden en hoe vaak vervangen?',keep:'Behouden aanwezige onderdelen',noInv:'Vul eerst de bestaande installaties in.',
   vsRef:'Ten opzichte van de referentie',better:'Grootste winst',worse:'Grootste verlies',noDiff:'Scoor de referentie en dit concept om de verschillen te zien.',
-  rmC:'Concept verwijderen',close:'Sluiten',hideC:'Verbergen in diagram',showC:'Tonen in diagram',allA:'Alle aspecten',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',
+  rmC:'Concept verwijderen',close:'Sluiten',editC:'Naam en beschrijving bewerken',hideC:'Verbergen in diagram',showC:'Tonen in diagram',allA:'Alle aspecten',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',
   toOK:'Bekijk interventies in het Ontwerpkader',fromOK:n=>'Gemaakt van '+n+' interventie'+(n===1?'':'s')+' uit het Ontwerpkader.',srcT:'Interventies uit het Ontwerpkader',addedC:'Concept gemaakt van je selectie',maxC:'Er kunnen maximaal 6 concepten zijn',
   aspScores:'Scores per concept',note:'Toelichting',notePh:'Waarom deze scores? Aannames, bronnen, twijfels…',
   invT:'Bestaande installaties',invS:'Wat is er aanwezig en hoelang kan het nog mee?',
   elPh:'Bijv. CV-ketel',rem:'Resterende levensduur',life:'Levensduur vervanger',yr:'jaar',replIn:(h,n)=>'Vervangen in '+h+' jaar: '+n+'×',replS:n=>n+'× vervangen',staysS:'gaat mee',rmEl:'Onderdeel verwijderen',addEl:'+ Onderdeel toevoegen',
   stays:'gaat het hele tijdsframe mee',repl:n=>n+'× vervangen',unk:'levensduur onbekend',
   tblT:'Alle concepten',tblS:'Scores van 0 (slecht of niet van toepassing) tot 5 (uitstekend). Klik op een score om hem te wijzigen.',back:'Terug naar radardiagram',avg:'Gemiddelde score',
-  infoT:'Over het evaluatiekader',infoE:'Hoofdstuk 6.1 Kwalitatieve evaluatie',
+  infoT:'Over het evaluatiekader',infoE:'',
   infoB:'<p>Met het radardiagram worden de prestaties van een klimaatinstallatie op een intuïtieve en snelle manier geëvalueerd. Het helpt installatiespecialisten en ontwerpers bij het maken van weloverwogen (circulaire) keuzes en geeft inzicht in dilemma’s bij het ontwerp.</p><p>Het radardiagram redeneert vanuit het installatiesysteem: het beoordeelt de circulariteit van het installatieconcept en niet van de ingreep. Gebruikt een concept al aanwezig materiaal of aanwezige installatieproducten, dan scoort het beter op ‘verminderen materiaalgebruik’ en ‘selectie van lage impact materialen’. Hergebruik bij de ingreep wordt zo wel beloond.</p><ol><li>Stel vast wat zich aan installaties in het gebouw bevindt en schat hoelang deze nog mee kunnen.</li><li>Stel een tijdsframe vast voor hoe lang het gebouw na de renovatie nog gebruikt wordt, bijvoorbeeld 30 of 50 jaar.</li><li>Map het scenario waarin het huidige installatieconcept gehandhaafd blijft. Schat de nodige vervangingen binnen het tijdsframe en ga na welke aanwezige elementen je kunt behouden.</li><li>Bedenk alternatieve installatieconcepten, met hun vervangingen en behouden elementen.</li><li>Map de alternatieve installatieconcepten in het radardiagram.</li></ol><div class="note">Je invoer wordt automatisch in deze browser bewaard. Via ‘Bestand’ sla je een evaluatie op als bestand of exporteer je het radardiagram en de scores.</div>',
   src:'Gebaseerd op hoofdstuk 6.1 ‘Kwalitatieve evaluatie’ van het Circular HVAC-kader (TU Delft & DGBC). Invoer blijft in je eigen browser; sla een evaluatie op als bestand om hem te bewaren of te delen.',
   cNew:'Alle invoer wissen?',cEx:'Het voorbeeld vervangt je huidige invoer.',yes:'Doorgaan',no:'Annuleren',
@@ -2312,14 +2366,14 @@ const T={
   all:'Show all',ref:'Reference',alt:'Alternative',avgL:'average',scored:n=>n+'/'+N+' scored',
   name:'Name',desc:'Description',descPh:'What is installed, kept and how often replaced?',keep:'Existing elements kept',noInv:'Enter the existing installations first.',
   vsRef:'Compared with the reference',better:'Largest gains',worse:'Largest losses',noDiff:'Score the reference and this concept to see the differences.',
-  rmC:'Remove concept',close:'Close',hideC:'Hide in diagram',showC:'Show in diagram',allA:'All aspects',hideP:'Slide panel to the right',showP:'Show panel',
+  rmC:'Remove concept',close:'Close',editC:'Edit name and description',hideC:'Hide in diagram',showC:'Show in diagram',allA:'All aspects',hideP:'Slide panel to the right',showP:'Show panel',
   toOK:'View interventions in the Design framework',fromOK:n=>'Made from '+n+' intervention'+(n===1?'':'s')+' in the Design framework.',srcT:'Interventions from the Design framework',addedC:'Concept created from your selection',maxC:'There can be at most 6 concepts',
   aspScores:'Scores per concept',note:'Note',notePh:'Why these scores? Assumptions, sources, doubts…',
   invT:'Existing installations',invS:'What is in the building and how long can it last?',
   elPh:'E.g. gas boiler',rem:'Remaining lifespan',life:'Replacement lifespan',yr:'years',replIn:(h,n)=>'Replaced in '+h+' years: '+n+'×',replS:n=>'replaced '+n+'×',staysS:'lasts',rmEl:'Remove element',addEl:'+ Add element',
   stays:'lasts the whole time frame',repl:n=>'replaced '+n+'×',unk:'lifespan unknown',
   tblT:'All concepts',tblS:'Scores from 0 (poor or not applicable) to 5 (excellent). Click a score to change it.',back:'Back to radar diagram',avg:'Average score',
-  infoT:'About the evaluation framework',infoE:'Section 6.1 Qualitative evaluation',
+  infoT:'About the evaluation framework',infoE:'',
   infoB:'<p>The radar diagram gives HVAC specialists and designers a quick, intuitive way to evaluate the performance of an HVAC system. It supports well-considered (circular) choices and shows the trade-offs in the design.</p><p>The diagram reasons from the installation system: it assesses the circularity of the HVAC concept, not of the intervention. A concept that uses materials or products already present scores better on ‘reduce material use’ and ‘select low-impact materials’, so reuse in the intervention is rewarded.</p><ol><li>Establish which installations are in the building and estimate how long they can still last.</li><li>Set a time frame for how long the building will be used after renovation, e.g. 30 or 50 years.</li><li>Map the scenario in which the current concept is kept. Estimate the replacements needed within the time frame and check which existing elements you can keep.</li><li>Devise alternative concepts, with their replacements and retained elements.</li><li>Map the alternative concepts in the radar diagram.</li></ol><div class="note">Your input is saved automatically in this browser. Use ‘File’ to save an evaluation as a file or to export the radar diagram and scores.</div>',
   src:'Based on section 6.1 ‘Qualitative evaluation’ of the Circular HVAC framework (TU Delft & DGBC). Input stays in your own browser; save an evaluation as a file to keep or share it.',
   cNew:'Clear all input?',cEx:'The example replaces your current input.',yes:'Continue',no:'Cancel',
@@ -2338,7 +2392,7 @@ function example(){
 }
 function blank(){ const t=L(); return {example:false,name:'',horizon:30,inv:[],notes:{},concepts:[
   {id:nid(),name:t.refName,desc:'',keep:[],vis:true,s:Array(N).fill(null)},{id:nid(),name:t.altName(1),desc:'',keep:[],vis:true,s:Array(N).fill(null)}]}; }
-const S={invOpen:new Set(),aspOpen:false,sideMin:false,lang:'nl',min:false,view:'radar',cats:new Set(),sel:null,hl:null,P:example()};
+const S={editC:false,invOpen:new Set(),aspOpen:false,sideMin:false,lang:'nl',min:false,view:'radar',cats:new Set(),sel:null,hl:null,P:example()};
 const KEY='chvac-eval-v1';
 const valid=p=>p&&Array.isArray(p.concepts)&&p.concepts.length&&p.concepts.every(c=>Array.isArray(c.s)&&c.s.length===N)&&Array.isArray(p.inv);
 try{const r=JSON.parse(localStorage.getItem(KEY)||'null'); if(r){ if(valid(r.P)) S.P=r.P; if(r.lang==='en')S.lang='en'; if(Array.isArray(r.cats)) r.cats.filter(k=>CATS.includes(k)).forEach(k=>S.cats.add(k)); if(r.view==='table')S.view='table'; if(r.sideMin)S.sideMin=true; }}catch(e){}
@@ -2366,6 +2420,7 @@ const I={
  grid:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16M15 4v16"/></svg>',
  radar:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.5l9 6.5-3.4 10.5H6.4L3 9z" opacity=".45"/><path d="M12 7l4.5 3.5-2 5.5h-4.5L8 10.5z" fill="currentColor" fill-opacity=".25"/><path d="M12 2.5V12M21 9l-9 3M17.6 19.5L12 12M6.4 19.5L12 12M3 9l9 3" opacity=".45"/></svg>',
  chev:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
+ pen:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>',
  house:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 9.5V20h14V9.5"/></svg>',
  plus:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'
 };
@@ -2529,9 +2584,8 @@ function renderPop(){
       A.filter(a=>a.c===k).map(a=>`<div class="arow ${S.hl===a.i?'hl':''}" data-row="${a.i}"><button type="button" class="an" data-asp="${a.i}">${esc(lbl(a))}</button>${pipsHTML(i,a.i)}</div>`).join('')).join('');
     const invs=p.inv.filter(e=>e.el);
     const keeps=invs.length?invs.map(e=>{const on=c.keep.includes(e.id); return `<button type="button" class="kp" data-keep="${e.id}" aria-pressed="${on}" style="--kc:${col}"><span class="bx"></span><span>${esc(e.el)}${on?` <small>(${esc(repTxt(e).t)})</small>`:''}</span></button>`;}).join(''):`<p class="muted">${t.noInv}</p>`;
-    h=`<div class="ph"><div><div class="eb" style="color:${col}">${i===0?t.ref:t.alt+' '+i}</div><h2 id="popT">${esc(cname(c,i))}</h2><p class="pm"><span><span data-avg="${i}">${fmt(avgC(c))}</span> ${t.avgL}${S.cats.size?' ('+t.filtered+')':''}</span><span data-prog="${i}">${t.scored(c.s.filter(v=>v!==null).length)}</span></p></div>${x}</div>
-      <div class="pb"><div class="pact"><button type="button" class="cbtn pri" data-view="table">${I.grid} ${t.all}</button>${i>0?`<button type="button" class="cbtn del" data-rmc="${i}">${t.rmC}</button>`:''}</div>
-      <div class="fx"><label for="cName">${t.name}</label><input id="cName" data-cf="name" value="${esc(c.name)}"><label for="cDesc">${t.desc}</label><textarea id="cDesc" data-cf="desc" placeholder="${esc(t.descPh)}">${esc(c.desc)}</textarea></div>
+    h=`<div class="ph"><div><h2 class="cnh"><span id="popT">${esc(cname(c,i))}</span><button type="button" class="pen ${S.editC?'on':''}" data-cedit="1" title="${esc(t.editC)}" aria-label="${esc(t.editC)}" aria-pressed="${!!S.editC}">${I.pen}</button></h2><p class="pm"><span><span data-avg="${i}">${fmt(avgC(c))}</span> ${t.avgL}${S.cats.size?' ('+t.filtered+')':''}</span><span data-prog="${i}">${t.scored(c.s.filter(v=>v!==null).length)}</span></p></div>${x}</div>
+      <div class="pb">${S.editC?`<div class="fx"><label for="cName">${t.name}</label><input id="cName" data-cf="name" value="${esc(c.name)}"><label for="cDesc">${t.desc}</label><textarea id="cDesc" data-cf="desc" placeholder="${esc(t.descPh)}">${esc(c.desc)}</textarea></div>${i>0?`<div class="pact" style="padding-top:8px"><button type="button" class="cbtn del" data-rmc="${i}">${t.rmC}</button></div>`:''}`:(c.desc?`<p class="cdesc">${esc(c.desc)}</p>`:'')}
       ${c.src&&c.src.length?`<div class="grp-t">${t.srcT}</div>`+c.src.map(k=>`<button type="button" class="kp srci" data-okitem="${esc(k)}"><span class="dot"></span><span>${esc(window.OK&&OK.itemName?OK.itemName(k):k)}</span></button>`).join(''):''}
       ${groups}
       <div class="grp-t">${t.keep}</div>${keeps}
@@ -2577,7 +2631,7 @@ function addConcept(pl){
   p.concepts.push({id:nid(),name:t.altName(n),desc:t.fromOK(names.length),keep:[],vis:true,s:Array(N).fill(null),src:pl.items.slice()});
   touch(); S.sel={t:'c',i:n}; S.min=false; S.view='radar'; save(); renderAll(); toast(t.addedC); return true;
 }
-function openSel(sel){ const same=S.sel&&sel&&S.sel.t===sel.t&&S.sel.i===sel.i; S.sel=same&&!S.min?null:sel; S.min=false; if(S.sel&&S.sel.t==='c') P().concepts[S.sel.i].vis=true; $('pop').scrollTop=0; renderChips(); renderSide(); renderPop(); drawRadar(); }
+function openSel(sel){ S.editC=false; const same=S.sel&&sel&&S.sel.t===sel.t&&S.sel.i===sel.i; S.sel=same&&!S.min?null:sel; S.min=false; if(S.sel&&S.sel.t==='c') P().concepts[S.sel.i].vis=true; $('pop').scrollTop=0; renderChips(); renderSide(); renderPop(); drawRadar(); }
 function closePop(){ if(!S.sel) return; S.sel=null; renderChips(); renderPop(); drawRadar(); }
 
 /* ---------- table view ---------- */
@@ -2624,7 +2678,7 @@ RT.addEventListener('click',e=>{
   if(!b) return; const p=P(), t=L(), d=b.dataset;
   if(d.aspdd){ S.aspOpen=!S.aspOpen; renderTable(); return; }
   if(b.id==='lang'){S.lang=S.lang==='nl'?'en':'nl'; save(); renderAll(); if(window.OK) OK.setLang(S.lang); if(window.UH) UH.sync('ev'); return;}
-  if(b.id==='infoB'){ $('modal').innerHTML=`<div class="mbox" role="dialog" aria-modal="true" aria-labelledby="mT"><div class="ph"><div><div class="eb">${t.infoE}</div><h2 id="mT">${t.infoT}</h2></div><button type="button" class="px" data-mclose="1" aria-label="${t.close}">${I.x}</button></div><div class="mb">${t.infoB}</div></div>`; $('modal').hidden=false; return; }
+  if(b.id==='infoB'){ $('modal').innerHTML=`<div class="mbox" role="dialog" aria-modal="true" aria-labelledby="mT"><div class="ph"><div>${t.infoE?`<div class="eb">${t.infoE}</div>`:''}<h2 id="mT">${t.infoT}</h2></div><button type="button" class="px" data-mclose="1" aria-label="${t.close}">${I.x}</button></div><div class="mb">${t.infoB}</div></div>`; $('modal').hidden=false; return; }
   if(d.mclose){ $('modal').hidden=true; return; }
   if(b.id==='fileB'){ const m=$('fileM'); m.hidden=!m.hidden; b.setAttribute('aria-expanded',!m.hidden); return; }
   if(d.f){ closeFile(); const f=d.f;
@@ -2642,6 +2696,7 @@ RT.addEventListener('click',e=>{
   if(d.unfold){ S.sideMin=false; applySide(); save(); if(window.OK&&OK.setSide) OK.setSide(false); return; }
   if(d.okfor!==undefined){ if(window.OK&&OK.openFor){ const i=+d.okfor; OK.openFor(lbl(A[i]),KW[i]); if(window.UH&&UH.show) UH.show('ok'); } return; }
   if(d.okitem){ if(window.OK&&OK.openItem) OK.openItem(d.okitem); return; }
+  if(d.cedit){ S.editC=!S.editC; renderPop(); if(S.editC) setTimeout(()=>$('cName')?.focus(),20); return; }
   if(d.inv){ openSel({t:'inv',i:0}); return; }
   if(d.hz){ p.horizon=+d.hz; touch(); renderSide(); renderPop(); return; }
   if(d.vis!==undefined){ const c=p.concepts[+d.vis]; c.vis=!c.vis; if(!c.vis&&S.sel&&S.sel.t==='c'&&S.sel.i===+d.vis) S.sel=null; save(); renderSide(); renderChips(); drawRadar(); renderPop(); renderTable(); return; }
@@ -2726,13 +2781,14 @@ renderAll();
 (()=>{
 const $=id=>document.getElementById(id);
 const LBL={nl:['Ontwerpkader','Evaluatiekader'],en:['Design','Evaluation']};
-const CV={nl:{h:'Ontwerp en evalueer <em>circulaire klimaatinstallaties</em>',p:'Ontdek welke circulaire interventies er zijn voor verwarming, koeling en ventilatie, en vergelijk installatieconcepten op circulariteit, comfort en kosten.',b1:'Open het Ontwerpkader',b2:'Open het Evaluatiekader',c1t:'Ontwerpkader',c1s:'Interventies in het gebouw',c2t:'Evaluatiekader',c2s:'Concepten in een radardiagram',foot:'Ontwikkeld door TU Delft en Dutch Green Building Council.'},
- en:{h:'Design and evaluate <em>circular HVAC systems</em>',p:'Explore circular interventions for heating, cooling and ventilation, and compare HVAC concepts on circularity, comfort and cost.',b1:'Open the Design framework',b2:'Open the Evaluation framework',c1t:'Design framework',c1s:'Interventions in the building',c2t:'Evaluation framework',c2s:'Concepts in a radar diagram',foot:'Developed by TU Delft and Dutch Green Building Council.'}};
+const CV={nl:{h:'Ontwerp en evalueer <em>circulaire klimaatinstallaties</em>',p:'Ontdek welke circulaire interventies er zijn voor verwarming, koeling en ventilatie, en vergelijk installatieconcepten op circulariteit, comfort en kosten.',b1:'Open het Ontwerpkader',b2:'Open het Evaluatiekader',c1t:'Ontwerpkader',fx:{sedum:'Sedumdak',shade:'Zonwering',trees:'Bomen en groen',pipeins:'Leidingisolatie'},c1s:'Interventies in het gebouw',c2t:'Evaluatiekader',c2s:'Concepten in een radardiagram',foot:'Ontwikkeld door TU Delft en Dutch Green Building Council.'},
+ en:{h:'Design and evaluate <em>circular HVAC systems</em>',p:'Explore circular interventions for heating, cooling and ventilation, and compare HVAC concepts on circularity, comfort and cost.',b1:'Open the Design framework',b2:'Open the Evaluation framework',c1t:'Design framework',fx:{sedum:'Sedum roof',shade:'Sun shading',trees:'Trees and greenery',pipeins:'Pipe insulation'},c1s:'Interventions in the building',c2t:'Evaluation framework',c2s:'Concepts in a radar diagram',foot:'Developed by TU Delft and Dutch Green Building Council.'}};
 const ARR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 function paintCover(){ const l=lang(), c=CV[l]||CV.nl;
   $('cv-h').innerHTML=c.h; $('cv-p').textContent=c.p; $('cv-b1').textContent=c.b1; $('cv-b2').textContent=c.b2; $('cv-foot').textContent=c.foot;
   $('cv-c1t').textContent=c.c1t; $('cv-c2t').textContent=c.c2t;
-  const th=window.OK?OK.thumb('r'):''; $('cv-c1v').innerHTML=th?`<img src="${th}" alt="">`:''; $('cv-c2v').innerHTML=window.EV?EV.radar():'';
+  const cv=window.OK&&OK.cover?OK.cover():null, th=cv?cv.u:(window.OK?OK.thumb('r'):'');
+  $('cv-c1v').innerHTML=th?`<img src="${th}" alt="">`+(cv?Object.entries(cv.pts).filter(([k,[x,y]])=>x>.04&&x<.9&&y>.06&&y<.94).map(([k,[x,y]])=>`<span class="cvm" style="left:${(x*100).toFixed(1)}%;top:${(y*100).toFixed(1)}%"><i>+</i><b>${c.fx[k]||k}</b></span>`).join(''):''):''; $('cv-c2v').innerHTML=window.EV?EV.radar():'';
   const lb=$('cv-lang'); lb.textContent=l==='nl'?'en':'nl'; lb.title=l==='nl'?'English':'Nederlands'; lb.setAttribute('aria-label',lb.title); }
 function home(){ $('cover').hidden=false; document.body.classList.add('cv-open'); paintCover(); $('cover').scrollTop=0; document.title='Circular HVAC Framework'; }
 function enter(t){ $('cover').hidden=true; document.body.classList.remove('cv-open'); show(t); window.scrollTo(0,0); }

@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Circular HVAC Framework</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IiNlYjVlMjgiLz48ZyBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMy40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMS43MCAzNC44NUEyMC41IDIwLjUgMCAwIDEgNDcuMjMgMTguMjgiLz48cGF0aCBkPSJNNDcuMDIgMTIuMDlMNDcuMjMgMTguMjhMNDEuMDkgMTcuNDIiLz48cGF0aCBkPSJNNTIuMzAgMjkuMTVBMjAuNSAyMC41IDAgMCAxIDE2Ljc3IDQ1LjcyIi8+PHBhdGggZD0iTTE2Ljk4IDUxLjkxTDE2Ljc3IDQ1LjcyTDIyLjkxIDQ2LjU4Ii8+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMTAuNSIvPjwvZz48L3N2Zz4=">
@@ -658,6 +659,27 @@ body{background:#fff}
 .inf-w b{font-size:14px;font-weight:600;color:var(--text)}
 .inf-w b::after{content:": "}
 .inf-w span{font-size:14px;color:var(--text2)}
+.ss-box{padding:4px 4px 4px 14px!important;gap:8px}.ss-go{flex:none;width:28px;height:28px;border:0;border-radius:4px;background:var(--accent);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;transition:filter .15s}.ss-go:hover{filter:brightness(.93)}.ss-go svg{width:14px;height:14px}
+.ss-box input{font-size:13px;color:var(--text)}
+.mhead .lang{width:auto;min-width:38px;padding:0 12px;line-height:1}
+.betaw{position:relative;display:inline-flex}
+.betaw>button{cursor:pointer}
+.betaw>button:hover,.betaw>button[aria-expanded="true"]{background:var(--accent-s)}
+.betapop{position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:280px;max-width:calc(100vw - 24px);padding:14px 16px;background:var(--white,#fff);border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 30px rgba(28,26,23,.14);font:400 13px/1.5 var(--sans);color:var(--text);text-align:left;animation:betain .16s ease-out}
+.betapop p{margin:0 0 6px}
+.betapop p:first-child{font-weight:600}
+.betapop a{color:var(--accent);font-weight:600;text-decoration:none;word-break:break-all}
+.betapop a:hover{text-decoration:underline}
+@keyframes betain{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.betapop{animation:none}}
+#app .layout .fnote{pointer-events:auto;cursor:pointer}
+#app .layout .fnote:hover{border-color:var(--accent)}
+#app .side .pill.fflash{animation:fflash 1.9s ease-in-out 1!important}
+@keyframes fflash{0%{transform:scale(1);box-shadow:0 0 0 0 color-mix(in srgb,var(--fc) 0%,transparent)}
+35%{transform:scale(1.04);background:color-mix(in srgb,var(--fc) 10%,#fff);border-color:var(--fc);box-shadow:0 0 0 4px color-mix(in srgb,var(--fc) 18%,transparent)}
+70%{transform:scale(1);box-shadow:0 0 0 8px color-mix(in srgb,var(--fc) 0%,transparent)}
+100%{transform:scale(1);box-shadow:0 0 0 0 color-mix(in srgb,var(--fc) 0%,transparent)}}
+@media (prefers-reduced-motion:reduce){#app .side .pill.fflash{animation:none!important;outline:2px solid var(--fc)}}
 </style>
 <style>
 /* combined shell: one header for both tools (switch left, heading, logos right), same page widths */
@@ -689,6 +711,14 @@ body{background:#fff}
 .pgrip svg{transition:transform .22s}
 #app .stage.pc .pgrip{right:0}
 #app .stage.pc .pgrip svg{transform:rotate(180deg)}
+@media (min-width:701px){#app .stage .pop{width:var(--opw,340px)}#app .pgrip{right:var(--opw,340px)}}
+#app .pgrip .gl{display:none}
+#app .stage.rz:not(.pc) .pgrip{cursor:ew-resize}
+#app .stage.rz:not(.pc) .pgrip .gl{display:block;transform:none}
+#app .stage.rz:not(.pc) .pgrip .gl+svg{display:none}
+#app .stage .pop{transition:transform .22s ease,width .38s cubic-bezier(.2,.7,.2,1)}
+#app .pgrip{transition:right .38s cubic-bezier(.2,.7,.2,1)}
+#app .stage.rzing,#app .stage.rzing .pop,#app .stage.rzing .pgrip{transition:none!important;user-select:none}
 @media (max-width:700px){.pgrip{display:none!important}#app .stage.pc .pop{transform:none;visibility:visible}}
 /* filter column: tighter, never a scrollbar */
 #app .side{scrollbar-width:none;overflow-x:hidden}
@@ -770,7 +800,7 @@ body{background:#fff}
 .cv-b.pri:hover{filter:brightness(.95);transform:translateY(-1px)}
 .cv-b.sec{background:var(--white);color:var(--accent)}
 .cv-b.sec:hover{background:var(--accent-s);transform:translateY(-1px)}
-.cv-b svg{width:17px;height:17px}
+.cv-b{gap:18px}.cv-b svg{width:18px;height:18px;flex:none;transition:transform .15s}.cv-b:hover svg{transform:translate(2px,-2px)}
 .cv-tr{position:fixed;top:max(20px,env(safe-area-inset-top,0px));right:max(24px,env(safe-area-inset-right,0px));z-index:2;display:flex;gap:12px}
 .cv-sq{height:38px;min-width:38px;padding:0 12px;border:1px solid var(--accent);border-radius:4px;background:var(--white);color:var(--accent);font:700 10.5px/1 var(--sans);letter-spacing:.2px;display:inline-flex;align-items:center;justify-content:center}
 button.cv-sq{cursor:pointer}
@@ -819,10 +849,10 @@ body.cv-open{overflow:hidden}
 <div class="head" id="head">
 <header class="topbar">
   <button class="title" type="button" id="home"><span>Circular HVAC</span><span>Design Framework</span></button>
-  <div class="search"><div class="ss-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search"><button class="ss-x" type="button" id="qx" hidden>×</button></div></div>
+  <div class="search"><div class="ss-box"><input id="q" type="search"><button class="ss-x" type="button" id="qx" hidden>×</button><button class="ss-go" type="button" aria-label="Zoek" onclick="document.getElementById('q').focus()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/></svg></button></div></div>
   <div class="tr">
     <button class="lang" type="button" id="lang"></button>
-    <span class="beta" id="beta">beta</span>
+    <span class="betaw"><button type="button" class="beta" id="beta" aria-expanded="false" onclick="betaToggle(this)">beta</button></span>
         <button class="infob" type="button" id="infoBtn" aria-haspopup="dialog"><span id="infoL">Info</span></button>
     <button class="cartb" type="button" id="cartBtn" aria-haspopup="dialog"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18l-2 12H5z"/><path d="M8 6l4-3 4 3M9 11v3M15 11v3"/></svg><span class="cl" id="cartL"></span><b id="cartN">0</b></button>
     <div class="logos">
@@ -835,7 +865,7 @@ body.cv-open{overflow:hidden}
 </div>
 
 <div class="cover" id="cover" role="dialog" aria-modal="true" aria-labelledby="cv-h" hidden>
-  <div class="cv-tr"><button type="button" class="cv-sq" id="cv-lang"></button><span class="cv-sq">beta</span></div>
+  <div class="cv-tr"><button type="button" class="cv-sq" id="cv-lang"></button><span class="betaw"><button type="button" class="cv-sq" aria-expanded="false" onclick="betaToggle(this)">beta</button></span></div>
   <div class="cv-in">
     <div>
       <div class="cv-logos" id="cv-logos"></div>
@@ -970,6 +1000,8 @@ h1 em{font-style:normal;font-weight:700;color:var(--accent)}
 .ss-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-s)}
 .ss-box input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:13px}
 .ss-box input::placeholder{color:var(--text3)}
+.ss-box{padding:4px 4px 4px 14px!important;gap:8px}.ss-go{flex:none;width:28px;height:28px;border:0;border-radius:4px;background:var(--accent);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;transition:filter .15s}.ss-go:hover{filter:brightness(.93)}.ss-go svg{width:14px;height:14px}
+.ss-box input{color:var(--text)}
 .dd{position:relative}
 .cartb{display:inline-flex;align-items:center;gap:8px;height:38px;border:1px solid var(--border2);background:var(--white);color:var(--text);border-radius:4px;padding:0 12px;font-size:13px;font-weight:500;white-space:nowrap}
 .cartb:hover,.cartb[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
@@ -1039,6 +1071,15 @@ button.sqb:hover{background:var(--accent-s)}
 .stage.pc .cats{max-width:calc(100% - 28px)}
 .pgrip{position:absolute;top:50%;right:var(--pw);transform:translateY(-50%);z-index:7;width:22px;height:64px;padding:0;border:1px solid var(--border);border-right:0;border-radius:6px 0 0 6px;background:var(--white);color:var(--text2);display:grid;place-items:center;box-shadow:-3px 2px 10px rgba(0,0,0,.06);transition:right .22s ease}
 .pgrip:hover{color:var(--accent);border-color:var(--accent)}
+.pgrip .gl{display:none}
+.stage.rz:not(.pc) .pgrip{cursor:ew-resize}
+.stage.rz:not(.pc) .pgrip .gl{display:block;transform:none}
+.stage.rz:not(.pc) .pgrip .gl+svg{display:none}
+.pop .arow,.pop .grp-t{padding-right:max(20px,calc(100% - 500px))}
+.pop{transition:transform .22s ease,width .38s cubic-bezier(.2,.7,.2,1)}
+.pgrip{transition:right .38s cubic-bezier(.2,.7,.2,1)}
+.stage .chips,.stage .rwrap,.stage .cats{transition:margin-right .38s cubic-bezier(.2,.7,.2,1)}
+.stage.rzing,.stage.rzing *{transition:none!important;user-select:none}
 .pgrip svg{transition:transform .22s}
 .stage.pc .pgrip{right:0}
 .stage.pc .pgrip svg{transform:rotate(180deg)}
@@ -1249,6 +1290,16 @@ button.sqb:hover{background:var(--accent-s)}
 .side{scrollbar-width:none;overflow-x:hidden}
 .side::-webkit-scrollbar{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.betaw{position:relative;display:inline-flex}
+.betaw>button{cursor:pointer}
+.betaw>button:hover,.betaw>button[aria-expanded="true"]{background:var(--accent-s)}
+.betapop{position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:280px;max-width:calc(100vw - 24px);padding:14px 16px;background:var(--white,#fff);border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 30px rgba(28,26,23,.14);font:400 13px/1.5 var(--sans);color:var(--text);text-align:left;animation:betain .16s ease-out}
+.betapop p{margin:0 0 6px}
+.betapop p:first-child{font-weight:600}
+.betapop a{color:var(--accent);font-weight:600;text-decoration:none;word-break:break-all}
+.betapop a:hover{text-decoration:underline}
+@keyframes betain{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.betapop{animation:none}}
 
 #fileB{min-width:150px;justify-content:center}
 @media (max-width:700px){#fileB{min-width:0}}
@@ -1260,11 +1311,11 @@ button.sqb:hover{background:var(--accent-s)}
       <div class="mhead">
         <button class="cartb" type="button" id="sideB" data-unfold="1" aria-expanded="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span id="sideBL"></span></button>
         <div class="seg" id="seg"></div>
-        <label class="ss-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg><input id="pn" type="text" autocomplete="off"></label>
+        <label class="ss-box"><input id="pn" type="text" autocomplete="off"><span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></span></label>
         <div class="dd"><button class="cartb" type="button" id="fileB" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span id="fileL"></span></button><div class="ddm" id="fileM" hidden></div></div>
         <button class="sqb" type="button" id="infoB">info</button>
         <button class="sqb" type="button" id="lang"></button>
-        <span class="sqb">beta</span>
+        <span class="betaw"><button type="button" class="sqb" aria-expanded="false" onclick="betaToggle(this)">beta</button></span>
       </div>
       <div class="stage" id="stage">
         <div class="chips" id="chips"></div>
@@ -1670,7 +1721,7 @@ let shT=0, shC=0;
 function applyShift(){ if(!host) return; const w=host.clientWidth,h=host.clientHeight; if(Math.abs(shC)>.5) cam.setViewOffset(w,h,shC,0,w,h); else cam.clearViewOffset(); cam.updateProjectionMatrix(); }
 function setShift(px){ shT=px; }
 function stepShift(){ const d=shT-shC; if(Math.abs(d)<.5){ if(shC!==shT){shC=shT; applyShift();} return; } shC+=d*.14; applyShift(); }
-function resize(){ if(!host) return; const w=host.clientWidth, h=host.clientHeight; R.setSize(w,h,false); cam.aspect=w/h; applyShift(); }
+function resize(){ if(!host) return; const w=host.clientWidth, h=host.clientHeight; const c=R.domElement, pr=R.getPixelRatio(); if(c.width!==Math.floor(w*pr)||c.height!==Math.floor(h*pr)){ R.setSize(w,h,false); cam.aspect=w/h; applyShift(); if(scene) R.render(scene,cam); } else { cam.aspect=w/h; applyShift(); } }
 let raf=0; function loop(){ cancelAnimationFrame(raf); const tick=()=>{ raf=requestAnimationFrame(tick); if(!host||!document.body.contains(host)){cancelAnimationFrame(raf);return;} stepFly(); stepShift(); ctl.update(); t+=.016; pulse(); animFx(); animIcon(); R.render(scene,cam); if(onFrame)onFrame(); }; tick(); }
 let t=0, selKey=null, selFn=null;
 const COL={h:0xc0392b,c:0x2a6fc0,v:0x4bae8a};
@@ -1808,7 +1859,7 @@ const HK=['ctx','bld','gen','dist','term','ctrl','gnl'];
 
 const T={
  nl:{
-  search:'Zoek interventies',clear:'Zoekopdracht wissen',close:'Sluiten',langBtn:'en',langTitle:'English',
+  search:'Waar ben je naar op zoek?',clear:'Zoekopdracht wissen',close:'Sluiten',langBtn:'en',langTitle:'English',
   h1:'Ontdek circulaire interventies<br><em>voor klimaatinstallaties</em>',
   lead:'Kies een gebouwtype en een installatiefunctie. Klik daarna op een punt in de doorsnede om te zien welke circulaire interventies daar mogelijk zijn.',
   step1:'Kies een gebouw',step2:'Kies een functie',
@@ -1835,7 +1886,7 @@ const T={
    lvx:{context:['Zonnestraling','Groene omgeving','Schaduw'],building:['Isolatie','Oriëntatie en indeling','Zonwering'],system:['Samenstelling van installatieproducten'],product:['Bijv. een warmtepomp, ventilatiekanaal of radiator'],component:['Onderdelen in producten, bijv. een motor']},
    h4:'Voor wie?',p4:'Welk schaalniveau het meest relevant is, verschilt per gebruiker.',
    who:[['Installatieadviseurs','naar verwachting vooral het systeem- en productniveau.',['system','product']],['HVAC-fabrikanten','met name het componentniveau.',['component']],['Architecten','waarschijnlijk het gebouw- en contextniveau.',['building','context']],['Vastgoedeigenaren','alle schaalniveaus kunnen relevant zijn.',['*']]],
-   src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',toConcept:'Maak er een concept van',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',foldF:'Filter inklappen',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Let op'],none:'Geen interventies bij deze filters.',
+   src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',toConcept:'Maak er een concept van',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',foldF:'Filter inklappen',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Aandachtspunt'],none:'Geen interventies bij deze filters.',
   allParts:'Alle onderdelen',interventions:'interventies',results:'Zoekresultaten',noResults:'Geen interventies gevonden.',
   tagM:'materiaal',tagE:'energie',lgLv:'schaalniveau',lgW:'bekend neveneffect',
   why:'Waarom dit helpt',watch:'Let op',noWhy:'Nog niet beschreven in het kader.',noNeg:'Geen neveneffecten genoemd in de interviews. Dat betekent niet dat ze er niet zijn.',
@@ -1844,7 +1895,7 @@ const T={
   src:'Interventies verzameld in zeven semigestructureerde interviews met acht installatieprofessionals en geordend met een analytisch model van R-strategieën (Potting, 2017), FODAR-componenten en schaalniveaus. Effectiviteit en neveneffecten zijn nog niet per project geëvalueerd. Ontwikkeld door TU Delft en Dutch Green Building Council.'
  },
  en:{
-  search:'Search interventions',clear:'Clear search',close:'Close',langBtn:'nl',langTitle:'Nederlands',
+  search:'What are you looking for?',clear:'Clear search',close:'Close',langBtn:'nl',langTitle:'Nederlands',
   h1:'Explore circular interventions<br><em>for HVAC systems</em>',
   lead:'Choose a building type and an HVAC function. Then click a point in the cross-section to see which circular interventions are possible there.',
   step1:'Choose a building',step2:'Choose a function',
@@ -1871,7 +1922,7 @@ const T={
    lvx:{context:['Solar radiation','Green surroundings','Shade'],building:['Insulation','Orientation and layout','Sun shading'],system:['Composition of installation products'],product:['E.g. a heat pump, ventilation duct or radiator'],component:['Parts within products, e.g. a motor']},
    h4:'Who is it for?',p4:'Which scale level is most relevant differs per stakeholder.',
    who:[['Installation consultants','the system and product level are expected to be the most relevant.',['system','product']],['HVAC manufacturers','the component level is expected to be the most relevant.',['component']],['Architects','the building and contextual level probably offer the most relevant insights.',['building','context']],['Property owners','all levels could be relevant.',['*']]],
-   src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'Selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',toConcept:'Turn into a concept',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',foldF:'Collapse filter',hideP:'Slide panel to the right',showP:'Show panel',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Watch out for'],none:'No interventions match these filters.',
+   src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'Selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',toConcept:'Turn into a concept',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',foldF:'Collapse filter',hideP:'Slide panel to the right',showP:'Show panel',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Consideration'],none:'No interventions match these filters.',
   allParts:'All parts',interventions:'interventions',results:'Search results',noResults:'No interventions found.',
   tagM:'material',tagE:'energy',lgLv:'scale level',lgW:'known side-effect',
   why:'Why this helps',watch:'Watch out for',noWhy:'Not yet described in the framework.',noNeg:'No side-effects recorded in the interviews. That does not mean there are none.',
@@ -1976,8 +2027,8 @@ function setApp(h){ const sb=document.querySelector('.search'), mv=[$('cartBtn')
   if(slot){ slot.appendChild(sb); slot.after(...mv); } sb.hidden=!slot; mv.forEach(x=>x.hidden=!slot); if(foc&&slot) $('q').focus(); slideSeg(); }
 const LOGOS=()=>`<div class="plogos">${document.querySelector('.logos').innerHTML}</div>`;
 const foldB=()=>`<button type="button" class="cartb oksb" data-okunfold aria-expanded="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>${L().fTitle}</span></button>`;
-function okSide(){ if(window.EV&&EV.setSide) EV.setSide(!!S.sideMin); const l=document.querySelector('#app .layout'); if(l) l.classList.toggle('sc',!!S.sideMin); try{localStorage.setItem('chvac-okside',S.sideMin?'1':'0');}catch(e){}
-  const t0=performance.now(); const f=()=>{ if($('stage')){ S3.resize(); frame(); } if(performance.now()-t0<720) requestAnimationFrame(f); }; f(); }
+function okSide(){ if(!S.sideMin){ S.opw=0; const st=$('stage'); if(st) st.style.setProperty('--opw','340px'); if(typeof place==='function') place(); } if(window.EV&&EV.setSide) EV.setSide(!!S.sideMin); const l=document.querySelector('#app .layout'); if(l) l.classList.toggle('sc',!!S.sideMin); try{localStorage.setItem('chvac-okside',S.sideMin?'1':'0');}catch(e){}
+  const t0=performance.now(); const f=()=>{ if($('stage')){ S3.resize(); frame(); if(typeof place==='function') place(); } if(performance.now()-t0<720) requestAnimationFrame(f); }; f(); }
 let VSPREV=null;
 function slideSeg(){ requestAnimationFrame(()=>requestAnimationFrame(()=>{ const v=document.querySelector('#app .vseg'); if(v) v.dataset.at=S.mode==='table'?'1':'0'; VSPREV=S.mode; })); }
 const viewSeg=m=>{const t=L(); return `<div class="seg vseg" data-at="${(VSPREV||m)==='table'?1:0}" role="group" aria-label="${t.view}"><button type="button" data-view="3d" class="${m==='3d'?'on':''}">${t.v3d}</button><button type="button" data-view="table" class="${m==='table'?'on':''}">${t.vtab}</button></div>`;};
@@ -2103,9 +2154,16 @@ function panel(){
   p.dataset.mode=S.h==='gnl'?'gnl':'mk'; p.hidden=false; p.scrollTop=keep; place();
 }
 function place(){ const p=$('pop'); if(!p) return; const dock=!p.hidden&&!S.popMin&&window.innerWidth>700; S3.setShift(dock?p.offsetWidth/2:0); okGrip(); }
+const OKG={d:null,moved:false};
+function okDrag(g){
+  g.addEventListener('pointerdown',e=>{ OKG.moved=false; if(!(S.sideMin&&!S.popMin&&window.innerWidth>1000)) return; OKG.d={x:e.clientX,w:S.opw||340}; g.setPointerCapture(e.pointerId); });
+  g.addEventListener('pointermove',e=>{ if(!OKG.d) return; const dx=OKG.d.x-e.clientX; if(!OKG.moved&&Math.abs(dx)<4) return; const st=$('stage'); if(!OKG.moved){ OKG.moved=true; st.classList.add('rzing'); }
+    const mx=Math.max(340,Math.min(760,Math.round(st.getBoundingClientRect().width*0.62))); S.opw=Math.max(340,Math.min(mx,OKG.d.w+dx)); st.style.setProperty('--opw',S.opw+'px'); place(); });
+  const end=()=>{ if(OKG.d&&OKG.moved){ const st=$('stage'); if(st) st.classList.remove('rzing'); } OKG.d=null; };
+  g.addEventListener('pointerup',end); g.addEventListener('pointercancel',end); }
 function okGrip(){ const st=$('stage'), p=$('pop'); if(!st||!p) return; let g=$('okgrip');
-  if(!g){ g=document.createElement('button'); g.type='button'; g.id='okgrip'; g.className='pgrip'; g.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'; st.appendChild(g); }
-  const on=!p.hidden; g.hidden=!on; st.classList.toggle('pc',on&&!!S.popMin); const t=L(); g.title=S.popMin?t.showP:t.hideP; g.setAttribute('aria-label',g.title); }
+  if(!g){ g=document.createElement('button'); g.type='button'; g.id='okgrip'; g.className='pgrip'; okDrag(g); g.innerHTML='<svg class="gl" width="10" height="18" viewBox="0 0 10 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v14M7 2v14"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'; st.appendChild(g); }
+  const on=!p.hidden; g.hidden=!on; st.classList.toggle('pc',on&&!!S.popMin); st.classList.toggle('rz',!!S.sideMin&&window.innerWidth>1000); st.style.setProperty('--opw',(S.opw||340)+'px'); const t=L(); g.title=(S.popMin?t.showP:t.hideP)+(!S.popMin&&S.sideMin&&window.innerWidth>1000?(S.lang==='en'?'. Drag to widen':'. Sleep om breder te maken'):''); g.setAttribute('aria-label',g.title); }
 let CAPTXT=''; function cap(s){ CAPTXT=s; const c=$('cap'); if(c) c.textContent=s; }
 
 /* events */
@@ -2114,9 +2172,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('cart').hidden&&
 document.addEventListener('click',e=>{
   const el=e.target;
   if(el.closest&&el.closest('#ev-host,.uhead')) return;
-  if(el.closest('#okgrip')){ S.popMin=!S.popMin; place(); return; }
+  if(el.closest('#okgrip')){ if(OKG.moved){ OKG.moved=false; return; } S.popMin=!S.popMin; place(); return; }
   if(el.closest('[data-okfold]')){ S.sideMin=true; okSide(); return; }
-  if(el.closest('.fnote')&&S.sideMin&&window.innerWidth>1000){ S.sideMin=false; okSide(); return; }
+  if(el.closest('.fnote')){ const unf=S.sideMin&&window.innerWidth>1000; if(unf){ S.sideMin=false; okSide(); } setTimeout(()=>{ const ps=[...document.querySelectorAll('#app .side .pill[data-f]')]; if(ps[0]&&window.innerWidth<=1000) ps[0].scrollIntoView({behavior:'smooth',block:'center'}); ps.forEach(p=>{ p.classList.remove('fflash'); void p.offsetWidth; p.classList.add('fflash'); p.addEventListener('animationend',()=>p.classList.remove('fflash'),{once:true}); }); },unf?450:0); return; }
   if(el.closest('[data-okunfold]')){ S.sideMin=false; okSide(); return; }
   if(el.closest('[data-home]')){ $('home').click(); return; }
   const db=el.closest('.ddb');
@@ -2291,6 +2349,19 @@ const setH=()=>document.documentElement.style.setProperty('--head-h',($('head').
 setH(); addEventListener('resize',setH);
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(setH);
 })();
+</script>
+
+
+<script>(function(){if(window.betaToggle)return;
+var T={nl:['Deze tool is nog in ontwikkeling.','Heb je feedback of ideeën? Mail naar','Feedback Circular HVAC Framework'],en:['This tool is still in development.','Have feedback or ideas? Email','Feedback Circular HVAC Framework']},M='s.vanwersch@dgbc.nl',open=null;
+function close(){if(!open)return;var p=open.querySelector('.betapop');if(p)p.remove();var b=open.querySelector('button');if(b)b.setAttribute('aria-expanded','false');open=null;}
+window.betaToggle=function(b){var w=b.parentNode;if(!w.classList.contains('betaw')){w=document.createElement('span');w.className='betaw';b.parentNode.insertBefore(w,b);w.appendChild(b);}if(open===w){close();return;}close();
+var lb=w.parentNode.querySelector('.lang,#lang,#cv-lang'),l=lb&&lb.textContent.trim().toLowerCase()==='nl'?'en':'nl',t=T[l];
+var p=document.createElement('div');p.className='betapop';p.setAttribute('role','dialog');
+p.innerHTML='<p>'+t[0]+'</p><p>'+t[1]+'</p><a href="mailto:'+M+'?subject='+encodeURIComponent(t[2])+'">'+M+'</a>';
+w.appendChild(p);var r=p.getBoundingClientRect();if(r.left<12){p.style.right='auto';p.style.left=(12-w.getBoundingClientRect().left)+'px';}b.setAttribute('aria-expanded','true');open=w;};
+document.addEventListener('pointerdown',function(e){if(open&&e.composedPath().indexOf(open)<0)close();},true);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});})();
 </script>
 <script>
 (()=>{
@@ -2506,7 +2577,7 @@ function showTip(e,ai){
   tip.innerHTML=`<b>${ai+1}. ${esc(lbl(a))}</b>`+p.concepts.map((c,ci)=>`<div><i style="background:${C(ci)}"></i><span>${esc(cname(c,ci))}</span><em>${c.s[ai]===null?'–':c.s[ai]}</em></div>`).join('');
   tip.hidden=false;
   const box=$('stage').getBoundingClientRect(); let x=e.clientX-box.left+16, y=e.clientY-box.top+16;
-  const lim=box.width-(S.sel&&!S.min&&innerWidth>700?340:0); if(x+tip.offsetWidth>lim) x=e.clientX-box.left-tip.offsetWidth-12; if(y+tip.offsetHeight>box.height) y=box.height-tip.offsetHeight-8;
+  const lim=box.width-(S.sel&&!S.min&&innerWidth>700?PW:0); if(x+tip.offsetWidth>lim) x=e.clientX-box.left-tip.offsetWidth-12; if(y+tip.offsetHeight>box.height) y=box.height-tip.offsetHeight-8;
   tip.style.left=Math.max(4,x)+'px'; tip.style.top=Math.max(4,y)+'px';
 }
 
@@ -2523,7 +2594,7 @@ function renderStatic(){
   $('cats').innerHTML=catBtns();
 }
 function catBtns(){ const t=L(); return CATS.map(k=>`<button type="button" class="cf ${S.cats.size&&!S.cats.has(k)?'off':''} ${S.cats.has(k)?'on':''}" data-cat="${k}" aria-pressed="${S.cats.has(k)}"><i style="background:${CAT[k].hex}"></i>${CAT[k][S.lang]} <small>(${A.filter(a=>a.c===k).length})</small></button>`).join('')+(S.cats.size?`<button type="button" class="cf clr" data-catclr="1">${t.allA}</button>`:''); }
-function applySide(){ RT.querySelector('.layout').classList.toggle('sc',S.sideMin); $('sideBL').textContent=L().filter; }
+function applySide(){ RT.querySelector('.layout').classList.toggle('sc',S.sideMin); if(!S.sideMin) setPW(340); $('stage').classList.toggle('rz',S.sideMin); $('sideBL').textContent=L().filter; }
 function renderSide(){
   const t=L(), p=P();
   const hz=[20,30,35,50].map(y=>`<button type="button" class="pill ${+p.horizon===y?'on':''}" data-hz="${y}">${y}</button>`).join('');
@@ -2574,7 +2645,7 @@ function renderPop(){
   const gr=$('pgrip');
   if(!S.sel){ pop.hidden=true; gr.hidden=true; S.min=false; $('stage').classList.remove('po','pc'); return; }
   pop.hidden=false; $('stage').classList.add('po'); $('stage').classList.toggle('pc',S.min);
-  gr.hidden=false; const gc=S.sel.t==='c'?C(S.sel.i):'transparent'; gr.innerHTML=I.chev+`<i style="background:${gc}"></i>`; gr.title=S.min?t.showP:t.hideP; gr.setAttribute('aria-label',gr.title); gr.setAttribute('aria-expanded',String(!S.min));
+  gr.hidden=false; const gc=S.sel.t==='c'?C(S.sel.i):'transparent'; gr.innerHTML='<svg class="gl" width="10" height="18" viewBox="0 0 10 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2v14M7 2v14"/></svg>'+I.chev+`<i style="background:${gc}"></i>`; gr.title=(S.min?t.showP:t.hideP)+(S.sideMin&&!S.min&&innerWidth>1000?(S.lang==='nl'?'. Sleep om breder te maken':'. Drag to widen'):''); gr.setAttribute('aria-label',gr.title); gr.setAttribute('aria-expanded',String(!S.min));
   const x=`<button type="button" class="px" data-close="1" aria-label="${t.close}">${I.x}</button>`;
   let h='';
   if(S.sel.t==='c'){
@@ -2670,6 +2741,15 @@ function renderAll(){ if(S.sel&&S.sel.t==='c'&&S.sel.i>=P().concepts.length) S.s
 let pending=null;
 function ask(msg,fn){ pending=fn; const t=L(); $('confirm').innerHTML=`<div class="confirm" role="alert"><span>${esc(msg)}</span><button class="cbtn pri" type="button" data-ok="1">${t.yes}</button><button class="cbtn" type="button" data-ok="0">${t.no}</button></div>`; }
 function closeFile(){ $('fileM').hidden=true; $('fileB').setAttribute('aria-expanded','false'); }
+/* panel width: drag the grip to widen the panel, only while Instellingen is folded */
+let PW=340, gDrag=null, gMoved=false;
+function setPW(w){ PW=w; $('stage').style.setProperty('--pw',w+'px'); }
+function pwMax(){ return Math.max(340,Math.min(760,Math.round($('stage').getBoundingClientRect().width*0.62))); }
+const GRP=$('pgrip');
+GRP.addEventListener('pointerdown',e=>{ gMoved=false; if(!(S.sideMin&&S.sel&&!S.min&&innerWidth>1000)) return; gDrag={x:e.clientX,w:PW}; GRP.setPointerCapture(e.pointerId); });
+GRP.addEventListener('pointermove',e=>{ if(!gDrag) return; const dx=gDrag.x-e.clientX; if(!gMoved&&Math.abs(dx)<4) return; if(!gMoved){ gMoved=true; $('stage').classList.add('rzing'); } setPW(Math.max(340,Math.min(pwMax(),gDrag.w+dx))); });
+const gEnd=()=>{ if(gDrag&&gMoved) $('stage').classList.remove('rzing'); gDrag=null; };
+GRP.addEventListener('pointerup',gEnd); GRP.addEventListener('pointercancel',gEnd);
 RT.addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!e.target.closest('.dd')) closeFile();
   if(S.aspOpen&&!e.target.closest('.adrop')&&!e.target.closest('.am2')){ S.aspOpen=false; const m=RT.querySelector('#tbl .am2'); if(m) m.hidden=true; $('aspB')?.setAttribute('aria-expanded','false'); }
@@ -2687,7 +2767,7 @@ RT.addEventListener('click',e=>{
     return doExport(f); }
   if(d.ok!==undefined){ const fn=pending; pending=null; $('confirm').innerHTML=''; if(d.ok==='1'&&fn) fn(); return; }
   if(d.view){ S.view=d.view; save(); renderStatic(); renderTable(); if(S.view==='radar') drawRadar(); return; }
-  if(b.id==='pgrip'){ S.min=!S.min; renderPop(); return; }
+  if(b.id==='pgrip'){ if(gMoved){ gMoved=false; return; } S.min=!S.min; renderPop(); return; }
   if(d.close){ closePop(); return; }
   if(d.c!==undefined){ if(S.view==='table'){S.view='radar'; save(); renderStatic(); renderTable();} openSel({t:'c',i:+d.c}); return; }
   if(d.asp!==undefined){ if(S.view==='table'){S.view='radar'; save(); renderStatic(); renderTable();} openSel({t:'a',i:+d.asp}); return; }
@@ -2780,11 +2860,11 @@ renderAll();
 (()=>{
 const $=id=>document.getElementById(id);
 const LBL={nl:['Ontwerpkader','Evaluatiekader'],en:['Design','Evaluation']};
-const CV={nl:{h:'Ontwerp en evalueer <em>circulaire klimaatinstallaties</em>',p:'Ontdek welke circulaire interventies er zijn voor verwarming, koeling en ventilatie, en vergelijk installatieconcepten op circulariteit, comfort en kosten.',b1:'Open het Ontwerpkader',b2:'Open het Evaluatiekader',c1t:'Ontwerpkader',fx:{sedum:'Sedumdak',shade:'Zonwering',trees:'Bomen en groen',pipeins:'Leidingisolatie'},c1s:'Interventies in het gebouw',c2t:'Evaluatiekader',c2s:'Concepten in een radardiagram',foot:'Ontwikkeld door TU Delft en Dutch Green Building Council.'},
- en:{h:'Design and evaluate <em>circular HVAC systems</em>',p:'Explore circular interventions for heating, cooling and ventilation, and compare HVAC concepts on circularity, comfort and cost.',b1:'Open the Design framework',b2:'Open the Evaluation framework',c1t:'Design framework',fx:{sedum:'Sedum roof',shade:'Sun shading',trees:'Trees and greenery',pipeins:'Pipe insulation'},c1s:'Interventions in the building',c2t:'Evaluation framework',c2s:'Concepts in a radar diagram',foot:'Developed by TU Delft and Dutch Green Building Council.'}};
-const ARR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const CV={nl:{h:'Ontwerp en evalueer <em>circulaire klimaatinstallaties</em>',p:'Ontdek welke circulaire interventies er zijn voor verwarming, koeling en ventilatie, en vergelijk installatieconcepten op circulariteit, comfort en kosten.',b1:'Open het Ontwerpkader',b2:'Open het Evaluatiekader',c1t:'Ontwerpkader',fx:{sedum:'Sedumdak',shade:'Zonwering',trees:'Bomen en groen',pipeins:'Leidingisolatie'},c1s:'Interventies in het gebouw',c2t:'Evaluatiekader',c2s:'Concepten in een radardiagram',foot:'Deze interactieve tool is ontwikkeld door TU Delft en Dutch Green Building Council en is bedoeld om te leren en verkennen.'},
+ en:{h:'Design and evaluate <em>circular HVAC systems</em>',p:'Explore circular interventions for heating, cooling and ventilation, and compare HVAC concepts on circularity, comfort and cost.',b1:'Open the Design framework',b2:'Open the Evaluation framework',c1t:'Design framework',fx:{sedum:'Sedum roof',shade:'Sun shading',trees:'Trees and greenery',pipeins:'Pipe insulation'},c1s:'Interventions in the building',c2t:'Evaluation framework',c2s:'Concepts in a radar diagram',foot:'This interactive tool was developed by TU Delft and Dutch Green Building Council and is intended for learning and exploration.'}};
+const ARR='<svg viewBox="17 11 20 20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 27.6Q27 23.4 34 14.3M25.4 15.1C28.4 14.6 31.3 14.3 34.3 14.1C34.2 17.1 34 19.9 33.7 22.8"/></svg>';
 function paintCover(){ const l=lang(), c=CV[l]||CV.nl;
-  $('cv-h').innerHTML=c.h; $('cv-p').textContent=c.p; $('cv-b1').textContent=c.b1; $('cv-b2').textContent=c.b2; $('cv-foot').textContent=c.foot;
+  $('cv-h').innerHTML=c.h; $('cv-p').textContent=c.p; const AR='<svg viewBox="17 11 20 20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 27.6Q27 23.4 34 14.3M25.4 15.1C28.4 14.6 31.3 14.3 34.3 14.1C34.2 17.1 34 19.9 33.7 22.8"/></svg>'; $('cv-b1').innerHTML=c.b1+AR; $('cv-b2').innerHTML=c.b2+AR; $('cv-foot').textContent=c.foot;
   $('cv-c1t').textContent=c.c1t; $('cv-c2t').textContent=c.c2t;
   const cv=window.OK&&OK.cover?OK.cover():null, th=cv?cv.u:(window.OK?OK.thumb('r'):'');
   $('cv-c1v').innerHTML=th?`<img src="${th}" alt="">`+(cv?Object.entries(cv.pts).filter(([k,[x,y]])=>x>.04&&x<.9&&y>.06&&y<.94).map(([k,[x,y]])=>`<span class="cvm" style="left:${(x*100).toFixed(1)}%;top:${(y*100).toFixed(1)}%"><i>+</i><b>${c.fx[k]||k}</b></span>`).join(''):''):''; $('cv-c2v').innerHTML=window.EV?EV.radar():'';
@@ -2824,3 +2904,5 @@ show(tool);
 home();
 })();
 </script>
+
+</body></html>

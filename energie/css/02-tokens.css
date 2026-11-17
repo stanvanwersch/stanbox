@@ -1,0 +1,426 @@
+/* ─── tokens ─── */
+:root{
+  --cream:#f7f8fb;--white:#ffffff;--border:#e1e5ee;--border2:#c7cede;
+  --text:#0e1b33;--text2:#40507a;--text3:#8991ac;
+  /* WEii-huisstijl kernkleuren: Donkerblauw (primair/interactief), Purper en
+     Vermiljoen (accent/gradient, zie huisstijlrichtlijnen WEii 3.1-3.4) */
+  --navy:#002e73;--purper:#b21d9c;--vermiljoen:#d90000;
+  --accent:var(--navy);--accent-s:rgba(0,46,115,.07);--accent-b:rgba(0,46,115,.2);
+  --gradient-brand:linear-gradient(45deg, var(--purper) 0%, var(--vermiljoen) 100%);
+  --blue:#1d5fa8;--blue-s:rgba(29,95,168,.07);--blue-b:rgba(29,95,168,.18);
+  --green:#1a6e3c;--green-s:rgba(26,110,60,.08);--green-b:rgba(26,110,60,.18);
+  --red:#b91c1c;--red-s:rgba(185,28,28,.07);--red-b:rgba(185,28,28,.16);
+  --sans:'Quicksand',system-ui,-apple-system,sans-serif;
+  --wordmark:'Quicksand',system-ui,sans-serif;
+  --r:10px;--r-sm:7px;
+  --shadow-soft:rgba(14,27,51,.07);
+  --shadow-card:rgba(14,27,51,.1);
+  --neutral-s:#eef0f6;
+  --grid-line:#e2e6f0;
+  /* WEii-klassen: WENG (best) tot Zeer onzuinig (slechtst) - kleurverloop
+     Donkerblauw -> Purper -> Vermiljoen, zie huisstijlrichtlijnen WEii 3.4/8.3 */
+  --k-weng:#002e73;--k-parisproof:#3b2881;--k-zeerzuinig:#77238e;--k-zuinig:#b21d9c;
+  --k-gemiddeld:#bf1368;--k-onzuinig:#cc0a34;--k-zeeronzuinig:#d90000;
+}
+html[data-theme="dark"]{
+  --cream:#12151f;--white:#1b2032;--border:#2b3247;--border2:#3a4259;
+  --text:#eef1f9;--text2:#b7c0da;--text3:#7c88a8;
+  --navy:#8fabde;--purper:#e18ad6;--vermiljoen:#ff6b6b;
+  --accent-s:rgba(143,171,222,.1);--accent-b:rgba(143,171,222,.26);
+  --shadow-soft:rgba(0,0,0,.35);
+  --shadow-card:rgba(0,0,0,.4);
+  --neutral-s:#232941;
+  --grid-line:#2a3049;
+  --k-weng:#4a76c4;--k-parisproof:#7069c9;--k-zeerzuinig:#a15fc9;--k-zuinig:#d374c8;
+  --k-gemiddeld:#e0629a;--k-onzuinig:#ec5470;--k-zeeronzuinig:#ff5a5a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{color-scheme:light;}
+html[data-theme="dark"]{color-scheme:dark;}
+html,body{background:var(--cream);color:var(--text);height:100%;overflow:hidden;}
+body{font-family:var(--sans);font-size:15px;line-height:1.7;font-weight:300;transition:background .2s,color .2s;}
+::selection{background:var(--accent-b);}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--cream);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+button,select,input{font-family:var(--sans);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+strong,b{font-weight:600;color:var(--text);}
+a{color:var(--accent);}
+
+/* ─── fixed full-page background photo ─── */
+.bg-photo{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(180deg, rgba(12,12,10,.4) 0%, rgba(12,12,10,.52) 40%, rgba(12,12,10,.66) 100%),
+    url(../assets/img/afbeelding-01.jpg) center 32% / cover no-repeat;
+}
+
+/* ─── app-shell: het dashboard is nu 1 scherm/vlak. De topbar staat als vaste
+   kopregel bovenin dát vlak (geen los zwevend balkje meer erboven) en scrolt
+   nooit mee; alleen .page-scroll eronder scrolt. ─── */
+.app-shell{height:100vh;display:flex;flex-direction:column;}
+.app-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+
+/* topbar zit nu structureel binnen .page, vóór .page-scroll: een gewone,
+   niet-gepositioneerde kopregel die nooit meescrolt (geen fixed/sticky-truc
+   meer nodig, dus ook geen aparte topbar-hoogte-meting in JS). */
+.topbar{
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  padding:18px 32px;border-bottom:1.5px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex:1;min-width:0;}
+.logo img{height:28px;width:auto;display:block;flex-shrink:0;}
+.logo-text{display:flex;align-items:baseline;gap:8px;min-width:0;}
+.logo-name{font-size:13.5px;font-weight:600;color:var(--text);font-family:var(--wordmark);line-height:1.3;}
+.logo-sub{font-size:12px;color:var(--text3);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.icon-btn{
+  width:32px;height:32px;flex-shrink:0;border-radius:50%;
+  border:1px solid var(--border);background:var(--white);color:var(--text2);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:color .15s,border-color .15s,background .15s;
+  text-decoration:none;overflow:hidden;
+}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent-b);background:var(--accent-s);}
+.icon-btn img{width:66%;height:66%;object-fit:contain;}
+.theme-toggle .ti-sun{display:none;}
+html[data-theme="dark"] .theme-toggle .ti-moon{display:none;}
+html[data-theme="dark"] .theme-toggle .ti-sun{display:block;}
+
+/* ─── page: één vlak/scherm (topbar + inhoud samen) ─── */
+.page-card-wrap{flex:1;min-height:0;padding:14px 14px 14px;position:relative;z-index:1;display:flex;}
+/* .page zelf scrolt niet: .topbar (vast bovenaan) en .page-scroll (de
+   eigenlijke scrollende inhoud eronder) zijn de enige kinderen. */
+.page{
+  flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;
+  max-width:980px;margin:0 auto;width:100%;background:var(--cream);
+  border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);
+  overflow:hidden;
+}
+.page-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:22px 32px 22px;}
+
+p{margin-bottom:12px;color:var(--text2);font-weight:300;}
+
+/* ─── enkel doorlopend paneel: geen hoofdtabs meer. Eén grafiekveld
+   (trendlijn/staafdiagram) met een modus-schakelaar en een dropdown om
+   gebouwtypen toe te voegen, aangevuld met een tabel; alles in de normale
+   doorloop van .page-scroll. ─── */
+.dashboard-content{flex:0 0 auto;}
+
+/* modus-schakelaar (trendlijn / staafdiagram per jaar), met daarnaast de
+   weergave-opties (welke grootheid, welke doelpaden) en de gebouwtypen-
+   dropdown - in die volgorde van links naar rechts, zodat de weergave-
+   opties direct links van de dropdown staan. De jaarkiezer (alleen relevant
+   in staafdiagram-modus) wordt met margin-left:auto naar rechts geduwd. */
+.mode-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.mode-toggle{display:inline-flex;background:var(--white);border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px;flex-shrink:0;}
+.mode-btn{
+  font-family:var(--sans);font-size:12.5px;font-weight:500;color:var(--text3);
+  background:transparent;border:none;border-radius:999px;padding:7px 15px;cursor:pointer;
+  transition:background .15s,color .15s;white-space:nowrap;
+}
+.mode-btn.on{background:var(--accent);color:#fff;}
+.mode-btn:not(.on):hover{color:var(--text);}
+.year-tabs-inline{display:flex;align-items:center;margin-left:auto;}
+.year-tabs-inline[hidden]{display:none;}
+.year-tabs-inline .year-tabs{border-bottom:none;}
+.chart-kader{padding:26px 28px 18px;}
+
+/* weergave-optie: welke indicator(en) (indicator-dropdown, dezelfde
+   aankruislijst-opmaak als de gebouwtypen-dropdown, zie .cat-dropdown-* )
+   en welke doelpaden (pathway-toggles) worden getoond - staan in de
+   mode-row, links van de gebouwtypen-dropdown */
+.pathway-toggles{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.pathway-toggles[hidden]{display:none;}
+.pathway-chk{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text2);cursor:pointer;user-select:none;white-space:nowrap;}
+.pathway-chk input{accent-color:var(--accent);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
+.pathway-chk.disabled{opacity:.48;}
+.pathway-chk.disabled input,.pathway-chk.disabled span{cursor:not-allowed;}
+.methodiek-section{flex-shrink:0;margin-top:10px;}
+
+/* ─── uitklapmenu (methodiek en bronnen): één samengevouwen blok met per onderwerp een eigen uitklapbaar kopje ─── */
+.mlist{display:flex;flex-direction:column;margin:12px 0 4px;background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.mrow-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;cursor:pointer;transition:background .12s;}
+.mrow-head:hover{background:var(--accent-s);}
+.mrow-name{font-size:14px;font-weight:600;color:var(--text);font-family:var(--wordmark);}
+.mrow-chev{color:var(--text3);font-size:15px;flex-shrink:0;margin-left:auto;transition:transform .15s,color .15s;}
+.mrow.on .mrow-chev{transform:rotate(90deg);color:var(--accent);}
+.mrow-body{display:none;}
+.mrow.on .mrow-body{display:block;margin:0 16px 8px 16px;border-top:1px solid var(--border);}
+.msec-tools{display:flex;justify-content:flex-end;padding:8px 0 2px;}
+.msec-all{font-family:var(--sans);font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;padding:2px 0;}
+.msec-all:hover{text-decoration:underline;}
+.msec{border-bottom:1px solid var(--border);}
+.msec:last-child{border-bottom:none;}
+.msec-head{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;cursor:pointer;padding:12px 0;font-family:var(--wordmark);font-size:13.5px;font-weight:600;color:var(--text);}
+.msec-head:hover{color:var(--accent);}
+.msec-chev{margin-left:auto;color:var(--text3);font-size:15px;flex-shrink:0;transition:transform .15s,color .15s;}
+.msec.on .msec-chev{transform:rotate(90deg);color:var(--accent);}
+.msec-body{display:none;padding:0 0 14px;}
+.msec.on .msec-body{display:block;}
+.mrow-body p{font-size:13.5px;margin-bottom:10px;color:var(--text2);font-weight:300;line-height:1.65;}
+.mrow-body p:last-child{margin-bottom:0;}
+.mrow-body strong{color:var(--text);font-weight:600;}
+.wa-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 0;}
+.wa-table th{font-weight:600;color:var(--text);text-align:right;padding:6px 8px;border-bottom:1px solid var(--border);white-space:normal;vertical-align:bottom;}
+.wa-table td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2);text-align:right;font-variant-numeric:tabular-nums;}
+.wa-table th:first-child,.wa-table td:first-child{text-align:left;}
+.wa-scroll{overflow-x:auto;}
+
+
+/* ─── year tabs (onderliggend, geen gevulde pillen); nu alleen gebruikt als
+   inline jaarkiezer naast de modus-schakelaar (staafdiagram-modus) ─── */
+.year-tabs{display:flex;border-bottom:1.5px solid var(--border);}
+.year-tab{
+  padding:7px 16px;cursor:pointer;font-family:var(--sans);
+  font-size:13px;font-weight:500;color:var(--text3);
+  background:transparent;border:none;border-bottom:2px solid transparent;
+  margin-bottom:-1.5px;transition:all .12s;font-variant-numeric:tabular-nums;
+}
+.year-tab.on{color:var(--accent);border-bottom-color:var(--accent);}
+.year-tab:hover{color:var(--text);}
+
+/* ─── kader (bordered content box) ─── */
+.kader{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;box-shadow:0 1px 2px var(--shadow-soft);}
+.kader + .kader{margin-top:14px;}
+
+.legend-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px;}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text2);}
+.legend-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.legend-item .legend-line{display:inline-block;width:20px;height:0;flex-shrink:0;}
+
+svg text{font-family:var(--sans);}
+.axis-label{fill:var(--text3);font-size:10.5px;}
+.grid-line{stroke:var(--grid-line);stroke-width:1;}
+.bar-label{fill:var(--text2);font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums;}
+.bar-name{fill:var(--text2);font-size:12px;font-weight:400;}
+.bar-col-hit{cursor:default;}
+.bar-col-group:hover .bar-rect{filter:brightness(1.12);}
+
+/* ─── trendlijn: meerdere indicatoren tegelijk -> één paneel per eenheid
+   (kWh/m², kg CO2/m², %), zie METRICS/GROUP_ORDER in app2.js. Elk paneel
+   heeft een eigen titel, legenda en toelichting; bij precies 1 indicator
+   is er precies 1 paneel en oogt dit zoals de oorspronkelijke enkelvoudige
+   trendlijn. ─── */
+.trend-panel + .trend-panel{margin-top:26px;padding-top:22px;border-top:1px dashed var(--border);}
+.trend-panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:10px;}
+.trend-panel-title{font-size:13px;font-weight:600;color:var(--text);font-family:var(--wordmark);}
+.trend-panel-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12px;}
+.trend-panel-legend .legend-item{display:flex;align-items:center;gap:6px;color:var(--text2);}
+.trend-panel-legend .legend-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.trend-panel-legend .legend-note{color:var(--text3);font-size:11.5px;}
+.trend-panel-note{font-size:11.5px;color:var(--text3);font-weight:300;margin-top:8px;line-height:1.5;}
+.table-metric-heading{font-size:13px;font-weight:600;color:var(--text);font-family:var(--wordmark);margin:18px 0 6px;}
+.table-metric-heading:first-child{margin-top:0;}
+
+/* ─── dropdown: gebouwtypen toevoegen (vervangt de linker balk/lijst) ─── */
+.cat-dropdown{position:relative;}
+.cat-dropdown-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--sans);font-size:12.5px;font-weight:500;color:var(--text2);
+  background:var(--white);border:1px solid var(--border2);border-radius:20px;
+  padding:8px 14px;cursor:pointer;transition:border-color .15s,color .15s;white-space:nowrap;
+}
+.cat-dropdown-btn:hover{border-color:var(--accent-b);color:var(--accent);}
+.cat-dropdown-btn .chev{flex-shrink:0;transition:transform .15s;}
+.cat-dropdown.open .cat-dropdown-btn .chev{transform:rotate(180deg);}
+.cat-dropdown.open .cat-dropdown-btn{border-color:var(--accent-b);color:var(--accent);}
+.cat-dropdown-panel{
+  position:absolute;top:calc(100% + 8px);left:0;z-index:60;
+  width:300px;max-width:min(300px, calc(100vw - 40px));
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
+  box-shadow:0 12px 32px var(--shadow-card);padding:10px;
+}
+.cat-dropdown-panel[hidden]{display:none;}
+.cat-dropdown-search{margin-bottom:8px;}
+.cat-dropdown-search input{
+  width:100%;font-family:var(--sans);font-size:13px;color:var(--text);
+  border:1px solid var(--border2);border-radius:var(--r-sm);padding:7px 10px;outline:none;background:var(--cream);
+}
+.cat-dropdown-search input:focus{border-color:var(--accent);}
+.cat-dropdown-list{max-height:280px;overflow-y:auto;}
+.cat-dropdown-item{
+  display:flex;align-items:center;gap:8px;padding:7px 6px;border-radius:var(--r-sm);cursor:pointer;
+  transition:background .12s;
+}
+.cat-dropdown-item:hover{background:var(--accent-s);}
+.cat-dropdown-item.active{background:var(--accent-s);}
+.ci-check{
+  width:14px;height:14px;flex-shrink:0;border-radius:4px;border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;transition:background .12s,border-color .12s;
+  background:var(--white);
+}
+.cat-dropdown-item.active .ci-check{background:var(--accent);border-color:var(--accent);}
+.ci-check svg{width:9px;height:9px;display:block;}
+.ci-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cdi-name{flex:1;min-width:0;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cdi-tag{font-size:10.5px;color:var(--text3);font-weight:400;margin-left:6px;white-space:nowrap;}
+.cdi-val{font-size:12.5px;color:var(--text2);font-variant-numeric:tabular-nums;flex-shrink:0;}
+.cat-dropdown-empty{padding:14px 6px;font-size:12.5px;color:var(--text3);font-weight:300;}
+
+.detail-title{font-size:16px;font-weight:600;color:var(--text);font-family:var(--wordmark);margin-bottom:3px;}
+
+.trend-line{fill:none;stroke:var(--text2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.trend-dot{stroke:var(--white);stroke-width:2;cursor:pointer;}
+.trend-dot-hit{fill:transparent;cursor:pointer;}
+.band-label{font-size:9.5px;fill:var(--text3);}
+.crosshair{stroke:var(--border2);stroke-width:1;stroke-dasharray:3,3;}
+
+.tooltip{
+  position:fixed;pointer-events:none;background:var(--text);color:var(--cream);
+  border-radius:8px;padding:8px 11px;font-size:11.5px;line-height:1.5;box-shadow:0 8px 24px var(--shadow-card);
+  z-index:900;opacity:0;transition:opacity .1s;max-width:230px;
+}
+html[data-theme="dark"] .tooltip{background:#0f0e0c;}
+.tooltip.show{opacity:1;}
+.tooltip .tt-title{font-weight:600;margin-bottom:3px;color:#fff;}
+.tooltip .tt-row{display:flex;justify-content:space-between;gap:12px;color:var(--cream);opacity:.88;}
+.tooltip .tt-strong{font-weight:600;color:#fff;opacity:1;font-variant-numeric:tabular-nums;}
+
+/* ─── tables ─── */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--accent-s);color:var(--text2);font-weight:600;font-size:11.5px;letter-spacing:.2px;padding:8px 9px;text-align:right;border-bottom:1.5px solid var(--accent-b);}
+th:first-child,th.l{text-align:left;}
+td{padding:8px 9px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;font-weight:300;text-align:right;font-variant-numeric:tabular-nums;}
+td:first-child{text-align:left;color:var(--text);font-weight:500;font-variant-numeric:normal;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--cream);}
+/* Besparing/toename-kolom: groen = verbetering, rood = verslechtering - de
+   richting die "verbetering" betekent verschilt per indicator (zie
+   HIGHER_IS_BETTER in app2.js), dus deze kleuren volgen altijd de td.good/
+   td.bad-klasse die daar per rij al voor bepaald is. */
+td.good{color:var(--green);font-weight:500;}
+td.bad{color:var(--red);font-weight:500;}
+.table-wrap{overflow-x:auto;margin-top:10px;}
+.klasse-tag{display:inline-flex;align-items:center;gap:5px;font-weight:500;}
+.klasse-tag .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.source-note{font-size:12px;color:var(--text3);margin-top:12px;line-height:1.6;}
+
+details{margin-top:6px;}
+details > summary{
+  cursor:pointer;list-style:none;font-size:13.5px;font-weight:500;color:var(--accent);
+  padding:4px 0;user-select:none;
+}
+details > summary::-webkit-details-marker{display:none;}
+details > summary::before{content:'→ ';display:inline-block;transition:transform .15s;}
+details[open] > summary::before{transform:rotate(90deg);}
+details[open] > summary{margin-bottom:14px;}
+
+/* ─── callouts ─── */
+.note{
+  border-radius:var(--r);border-left:3px solid var(--accent);background:var(--accent-s);
+  padding:13px 18px;margin:16px 0;font-size:13.5px;line-height:1.65;color:var(--text2);
+}
+.note.warn{border-left-color:var(--red);background:var(--red-s);}
+.note strong{color:var(--text);}
+
+/* ─── footer credit ─── */
+.footer-credit{
+  flex-shrink:0;display:flex;align-items:center;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);
+  text-decoration:none;transition:opacity .15s;
+}
+.footer-credit:hover{opacity:.78;}
+.footer-credit img{height:26px;width:auto;flex-shrink:0;}
+.footer-credit-text{font-size:11px;line-height:1.5;color:var(--text3);font-weight:300;}
+/* bronvermelding TNO: altijd zichtbaar, ook als 'Methodiek en bronnen' dicht is */
+.footer-block{flex-shrink:0;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px;}
+.footer-block .footer-credit{margin-top:0;padding-top:0;border-top:0;}
+.footer-source{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;}
+.footer-source img{height:22px;width:auto;flex-shrink:0;}
+html[data-theme="dark"] .footer-source img{filter:invert(1);}
+.footer-source-text{font-size:11px;line-height:1.5;color:var(--text3);font-weight:300;}
+.footer-source-text strong{font-weight:500;color:var(--text2);}
+@media (max-width:560px){.footer-source{flex-direction:column;align-items:flex-start;gap:8px;}.footer-source img{height:20px;}}
+
+
+/* ─── Dashboard / Settings tabs ─── */
+.view-toggle{display:inline-flex;background:var(--white);border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px;margin-bottom:16px;}
+.view-btn{
+  border:0;background:transparent;color:var(--text2);font-size:13px;font-weight:500;padding:6px 16px;border-radius:999px;cursor:pointer;
+  transition:background .15s,color .15s;position:relative;
+}
+.view-btn.on{background:var(--accent);color:#fff;}
+html[data-theme="dark"] .view-btn.on{color:#0e1b33;}
+.view-btn:not(.on):hover{color:var(--text);}
+.view-btn.changed::after{content:"";position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--vermiljoen);}
+
+/* ─── Settings ─── */
+#view-settings .kader{margin-bottom:14px;}
+#view-settings .kader + .kader{margin-top:0;}
+.set-sec-head{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;cursor:pointer;padding:0;font-size:16px;font-weight:600;color:var(--text);font-family:var(--wordmark);line-height:1.35;}
+.set-sec-head:hover{color:var(--accent);}
+.set-sec-chev{margin-left:auto;color:var(--text3);font-size:17px;flex-shrink:0;transition:transform .15s,color .15s;}
+.set-sec.on .set-sec-chev{transform:rotate(90deg);color:var(--accent);}
+.set-sec-body{display:none;margin-top:10px;}
+.set-sec.on .set-sec-body{display:block;}
+.set-h{font-size:16px;font-weight:600;color:var(--text);font-family:var(--wordmark);margin-bottom:6px;line-height:1.35;}
+.set-sub{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:10px;}
+.set-status{font-size:13px;color:var(--text2);margin:8px 0 12px;}
+.set-status strong{color:var(--text);}
+.set-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.set-btn{
+  border:1px solid var(--border2);background:var(--white);color:var(--text2);font-size:12.5px;font-weight:500;
+  padding:7px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;
+}
+.set-btn:hover{border-color:var(--accent-b);color:var(--accent);background:var(--accent-s);}
+.set-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+html[data-theme="dark"] .set-btn.primary{color:#0e1b33;}
+.set-btn.primary:hover{opacity:.9;background:var(--accent);color:#fff;}
+html[data-theme="dark"] .set-btn.primary:hover{color:#0e1b33;}
+.set-btn.warn{border-color:var(--red-b);color:var(--red);}
+.set-source{font-size:12.5px;color:var(--text3);}
+.set-source strong{color:var(--text2);font-weight:500;}
+.set-scroll{overflow:auto;max-height:560px;border:1px solid var(--border);border-radius:var(--r-sm);margin-top:8px;}
+.set-scroll.nomax{max-height:none;}
+.set-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;}
+.set-table th{position:sticky;top:0;z-index:1;background:var(--neutral-s);color:var(--text2);font-weight:600;font-size:11.5px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap;}
+.set-table td{padding:5px 10px;border-bottom:1px solid var(--border);color:var(--text2);text-align:left;vertical-align:middle;font-weight:400;}
+.set-table td:first-child{color:var(--text);font-weight:500;}
+.set-table th.num,.set-table td.num{text-align:right;font-variant-numeric:tabular-nums;}
+.set-table tr:last-child td{border-bottom:0;}
+.set-table td:first-child{position:sticky;left:0;background:var(--white);z-index:1;}
+.set-table th:first-child{left:0;z-index:3;}
+.set-table tr.nvt td:first-child{background:var(--white);}
+.set-table td.nvt-row,.set-table tr.nvt td:first-child{color:var(--text3);}
+.set-select{
+  width:100%;min-width:200px;font-size:12.5px;padding:5px 8px;border:1px solid var(--border2);border-radius:var(--r-sm);
+  background:var(--white);color:var(--text);
+}
+.set-select.nvt{color:var(--text3);}
+.set-select:disabled{opacity:.5;}
+.set-input{
+  width:84px;font-size:12.5px;padding:5px 8px;border:1px solid var(--border2);border-radius:var(--r-sm);
+  background:var(--white);color:var(--text);text-align:right;font-variant-numeric:tabular-nums;
+}
+.set-input::placeholder{color:var(--text3);opacity:1;}
+.set-input.filled{border-color:var(--green-b);background:var(--green-s);}
+.set-input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+.set-pct{display:inline-flex;align-items:center;gap:4px;}
+.set-pct .set-input{width:64px;}
+.set-pct span{color:var(--text3);}
+.set-tag{display:inline-block;font-size:10.5px;font-weight:500;color:var(--text3);border:1px solid var(--border2);border-radius:999px;padding:0 7px;margin-left:6px;line-height:1.6;white-space:nowrap;}
+.set-tab{display:inline-flex;background:var(--cream);border:1px solid var(--border);border-radius:999px;padding:2px;gap:2px;margin:6px 0 2px;}
+.set-tab button{border:0;background:transparent;color:var(--text2);font-size:12.5px;font-weight:500;padding:5px 14px;border-radius:999px;cursor:pointer;}
+.set-tab button.on{background:var(--accent);color:#fff;}
+html[data-theme="dark"] .set-tab button.on{color:#0e1b33;}
+.set-note{font-size:12px;color:var(--text3);margin-top:8px;line-height:1.6;}
+@media (max-width:560px){.set-select{min-width:130px;}.view-btn{padding:6px 12px;}}
+
+ul{padding-left:20px;margin-bottom:12px;}
+li{margin-bottom:5px;color:var(--text2);font-weight:300;}
+
+@media (max-width:760px){
+  /* Zelfde architectuur als desktop (vast paneel, alleen de kaart scrolt
+     intern): zo blijft de topbar op elke schermbreedte gegarandeerd op
+     dezelfde plek en kan er nooit tekst achter/door de rand heen schuiven.
+     Alleen de padding wordt smaller voor kleine schermen. */
+  .page-card-wrap{padding:10px 10px 10px;}
+  .topbar{padding:14px 18px;}
+  .page-scroll{padding:20px 18px 20px;}
+  .mode-row{align-items:stretch;}
+  /* op smalle schermen krijgen deze hun eigen volle regel breedte, in
+     plaats van naast elkaar te verdringen */
+  .pathway-toggles{width:100%;}
+  .cat-dropdown-panel{width:calc(100vw - 56px);}
+}

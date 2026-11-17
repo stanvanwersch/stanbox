@@ -1,0 +1,189 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="css/01-stijl.css"></head><body>
+<title>Paris Proof Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="js/01-script.js"></script>
+<link rel="stylesheet" href="css/02-tokens.css">
+
+<div class="bg-photo"></div>
+
+<div class="app-shell">
+
+<div class="app-body">
+
+<div class="page-card-wrap">
+<div class="page">
+
+  <div class="topbar">
+    <div class="logo">
+      <img src="assets/img/afbeelding-02.png" alt="DGBC">
+      <div class="logo-text">
+        <span class="logo-name">Werkelijke Energie-intensiteit (WEii) per gebouwtype</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <a class="icon-btn" href="https://www.weii.nl" target="_blank" rel="noopener" aria-label="Naar WEii.nl" title="WEii-protocol op WEii.nl">
+        <img src="assets/img/afbeelding-03.png" alt="WEii">
+      </a>
+      <button type="button" class="icon-btn theme-toggle" onclick="toggleTheme()" aria-label="Wissel donkere modus" title="Licht / donker">
+        <svg class="ti-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="ti-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-scroll">
+
+  <div class="view-toggle" id="view-toggle" role="tablist" aria-label="Weergave">
+    <button type="button" class="view-btn on" role="tab" aria-selected="true" data-view="dashboard">Dashboard</button>
+    <button type="button" class="view-btn" role="tab" aria-selected="false" data-view="settings" id="view-btn-settings">Settings</button>
+  </div>
+
+  <div id="view-dashboard">
+
+  <div class="dashboard-content">
+
+    <div class="mode-row">
+      <div class="mode-toggle" id="mode-toggle">
+        <button type="button" class="mode-btn on" data-mode="staaf">Staafdiagram per jaar</button>
+        <button type="button" class="mode-btn" data-mode="lijn">Trendlijn</button>
+      </div>
+      <div class="cat-dropdown" id="indicator-dropdown">
+        <button type="button" class="cat-dropdown-btn" id="indicator-dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
+          <span id="indicator-dropdown-label">WEii</span>
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cat-dropdown-panel" id="indicator-dropdown-panel" hidden>
+          <div class="cat-dropdown-list" id="indicator-dropdown-list"></div>
+        </div>
+      </div>
+      <div class="cat-dropdown" id="cat-dropdown">
+        <button type="button" class="cat-dropdown-btn" id="cat-dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
+          <span id="cat-dropdown-label">Selecteer gebouwtype</span>
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cat-dropdown-panel" id="cat-dropdown-panel" hidden>
+          <div class="cat-dropdown-search">
+            <input type="text" id="cat-dropdown-search-input" placeholder="Zoek gebouwtype…" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="cat-dropdown-list" id="cat-dropdown-list"></div>
+        </div>
+      </div>
+      <div class="pathway-toggles" id="pathway-toggles" hidden>
+        <label class="pathway-chk" id="pp-toggle-label"><input type="checkbox" id="pp-toggle"><span>Paris Proof-pad</span></label>
+        <label class="pathway-chk disabled" id="crrem-toggle-label" title="Het CRREM-pad is te tonen bij uitsluitend WEii-finaal of WEii-CO₂, met minstens één geselecteerd gebouwtype."><input type="checkbox" id="crrem-toggle" disabled aria-disabled="true"><span>CRREM-pad</span></label>
+      </div>
+      <div class="year-tabs-inline" id="year-tabs-weii-wrap">
+        <div class="year-tabs" id="year-tabs-weii"></div>
+      </div>
+    </div>
+
+    <div class="kader chart-kader">
+      <div class="legend-row" id="chart-legend"></div>
+      <div id="chart-wrap"></div>
+      <div class="source-note" id="chart-note" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="kader" style="margin-top:14px;">
+      <div class="detail-title" id="detail-title">Landelijk gemiddelde</div>
+      <div id="table-body"></div>
+    </div>
+
+  </div>
+
+  <div class="methodiek-section">
+    <div class="mlist">
+      <div class="mrow">
+        <div class="mrow-head" role="button" tabindex="0" aria-expanded="false"><span class="mrow-name">Methodiek en bronnen</span></div>
+        <div class="mrow-body">
+          <div class="msec-tools"><button type="button" class="msec-all" id="msec-all">Alles uitklappen</button></div>
+
+          <div class="msec">
+            <button type="button" class="msec-head" aria-expanded="false"><span>Rekenregel en indicatoren</span><span class="msec-chev">›</span></button>
+            <div class="msec-body">
+<p>De WEii is per gebouwtype berekend volgens de rekenregel uit het <strong>WEii-protocol versie 3.1</strong> (TVVL en DGBC, januari 2026):</p>
+          <p style="text-align:center;font-weight:500;color:var(--text);">WEii&nbsp;=&nbsp;(gas x 9,77 kWh/m³ + elektriciteit)&nbsp;/&nbsp;gebruiksoppervlak,&nbsp;met weercorrectie op het ruimteverwarmingsdeel</p>
+          <p>Hierbij zijn de landelijke, oppervlakte-gewogen gemiddelde energiekentallen voor aardgas en elektriciteit gebruikt (energie- en weegfactoren uit Tabel 1 van het protocol), exclusief eigenverbruik van lokaal opgewekte zonnestroom – dit is de hoofdmeter-gebaseerde "werkelijk energiegebruik"-definitie uit het protocol (Vergelijking 2), en dit is ook de score waarop de weergegeven WEii-klassen (WENG t/m Zeer onzuinig, incl. Paris Proof, per gebruikstype uit Tabel 4) zijn gedefinieerd.</p>
+          <p>Het protocol beschrijft in hoofdstuk 8 daarnaast enkele "overige indicatoren". Een daarvan is <strong>WEii-finaal</strong>: het finale energiegebruik, dat gelijk is aan de energie afgenomen van het net plus de lokale opwek (§8.1, Figuur 2). Voor dit dashboard geldt dus exact: WEii-finaal&nbsp;=&nbsp;WEii&nbsp;+&nbsp;zonne-opwek per m². WEii-finaal en de klassegrenzen (incl. Paris Proof) horen niet bij elkaar: de klassering is en blijft op de gewone WEii gedefinieerd.</p>
+          <p>Twee andere overige indicatoren uit het protocol zijn ook opgenomen: <strong>WEii-dekkingsgraad</strong> (§8.5) geeft aan welk deel van het finale energiegebruik wordt gedekt door zelf opgewekte én direct verbruikte zonnestroom (eigenverbruik&nbsp;÷&nbsp;WEii-finaal&nbsp;x&nbsp;100%), en <strong>WEii-benuttingsfactor</strong> (§8.6) geeft aan welk deel van de lokaal opgewekte zonnestroom direct zelf wordt verbruikt in plaats van teruggeleverd aan het net (eigenverbruik&nbsp;÷&nbsp;zonne-opwek&nbsp;x&nbsp;100%). Het eigenverbruik zelf is niet rechtstreeks als kental gepubliceerd door TNO, maar is af te leiden als het verschil tussen het gewogen gemiddelde elektriciteitskental inclusief en exclusief eigenverbruik zonnestroom (beide kentallen zijn, met hetzelfde pandoppervlak als weegfactor, over dezelfde populatie panden berekend, dus is ook het verschil een geldig gewogen gemiddelde). Beide indicatoren ontbreken voor gebouwtype/jaar-combinaties zonder betrouwbaar zonopwek-kental.</p>
+          <p>Tot slot is er <strong>WEii-CO₂</strong> (§8.3): de CO₂-emissie per m² die bij het werkelijke energiegebruik hoort. Het protocol schrijft voor dat hiervoor per jaar vastgestelde emissiefactoren worden gebruikt, omdat de Nederlandse elektriciteitsmix van jaar op jaar schoner wordt; een vaste factor over alle jaren zou zowel het niveau als de daling van de uitstoot verkeerd weergeven. Dit dashboard gebruikt daarom de officiële, per jaar gepubliceerde CO₂-emissiefactoren van WEii.nl (zelf gebaseerd op CO2emissiefactoren.nl, well-to-wheel): 1,884 (2020), 2,085 (2021), 2,079 (2022), 2,134 (2023) en 2,134 (2024) kg CO₂ per m³ aardgas, en 0,475 (2020), 0,427 (2021), 0,337 (2022), 0,328 (2023) en 0,268 (2024) kg CO₂ per kWh elektriciteit. Het protocol schrijft hier expliciet voor dat de weerscorrectie (zie hieronder) hier <em>niet</em> in wordt meegenomen, dus WEii-CO₂ is steeds op het ruwe, niet-gecorrigeerde gaskental berekend.</p>
+            </div>
+          </div>
+
+          <div class="msec">
+            <button type="button" class="msec-head" aria-expanded="false"><span>Weercorrectie op het ruimteverwarmingsdeel (nu uitgeschakeld)</span><span class="msec-chev">›</span></button>
+            <div class="msec-body">
+<p>Conform §6.3.1 van het protocol (Vergelijking 3: E_cor;verw&nbsp;=&nbsp;f_cor;verw&nbsp;x&nbsp;E_verw) geldt een weerscorrectie <em>alleen</em> voor het deel van het energiegebruik dat naar <strong>ruimteverwarming</strong> gaat; energie voor warm tapwater, koken en proces, en elektriciteit voor installaties, laptops en andere apparatuur wordt niet gecorrigeerd. Het dashboard is daarop voorbereid: per gebruikstype kan onder <strong>Settings</strong> het <strong>aandeel van het gasverbruik</strong> en het <strong>aandeel van het elektriciteitsverbruik</strong> worden vastgelegd dat naar ruimteverwarming gaat (gecorrigeerd gas = gas&nbsp;x&nbsp;(1&nbsp;+&nbsp;f&nbsp;x&nbsp;aandeel gas); gecorrigeerde elektriciteit = elektriciteit&nbsp;x&nbsp;(1&nbsp;+&nbsp;f&nbsp;x&nbsp;aandeel elektra)). <strong>Standaard staan alle aandelen op 0%, dus is er geen weerscorrectie toegepast</strong> en tonen WEii, WEii-gas en WEii-finaal het gemeten verbruik.</p>
+          <p>De factoren f komen van WEii.nl ("Weerscorrectiefactoren ruimteverwarming 2025"): 2020: +10,2%, 2021: −6,4%, 2022: +7,5%, 2023: +11,1%, 2024: +12,6% (referentiestation De Bilt, meteostation 260). Een eventuele correctie werkt door in WEii, WEii-gas en WEii-finaal, maar nooit in WEii-CO₂ (§8.3) of het eigenverbruik van zonnestroom.</p>
+              <div id="weer-aandeel-wrap"></div>
+              <p>De tabel toont de aandelen die nu actief zijn. Ze zijn aan te passen onder Settings, bij "Weercorrectie: aandeel ruimteverwarming"; het dashboard rekent direct opnieuw.</p>
+            </div>
+          </div>
+
+          <div class="msec">
+            <button type="button" class="msec-head" aria-expanded="false"><span>Bron van de kentallen en gebouwtypen</span><span class="msec-chev">›</span></button>
+            <div class="msec-body">
+              <p>TNO Energiekentallen Utiliteitsbouw 2020 tot en met 2024 (in opdracht van RVO), per zichtjaar. Dit zijn landelijke benchmarkcijfers over de Nederlandse gebouwvoorraad en geen WEii-metingen van specifieke DGBC-panden. Alle kentallen in dit dashboard zijn <strong>gewogen gemiddelden</strong>, op twee niveaus: (1) TNO's eigen "Gewogen gemiddelde kental" per gebouwtype wordt gebruikt (oppervlakte-gewogen), niet het ongewogen "Gemiddelde kental"; (2) de 65 TNO-gebouwtypen zijn volgens de koppeling onder Settings samengevoegd tot gebruikstypen, met het <strong>geschatte gebouwoppervlak</strong> als weegfactor (aantal panden x gemiddeld oppervlak per pand, afgeleid uit de TNO-oppervlakteklassen), en niet met het aantal panden. Het oppervlak per pand is een schatting (klassemidden van de TNO-oppervlakteklassen) tenzij onder Settings het door TNO opgegeven gemiddelde is ingevuld; de onderliggende TNO-gebouwtypen staan bij elk gebouwtype vermeld.</p>
+              <p>Het dashboard toont 23 gebruikstypen: de 25 WEii-gebruikstypen uit het protocol, waarbij <strong>winkel met en zonder warenkoeling</strong> (Winkel*) en <strong>café en restaurant</strong> (Café/restaurant**) elk als één gebruikstype zijn samengevoegd. TNO publiceert voor deze paren geen afzonderlijke kentallen, dus er is ook geen afzonderlijke data. De klassegrenzen en het Paris Proof-pad van Winkel* en Café/restaurant** zijn het gewogen gemiddelde van de twee samengevoegde gebruikstypen, met een weging naar oppervlak uit de routekaarten: 20% met en 80% zonder warenkoeling, en 23% café en 77% restaurant. Het <strong>landelijk gemiddelde</strong> is oppervlak-gewogen over 14 van deze 23: alle gebruikstypen behalve Sauna, Medische (groeps) praktijk, Opvang zonder overnachting, Garage/showroom, Vakantiepark, Sportaccommodatie binnen en buiten, Grondgebonden woningen en Appartementen. Een aantal TNO-gebouwtypen is aan twee gebruikstypen gekoppeld (bijvoorbeeld Winkelpand aan Winkel met en zonder warenkoeling); zouden alle 25 meetellen, dan telde hun oppervlak dubbel.</p>
+              <p>Voor <strong>Sauna, Garage/showroom, Sportaccommodatie buiten en Appartementen</strong> is in de standaardkoppeling geen TNO-gebouwtype beschikbaar; ze zijn wel te selecteren en tonen dan geen kentallen (gemarkeerd als "geen TNO-data"). Wie zelf een TNO-gebouwtype koppelt onder Settings, ziet direct de kentallen. Bij gebruikstypen waarvan het protocol de klassegrenzen maar deels geeft (Zeer zuinig, Zuinig en Paris Proof uit de routekaart) is de klasse boven de laatste bekende grens "onbekend".</p>
+            </div>
+          </div>
+
+          <div class="msec">
+            <button type="button" class="msec-head" aria-expanded="false"><span>Het CRREM-pad</span><span class="msec-chev">›</span></button>
+            <div class="msec-body">
+              <p>Het CRREM-pad is het 1,5°C-doelpad uit de <strong>CRREM Global Pathways (versie 2.01, 11 januari 2023)</strong>, voor Nederland, per CRREM-pandtype en per jaar van 2020 tot en met 2050 (energie in kWh/m², en CO₂ in kg CO₂/m²). Elk gebouwtype is aan het meest verwante CRREM-pandtype gekoppeld (tabel hieronder); waar de aansluiting niet exact is staat "benadering", en gebouwtypen zonder vergelijkbaar CRREM-type (zoals onderwijs, kinderopvang, restaurants en cellengebouwen) hebben geen CRREM-pad. Het pad is te tonen bij uitsluitend WEii-finaal (energie) of uitsluitend WEii-CO₂, voor minstens één geselecteerd gebouwtype.</p>
+              <p>CRREM heeft een eigen oppervlakte-definitie en rekent met finaal energiegebruik; daarom is het CRREM-pad te vergelijken met WEii-finaal (WEii plus lokale zonopwek) en niet met de gewone WEii. De vergelijking blijft richtinggevend. Het CRREM-CO₂-pad gebruikt de CRREM-emissiefactoren voor het Nederlandse net, WEii-CO₂ de WEii.nl-factoren per jaar. De CRREM-gegevens zijn afkomstig van het CRREM-consortium en worden gebruikt onder de voorwaarden en disclaimer van dat bestand ("as is", op eigen risico).</p>
+              <div id="crrem-map-wrap"></div>
+            </div>
+          </div>
+
+          <div class="msec">
+            <button type="button" class="msec-head" aria-expanded="false"><span>Het Paris Proof-pad</span><span class="msec-chev">›</span></button>
+            <div class="msec-body">
+              <p>Het Paris Proof-pad toont het volledige, officiële DGBC-routekaartpad per gebouwtype ("Paris Proof paden energie – prognose 2025"), niet een eigen benadering: het pad is piecewise-lineair tussen de ankerjaren 2020, 2025 (Zuinig), 2030 (Zeer zuinig) en 2040 (Paris Proof), en loopt vlak door tot 2050. De routekaart bevat een pad voor alle 25 gebruikstypen; voor <strong>Winkel*</strong> en <strong>Café/restaurant**</strong> is het pad het gewogen gemiddelde van de twee samengevoegde gebruikstypen (dezelfde weging als bij de klassegrenzen). Voor alle gebruikstypen komt de 2040-waarde exact overeen met de Paris Proof-klassegrens. Alleen bij Winkel* wijkt het ankerjaar 2025 af: de routekaart geeft daar (gewogen) 185 kWh/m², terwijl de Zuinig-grens 192 kWh/m² is – dit is een verschil tussen de brondocumenten zelf en geen keuze van dit dashboard.</p>
+              <p>Let ook op dat het 2020-basisjaar van dit officiële pad niet gelijk is aan de werkelijke, uit de TNO-kentallen berekende WEii voor 2020 die in dit dashboard wordt getoond: voor de meeste gebouwtypen ligt de routekaart-2020-waarde hoger (ongunstiger) dan het TNO-gemeten 2020-gemiddelde, vermoedelijk door een verschil in onderliggende bronmethodiek tussen de DGBC-routekaart en de TNO-benchmark.</p>
+            </div>
+          </div>
+
+          <div class="msec">
+            <button type="button" class="msec-head" aria-expanded="false"><span>Vereenvoudigingen</span><span class="msec-chev">›</span></button>
+            <div class="msec-body">
+              <p>Er is geen warmte- of koudelevering meegenomen in de WEii-berekening; dit is niet af te leiden uit de beschikbare landelijke kentallen. De optie "Zonne-opwek" (en daarmee ook WEii-finaal) toont de gewogen gemiddelde zonnestroomproductie per m² (bruto, per de kolom "Gewogen gemiddelde zonnestroomproductie kental" in de TNO-set) – dit is geen dekkingsgraad of benuttingsfactor, en TNO onderdrukt dit kental voor gebouwtype/jaar-combinaties met te weinig panden met zonnestroom in de steekproef (zichtbaar als een onderbroken lijn in de grafiek). Gebouwtypen met een kleine steekproef (zoals Cellengebouw, Onderwijs mbo, hbo en wo, en Koel- en vrieshuis) laten van jaar op jaar grotere schommelingen zien dan gebouwtypen met veel panden. De weerscorrectie (zie hierboven) is met één landelijk referentiestation (De Bilt) toegepast in plaats van per gebouw het dichtstbijzijnde weerstation, en de aandelen ruimteverwarming per gebruikstype staan voorlopig op 0% (geen weerscorrectie), en op het opwek-/eigenverbruikskental van lokale zonnestroom is geen aparte weerscorrectie (§6.3.2, f_cor;prod) toegepast, omdat daarvoor geen brontabel beschikbaar is.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /view-dashboard -->
+
+  <div id="view-settings" hidden></div>
+
+  <div class="footer-block">
+  <a class="footer-source" href="https://energy.nl/publications/energiekentallen-utiliteitsgebouwen-2020-2024/" target="_blank" rel="noopener">
+    <img src="assets/img/afbeelding-04.png" alt="TNO innovation for life">
+    <div class="footer-source-text"><strong>Bron kentallen: TNO</strong>, Energiekentallen Utiliteitsbouw 2020 t/m 2024, uitgevoerd in opdracht van RVO.<br>Alle energiekentallen in dit dashboard zijn afkomstig van deze TNO-publicatie.</div>
+  </a>
+  </div>
+
+  </div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script src="data/payload.js"></script>
+<script>
+const DATA = window.PAYLOAD_DATA;
+</script>
+<script src="assets/xlsx-sjabloon.js"></script>
+<script src="js/02-rekenmotor-van-het.js"></script>
+<script src="js/03-alle-weii-gebruikstypen.js"></script>
+
+
+</body></html>

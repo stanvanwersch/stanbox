@@ -486,6 +486,7 @@ function openDlg(g){
   const strat=t.ST[g.s];
   $('dlg-e').textContent=g.c&&g.c!=='gen_all'?`${strat}, ${t.CO[g.c]}`:strat;
   $('dlg-t').textContent=tx(it,'t');
+  { const im=$('dlg-img'), src=(window.CHVAC_IMG||{})[g.t]; im.hidden=!src; if(src){ im.href=src; const i=im.firstChild; i.src=src; i.alt=tx(it,'t'); } }
   const a=DATA.filter(x=>x.t===g.t); const fs=new Set(a.map(x=>x.f)), ls=new Set(a.map(x=>x.l)), as=new Set(a.flatMap(x=>x.a)), gl=new Set(a.flatMap(x=>x.g));
   if($('dlg-m')) $('dlg-m').innerHTML=lvSort(ls).map(l=>`<span class="ct lv">${RN[l]}, ${t.LV[l]}</span>`).join('')+(gl.has('m')?`<span class="ct m">${t.tagM}</span>`:'')+(gl.has('e')?`<span class="ct e">${t.tagE}</span>`:'');
   const w=tx(it,'w'), n=tx(it,'n');

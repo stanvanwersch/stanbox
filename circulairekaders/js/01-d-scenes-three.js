@@ -205,13 +205,13 @@ function house(){
   /* effects */
   const F=fxMats(M), fx={}, wins=WIN.splice(0); let e;
   e=fxGroup(g,'shade'); [-2.6,0,2.6].forEach(x=>B(e,1.5,.05,.85,F.awning,x,y2+2.32,5.4,{rx:.4})); B(e,1.6,.05,.85,F.awning,-2.75,y1+2.55,5.4,{rx:.4}); [1.5,-2.2].forEach(z=>B(e,.85,.05,1.5,F.awning,4.4,y2+2.25,z,{rz:-.4})); fx.shade=e;
-  e=fxGroup(g,'trees'); tree(e,M,-7.4,-1.6,.9); tree(e,M,-5.8,-7.2,.85); tree(e,M,-9.4,1.4,.75); C(e,1.4,.05,F.water,6.4,.07,-2.6,{seg:40}); for(let i=0;i<4;i++)B(e,1.0,.7,.6,F.green,4.2+i*1.05,.35,-7.8); fx.trees=e;
+  e=fxGroup(g,'trees'); tree(e,M,-7.4,-1.6,.9); tree(e,M,-5.8,-7.2,.85); tree(e,M,-9.4,1.4,.75); C(e,1.4,.05,F.water,6.4,.07,-2.6,{seg:40}); for(let i=0;i<4;i++)B(e,1.0,.7,.6,F.green,4.2+i*1.05,.35,-7.8); e.userData.anchor=V(-9.2,3.2,1.4); fx.trees=e;
   e=fxGroup(g,'sedum'); {const q=new THREE.Group(); B(q,4.3,.08,sl-.15,F.sedum,0,.27,0); q.rotation.x=pitch; q.position.set(-2.1,roofY+.1,2.55); e.add(q);} fx.sedum=e;
   e=fxGroup(g,'insul'); {const q=new THREE.Group(); for(let x=-2.1+.83;x<2.1;x+=1.35)B(q,1.15,.2,sl-.45,F.insul,x,-.02,0); q.rotation.x=pitch; q.position.set(2.2,roofY+.1,2.55); e.add(q);}
     B(e,7.6,.12,9.6,F.insul,0,y1-.03,0); B(e,.18,H1,.36,F.insul,-1.5,y1+H1/2,5-W/2); B(e,.36,H1,.18,F.insul,4-W/2,y1+H1/2,4.5); fx.insul=e;
   e=fxGroup(g,'glass'); wins.forEach(({grp,w,h})=>{const q=new THREE.Group(); q.position.copy(grp.position); q.rotation.copy(grp.rotation); const m=new THREE.Mesh(new THREE.PlaneGeometry(w-.14,h-.14),F.glass); m.position.z=.03; q.add(m); e.add(q);}); fx.glass=e;
   e=fxGroup(g,'district'); line(e,[V(-11.5,.14,8.4),V(5.6,.14,8.4),V(5.6,.14,4.9)],.09,F.district); B(e,.9,1.3,.55,F.district,5.6,.65,4.6); line(e,[V(5.1,.5,4.6),V(3.85,y1+.42,4.6),V(3.85,y1+.42,-3.6),V(3.5,y1+.42,-4.0)],.06,F.district); fx.district=e;
-  e=fxGroup(g,'pipeins'); line(e,[V(4.9,.55,1.6),V(4.3,.55,1.6),V(3.6,y1+.18,1.6),V(3.6,y1+.18,-3.9)],.1,F.sleeve); line(e,[V(4.9,.4,1.75),V(4.3,.4,1.75),V(3.75,y1+.3,1.75),V(3.75,y1+.3,-3.7)],.1,F.sleeve); line(e,[V(2.85,y1+.25,-4.5),V(-.4,y1+.25,-4.5)],.09,F.sleeve); fx.pipeins=e;
+  e=fxGroup(g,'pipeins'); line(e,[V(4.9,.55,1.6),V(4.3,.55,1.6),V(3.6,y1+.18,1.6),V(3.6,y1+.18,-3.9)],.1,F.sleeve); line(e,[V(4.9,.4,1.75),V(4.3,.4,1.75),V(3.75,y1+.3,1.75),V(3.75,y1+.3,-3.7)],.1,F.sleeve); line(e,[V(2.85,y1+.25,-4.5),V(-.4,y1+.25,-4.5)],.09,F.sleeve); e.userData.anchor=V(3.68,y1+.25,-2.6); fx.pipeins=e;
   e=fxGroup(g,'radfan'); B(e,1.0,.14,.18,F.dark,.2,y1+.32,-4.5); [-.25,.25].forEach(x=>{const m=new THREE.Mesh(new THREE.CircleGeometry(.055,16),F.signal); m.position.set(.2+x,y1+.32,-4.4); e.add(m);}); fx.radfan=e;
   e=fxGroup(g,'wireless'); arcs(e,F,2.75,y1+1.7,-4.6); arcs(e,F,2.25,y1+1.3,-4.6); fx.wireless=e;
   e=fxGroup(g,'nightvent'); [-2.6,0,2.6].forEach(x=>arrow(e,F,V(x,y2+1.45,7.2),V(x,y2+1.45,5.4))); [1.5,-2.2].forEach(z=>arrow(e,F,V(4.4,y2+1.45,z),V(6.4,y2+1.45,z))); arrow(e,F,V(-1,y1+1.6,6.8),V(-1,y1+1.6,3.2)); fx.nightvent=e;
@@ -434,7 +434,7 @@ function setEffects(b,keys,animate){ const d=get(b); Object.entries(d.fx).forEac
     if(on&&!grp.visible){ grp.visible=true; if(animate){ grp.userData.t0=t; grp.traverse(o=>{ if(o.isMesh) o.scale.setScalar(.01); }); } }
     if(!on&&grp.visible){ grp.visible=false; } }); }
 function flashFx(b,k){ const d=get(b), grp=d.fx[k]; if(!grp) return; grp.traverse(o=>{ if(!o.isMesh||o.userData.flash) return; const h=new THREE.Mesh(o.geometry,new THREE.MeshBasicMaterial({color:0xe07a2f,transparent:true,opacity:.5,side:THREE.BackSide,depthWrite:false})); h.userData.flash=t+2.6; h.raycast=()=>{}; h.scale.setScalar(1.08); o.add(h); }); }
-function fxCenter(b,k){ const grp=get(b).fx[k]; if(!grp) return null; const box=new THREE.Box3().setFromObject(grp); return box.isEmpty()?null:box.getCenter(new THREE.Vector3()); }
+function fxCenter(b,k){ const grp=get(b).fx[k]; if(!grp) return null; if(grp.userData.anchor) return grp.userData.anchor.clone(); const box=new THREE.Box3().setFromObject(grp); return box.isEmpty()?null:box.getCenter(new THREE.Vector3()); }
 function animFx(){ if(!cur) return; const d=get(cur); const ease=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
   Object.values(d.fx).forEach(grp=>{ if(grp.userData.t0==null) return; const p=Math.min(1,(t-grp.userData.t0)/.7); const s=Math.max(.01,ease(p)); grp.traverse(o=>{ if(o.isMesh&&!o.userData.flash) o.scale.setScalar(s); }); if(p>=1) grp.userData.t0=null; });
   const rm=[]; d.sc.traverse(o=>{ if(o.userData.flash){ const left=o.userData.flash-t; if(left<=0) rm.push(o); else { const a=(Math.sin(t*6)+1)/2; o.material.opacity=Math.min(1,left)*(.25+.4*a); } } }); rm.forEach(o=>o.parent.remove(o)); }

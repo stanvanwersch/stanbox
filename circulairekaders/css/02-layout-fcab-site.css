@@ -677,3 +677,8 @@ body{background:#fff}
 /* Info-knop opvallender: oranje met witte tekst */
 #infoBtn.infob{background:var(--accent);color:#fff;border-color:var(--accent)}
 #infoBtn.infob:hover{background:#d14f1e;border-color:#d14f1e}
+
+/* Afbeelding bij interventie (data/afbeeldingen.js) */
+.dimg{display:block;margin:0 -4px;cursor:zoom-in}
+.dimg[hidden]{display:none}
+.dimg img{display:block;width:100%;height:auto}

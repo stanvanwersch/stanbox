@@ -413,3 +413,7 @@ button.sqb:hover{background:var(--accent-s)}
 
 #fileB{min-width:150px;justify-content:center}
 @media (max-width:700px){#fileB{min-width:0}}
+
+/* Info-knop opvallender: oranje met witte tekst */
+#infoB.sqb{background:var(--accent);color:#fff;border-color:var(--accent)}
+button#infoB.sqb:hover{background:#d14f1e;border-color:#d14f1e}

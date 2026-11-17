@@ -673,3 +673,7 @@ body{background:#fff}
 70%{transform:scale(1);box-shadow:0 0 0 8px color-mix(in srgb,var(--fc) 0%,transparent)}
 100%{transform:scale(1);box-shadow:0 0 0 0 color-mix(in srgb,var(--fc) 0%,transparent)}}
 @media (prefers-reduced-motion:reduce){#app .side .pill.fflash{animation:none!important;outline:2px solid var(--fc)}}
+
+/* Info-knop opvallender: oranje met witte tekst */
+#infoBtn.infob{background:var(--accent);color:#fff;border-color:var(--accent)}
+#infoBtn.infob:hover{background:#d14f1e;border-color:#d14f1e}

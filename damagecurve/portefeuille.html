@@ -1,0 +1,108 @@
+<!doctype html><html lang="nl"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="css/01-stijl.css">
+<title>Portefeuille · Rekenketen wateroverlast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/02-layout-vaste-sfeerfoto.css">
+<link rel="stylesheet" href="css/03-portefeuille.css">
+<link rel="stylesheet" href="css/04-site.css">
+</head><body data-pagina="portefeuille">
+<!-- Teksten staan per taal naast elkaar (data-lang="nl"/"en"); wat het script maakt, via data/teksten.js. -->
+<div class="bg-photo" aria-hidden="true"></div>
+<div class="page">
+  <header class="uhead" id="uhead"></header>
+
+  <main class="steps pf">
+    <p class="pf-intro">
+      <span data-lang="nl">Dezelfde rekenketen als voor één woning, voor een lijst panden of typologieën. Elke regel staat voor een
+      aantal gelijke woningen op de begane grond. Per regel: blootstelling (stap 1), gebouwkenmerken (stap 2) en een maatregelpakket (stap 5).
+      Kentallen, schadecurve en financiële uitgangspunten gelden voor de hele portefeuille.</span>
+      <span data-lang="en">The same damage chain as for a single dwelling, for a list of buildings or building types. Each row stands for a
+      number of identical ground-floor dwellings. Per row: exposure (step 1), building characteristics (step 2) and a package of measures (step 5).
+      Unit costs, damage curve and financial assumptions apply to the whole portfolio.</span></p>
+
+    <!-- 1 -->
+    <article class="step p1" id="p1">
+      <div class="step-h"><div class="n">1</div><div><h2><span data-lang="nl">Panden en typologieën</span><span data-lang="en">Buildings and building types</span></h2><p><span data-lang="nl">Waterdiepte bij het pand, de kenmerken die bepalen wanneer water binnenkomt, en het maatregelpakket per regel.</span><span data-lang="en">Water depth at the building, the characteristics that determine when water gets in, and the package of measures per row.</span></p></div></div>
+      <div class="pf-body">
+        <div class="pf-scroll"><table class="tbl ptbl" id="rows"></table></div>
+        <div class="pf-actions">
+          <button type="button" class="addbtn" id="add"><span data-lang="nl">+ Regel toevoegen</span><span data-lang="en">+ Add row</span></button>
+          <button type="button" class="addbtn ghost" id="example"><span data-lang="nl">Voorbeeld laden</span><span data-lang="en">Load example</span></button>
+          <button type="button" class="addbtn ghost" id="clear"><span data-lang="nl">Leegmaken</span><span data-lang="en">Clear</span></button>
+        </div>
+        <details class="pf-paste">
+          <summary><span data-lang="nl">Plakken uit Excel of kopiëren naar Excel</span><span data-lang="en">Paste from Excel or copy to Excel</span></summary>
+          <p class="note">
+            <span data-lang="nl">Eén regel per typologie, kolommen gescheiden door tab of puntkomma, in deze volgorde (een kopregel mag):</span>
+            <span data-lang="en">One row per building type, columns separated by tab or semicolon, in this order (a header row is allowed):</span><br>
+            <code id="cols"></code><br>
+            <span data-lang="nl">instroom naar: <code>woon</code> of <code>kruip</code> · kruipruimte: <code>ja</code>/<code>nee</code> · kelder: <code>geen</code>, <code>0</code>, <code>10</code> of <code>20</code> (drempel in cm) ·
+            riool: <code>gemengd</code>/<code>gescheiden</code> · installaties: <code>bg</code>, <code>onder</code> of <code>hoger</code> · maatregelen: FCAB-nummers met spatie, bijv. <code>76 102</code></span>
+            <span data-lang="en">inflow to: <code>woon</code> (living space) or <code>kruip</code> (crawl space) · crawl space: <code>ja</code>/<code>nee</code> (yes/no) · basement: <code>geen</code> (none), <code>0</code>, <code>10</code> or <code>20</code> (threshold in cm) ·
+            sewer: <code>gemengd</code> (combined) or <code>gescheiden</code> (separate) · services: <code>bg</code> (ground floor), <code>onder</code> (below street) or <code>hoger</code> (raised) · measures: FCAB numbers separated by spaces, e.g. <code>76 102</code></span></p>
+          <textarea id="paste" rows="6" spellcheck="false" data-t-attr="aria-label:pf.plakveld"></textarea>
+          <div class="pf-actions">
+            <button type="button" class="addbtn" id="read"><span data-lang="nl">Inlezen (vervangt de lijst)</span><span data-lang="en">Import (replaces the list)</span></button>
+            <button type="button" class="addbtn ghost" id="copy"><span data-lang="nl">Huidige lijst hierin zetten</span><span data-lang="en">Put current list here</span></button>
+            <span class="note" id="pastemsg" role="status"></span>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="step p2" id="p2">
+      <div class="step-h"><div class="n">2</div><div><h2><span data-lang="nl">Uitgangspunten voor de hele portefeuille</span><span data-lang="en">Assumptions for the whole portfolio</span></h2><p><span data-lang="nl">Schadecurve, kentallen (stap 3), lichtste bui zonder schade (stap 4) en kosten-baten (stap 6).</span><span data-lang="en">Damage curve, unit costs (step 3), lightest event without damage (step 4) and costs and benefits (step 6).</span></p></div></div>
+      <div class="pf-body pf-grid">
+        <div>
+          <div class="col-t"><span data-lang="nl">Schadecurve</span><span data-lang="en">Damage curve</span></div>
+          <div class="seg" id="curve"></div>
+          <p class="note" id="curvenote"></p>
+          <div class="col-t" style="margin-top:14px"><span data-lang="nl">Kentallen</span><span data-lang="en">Unit costs</span></div>
+          <div class="kgrid" id="kentallen"></div>
+        </div>
+        <div>
+          <div class="col-t"><span data-lang="nl">Rekenen en kosten-baten</span><span data-lang="en">Calculation, costs and benefits</span></div>
+          <div class="kgrid" id="fin"></div>
+          <div class="f" style="margin-top:8px"><label><span data-lang="nl">Discontovoet</span><span data-lang="en">Discount rate</span></label><div class="seg" id="rate"><button type="button" data-v="0.0225"></button><button type="button" data-v="0.04"></button><button type="button" data-v="0.055"></button></div></div>
+          <div class="col-t" style="margin-top:14px"><span data-lang="nl">Kosten per maatregel per woning</span><span data-lang="en">Cost per measure per dwelling</span></div>
+          <div class="kgrid" id="mkosten"></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="step p3" id="p3">
+      <div class="step-h"><div class="n">3</div><div><h2><span data-lang="nl">Uitkomsten</span><span data-lang="en">Results</span></h2><p><span data-lang="nl">Verwachte schade per jaar zonder maatregelen, vermeden schade en kosten-baten, opgeteld over de portefeuille. De marge is de bandbreedte over alle schadecurves.</span><span data-lang="en">Expected annual damage without measures, avoided damage, costs and benefits, summed over the portfolio. The margin is the range across all damage curves.</span></p></div></div>
+      <div class="pf-body">
+        <div class="kpis pf-kpis" id="kpis"></div>
+        <div class="pf-chart">
+          <div class="col-t"><span data-lang="nl">Verwachte schade per jaar per regel, bij niets doen</span><span data-lang="en">Expected annual damage per row, when doing nothing</span></div>
+          <svg class="ch" id="chart" role="img" data-t-attr="aria-label:pf.grafiek"></svg>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="pf-scroll"><table class="tbl" id="res"></table></div>
+        <p class="note" id="resnote"></p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="foot">
+    <p><span data-lang="nl">Indicatief rekenvoorbeeld. Bedragen, waterdieptes, kentallen en typologieën zijn voorbeeldwaarden en worden in de pilotcasus bepaald. Je lijst wordt alleen in deze browser bewaard.</span><span data-lang="en">Indicative calculation example. Amounts, water depths, unit costs and building types are example values to be determined in the pilot case. Your list is only stored in this browser.</span></p>
+    <div class="logos">
+      <img alt="Dutch Green Building Council" src="assets/img/afbeelding-02.png">
+      <img alt="TU Delft" src="assets/img/afbeelding-03.png">
+      <img alt="Climate Adaptation Services" src="assets/img/afbeelding-04.png">
+      <img alt="Haskoning" src="assets/img/afbeelding-05.png">
+    </div>
+  </footer>
+</div>
+
+<script src="data/teksten.js"></script>
+<script src="js/00-site.js"></script>
+<script src="data/maatregelen.js"></script>
+<script src="data/schadecurves.js"></script>
+<script src="data/standaard.js"></script>
+<script src="js/01-rekenkern.js"></script>
+<script src="js/05-portefeuille.js"></script>
+</body></html>

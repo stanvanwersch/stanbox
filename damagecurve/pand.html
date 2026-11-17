@@ -1,0 +1,288 @@
+<!doctype html><html lang="nl"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="css/01-stijl.css">
+<title>Eén woning · Rekenketen wateroverlast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/02-layout-vaste-sfeerfoto.css">
+<link rel="stylesheet" href="css/04-site.css">
+</head><body data-pagina="pand">
+<!-- Teksten staan per taal naast elkaar (data-lang="nl"/"en"); keuzelijsten en tooltips via data/teksten.js (data-t). -->
+<div class="bg-photo" aria-hidden="true"></div>
+<div class="page">
+  <div class="sticky-head">
+  <header class="uhead" id="uhead"></header>
+
+  <nav class="tabs" role="tablist" aria-label="Onderdelen" data-t-attr="aria-label:tabs.label">
+    <button class="tab p1 on" role="tab" type="button" id="tab-1" aria-controls="ph-1" aria-selected="true"><span class="tn"><span data-lang="nl">Klimaatrisico</span><span data-lang="en">Climate risk</span></span></button>
+    <button class="tab p2" role="tab" type="button" id="tab-2" aria-controls="ph-2" aria-selected="false"><span class="tn"><span data-lang="nl">Scenario niets doen</span><span data-lang="en">Scenario: do nothing</span></span></button>
+    <button class="tab p3" role="tab" type="button" id="tab-3" aria-controls="ph-3" aria-selected="false"><span class="tn"><span data-lang="nl">Scenario met adaptatie</span><span data-lang="en">Scenario: with adaptation</span></span></button>
+  </nav>
+  </div>
+
+  <main class="steps">
+    <section class="panel" id="ph-1" role="tabpanel" aria-labelledby="tab-1">
+
+    <!-- STEP 1 -->
+    <article class="step p1" id="s1">
+      <div class="step-h"><div class="n">1</div><div><h2><span data-lang="nl">Blootstelling en omgeving</span><span data-lang="en">Exposure and surroundings</span></h2><p><span data-lang="nl">Hoeveel water staat er rond het pand bij buien van verschillende zwaarte?</span><span data-lang="en">How much water is there around the building during rain events of different severity?</span></p></div><button class="info" type="button" aria-expanded="false" aria-controls="s1" data-t-attr="title:info.titel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg><span data-t="info"></span></button></div>
+      <div class="ipo">
+        <div class="col in"><div class="col-t">Input</div>
+          <div class="f"><label for="h100"><span data-lang="nl">Waterdiepte 1× per 100 jaar (70 mm in 1 uur)</span><span data-lang="en">Water depth once per 100 years (70 mm in 1 hour)</span></label><span class="val" id="h100v"></span><input type="range" id="h100" min="0" max="60" value="18"></div>
+          <div class="f"><label for="h250"><span data-lang="nl">Waterdiepte 1× per 250 jaar (90 mm in 1 uur)</span><span data-lang="en">Water depth once per 250 years (90 mm in 1 hour)</span></label><span class="val" id="h250v"></span><input type="range" id="h250" min="0" max="80" value="28"></div>
+          <div class="f"><label for="h1000"><span data-lang="nl">Waterdiepte 1× per 1000 jaar (155 mm in 2 uur)</span><span data-lang="en">Water depth once per 1000 years (155 mm in 2 hours)</span></label><span class="val" id="h1000v"></span><input type="range" id="h1000" min="0" max="100" value="45"></div>
+          <div class="f"><label for="corr"><span data-lang="nl">Correctie uit lokale toets (afschot, stoep, rooster)</span><span data-lang="en">Correction from local check (slope, kerb, grating)</span></label><span class="val" id="corrv"></span><input type="range" id="corr" min="-10" max="10" value="0"></div>
+        </div>
+        <div class="col pr"><div class="col-t" data-t="proces"></div>
+          <ol data-lang="nl"><li>BAG-pandcontour met een buffer van 0,5 m; 99e percentiel van de waterdiepte binnen die buffer.</li><li>Waterdiepte per herhalingstijd uit de drie landelijke kaarten.</li><li>Lokaal toetsen en corrigeren.</li><li>FCAB-1 classificatie van de 1:100-bui (70 mm in 1 uur).</li></ol>
+          <ol data-lang="en"><li>BAG building footprint with a 0.5 m buffer; 99th percentile of the water depth within that buffer.</li><li>Water depth per return period from the three national maps.</li><li>Check and correct locally.</li><li>FCAB-1 classification of the 1:100 event (70 mm in 1 hour).</li></ol>
+          <div class="formula" data-lang="nl">h(T) = P99(h_kaart(T)) + correctie
+0–2 cm geen · 2–10 zeer laag
+10–15 laag
+15–20 middel · 20–30 hoog
+&gt;30 cm zeer hoog</div>
+          <div class="formula" data-lang="en">h(T) = P99(h_map(T)) + correction
+0–2 cm none · 2–10 very low
+10–15 low
+15–20 medium · 20–30 high
+&gt;30 cm very high</div>
+        </div>
+        <div class="col out"><div class="col-t"><span data-lang="nl">Output · h(T) en omgevingsscore</span><span data-lang="en">Output · h(T) and surroundings score</span></div>
+          <svg class="ch" id="c1" viewBox="0 0 360 170" role="img" data-t-attr="aria-label:c1.label"></svg>
+          <div class="fcab"><div class="fcab-t"><span class="tag">FCAB-1</span> <span data-lang="nl">omgevingsscore</span><span data-lang="en">surroundings score</span></div>
+            <div class="score" id="o1"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 2 -->
+    <article class="step p1" id="s2">
+      <div class="step-h"><div class="n">2</div><div><h2><span data-lang="nl">Gebouwkenmerken</span><span data-lang="en">Building characteristics</span></h2><p><span data-lang="nl">Bij welke waterdiepte komt water binnen, en hoe kwetsbaar is het pand volgens FCAB-2?</span><span data-lang="en">At what water depth does water get in, and how vulnerable is the building according to FCAB-2?</span></p></div><button class="info" type="button" aria-expanded="false" aria-controls="s2" data-t-attr="title:info.titel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg><span data-t="info"></span></button></div>
+      <div class="ipo">
+        <div class="col in"><div class="col-t">Input</div>
+          <div class="f"><label for="hdr"><span data-lang="nl">Hoogte ingang t.o.v. maaiveld op 2 m</span><span data-lang="en">Entrance height relative to ground level at 2 m</span></label><span class="val" id="hdrv"></span><input type="range" id="hdr" min="0" max="40" value="15"></div>
+          <div class="f"><label for="hin"><span data-lang="nl">Laagste overig instroompunt (kelderraam, stootvoeg, kruipruimteventilatie)</span><span data-lang="en">Lowest other inflow point (basement window, weep hole, crawl space vent)</span></label><span class="val" id="hinv"></span><input type="range" id="hin" min="0" max="40" value="5"></div>
+          <div class="sel"><label for="route"><span data-lang="nl">Water via dat instroompunt komt in</span><span data-lang="en">Water through that inflow point enters</span></label><select id="route"><option value="woon" data-t="opt.route.woon"></option><option value="kruip" data-t="opt.route.kruip"></option></select></div>
+          <div class="f"><label for="area"><span data-lang="nl">Vloeroppervlak begane grond</span><span data-lang="en">Ground floor area</span></label><span class="val" id="areav"></span><input type="range" id="area" min="30" max="120" step="5" value="50"></div>
+          <div class="f"><label><span data-lang="nl">Kruipruimte</span><span data-lang="en">Crawl space</span></label><div class="seg" id="crawl"><button type="button" class="on" data-v="1" data-t="ja"></button><button type="button" data-v="0" data-t="nee"></button></div></div>
+          <div class="sel"><label for="kelder"><span data-lang="nl">Kelder, souterrain of parkeerkelder</span><span data-lang="en">Basement, semi-basement or underground car park</span></label><select id="kelder"><option value="none" data-t="opt.kelder.none"></option><option value="0" data-t="opt.kelder.0"></option><option value="10" data-t="opt.kelder.10"></option><option value="20" data-t="opt.kelder.20"></option></select></div>
+          <div class="sel"><label for="riool"><span data-lang="nl">Rioolstelsel</span><span data-lang="en">Sewer system</span></label><select id="riool"><option value="gemengd" data-t="opt.riool.gemengd"></option><option value="gescheiden" data-t="opt.riool.gescheiden"></option></select></div>
+          <div class="f"><label for="bj"><span data-lang="nl">Bouwjaar (na 1981: ontlastput verplicht)</span><span data-lang="en">Year of construction (after 1981: relief well mandatory)</span></label><span class="val" id="bjv"></span><input type="range" id="bj" min="1900" max="2020" step="5" value="1935"></div>
+          <div class="sel"><label for="inst"><span data-lang="nl">Vaste installaties (cv-ketel, boiler, meterkast)</span><span data-lang="en">Building services (boiler, water heater, meter cupboard)</span></label><select id="inst"><option value="bg" data-t="opt.inst.bg"></option><option value="onder" data-t="opt.inst.onder"></option><option value="hoger" data-t="opt.inst.hoger"></option></select></div>
+        </div>
+        <div class="col pr"><div class="col-t" data-t="proces"></div>
+          <p data-lang="nl">Elk kenmerk krijgt kwetsbaarheidspunten (FCAB-2 tabel 15). De som is de gebouwscore (0–100). Die combineert met de omgevingsscore in de risicomatrix (tabel 17).</p>
+          <p data-lang="en">Each characteristic gets vulnerability points (FCAB-2 table 15). The sum is the building score (0–100). It is combined with the surroundings score in the risk matrix (table 17).</p>
+          <div class="formula" data-lang="nl">gebouwscore = Σ punten
+  ingang       40 / 28 / 10 / 4
+  kelder       15 / 10,5 / 6 / 0
+  instroompunt 20 / 8 / 0
+  riool        5 / 0
+  installaties 20 / 14 / 0</div>
+          <div class="formula" data-lang="en">building score = Σ points
+  entrance     40 / 28 / 10 / 4
+  basement     15 / 10.5 / 6 / 0
+  inflow point 20 / 8 / 0
+  sewer        5 / 0
+  services     20 / 14 / 0</div>
+          <p data-lang="nl">Dezelfde kenmerken bepalen in stap 3 de drempelwaarden van de schadecurve. De laagste opening naar de woonruimte bepaalt wanneer water binnenkomt: een hoge ingang helpt niet als water via een lager instroompunt binnenkomt.</p>
+          <p data-lang="en">The same characteristics set the thresholds of the damage curve in step 3. The lowest opening to the living space determines when water gets in: a high entrance does not help if water enters through a lower inflow point.</p>
+          <div class="formula" data-lang="nl">h_bin = min(h_ingang (+15 bij schot), h_in)
+        h_in telt niet als die alleen
+        naar kruipruimte/kelder leidt
+        of is afgedicht (#102)</div>
+          <div class="formula" data-lang="en">h_in = min(h_entrance (+15 with board), h_inflow)
+       h_inflow does not count if it only
+       leads to crawl space/basement
+       or has been sealed (#102)</div>
+        </div>
+        <div class="col out"><div class="col-t"><span data-lang="nl">Output · gebouwscore en klimaatrisicoscore</span><span data-lang="en">Output · building score and climate risk score</span></div>
+          <table class="tbl pts" id="t2"></table>
+          <div class="note" id="o2b" style="margin:6px 0 2px"></div>
+          <div class="fcab"><div class="fcab-t"><span class="tag">FCAB-2</span> <span data-lang="nl">risicomatrix</span><span data-lang="en">risk matrix</span></div>
+            <table class="matrix" id="mx" data-t-attr="aria-label:mx.label"></table>
+            <div class="mx-cap"><span data-t="mx.links"></span><span>100</span></div>
+            <div class="score" id="o2"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    </section>
+    <section class="panel" id="ph-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+
+    <!-- STEP 3 -->
+    <article class="step p2" id="s3">
+      <div class="step-h"><div class="n">3</div><div><h2><span data-lang="nl">Pandspecifieke schadecurve</span><span data-lang="en">Building-specific damage curve</span></h2><p><span data-lang="nl">Van de generieke curve naar euro's per waterdiepte, met de drempels uit de FCAB-2 kenmerken.</span><span data-lang="en">From the generic curve to euros per water depth, with the thresholds from the FCAB-2 characteristics.</span></p></div><button class="info" type="button" aria-expanded="false" aria-controls="s3" data-t-attr="title:info.titel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg><span data-t="info"></span></button></div>
+      <div class="ipo">
+        <div class="col in"><div class="col-t"><span data-lang="nl">Input · curve en kostenkentallen</span><span data-lang="en">Input · curve and unit costs</span></div>
+          <div class="f"><label><span data-lang="nl">Schadecurve voor de berekening</span><span data-lang="en">Damage curve for the calculation</span></label><div class="seg" id="curve"></div></div>
+          <div class="f"><label for="cvast"><span data-lang="nl">Vaste schade per m² zodra water binnen is (pandspecifiek)</span><span data-lang="en">Fixed damage per m² once water is inside (building-specific)</span></label><span class="val" id="cvastv"></span><input type="range" id="cvast" min="100" max="500" step="10" value="280"></div>
+          <div class="f"><label for="cdiep"><span data-lang="nl">Extra schade per m² per cm waterdiepte (tot 30 cm, pandspecifiek)</span><span data-lang="en">Extra damage per m² per cm of water depth (up to 30 cm, building-specific)</span></label><span class="val" id="cdiepv"></span><input type="range" id="cdiep" min="0" max="20" step="0.5" value="8"></div>
+          <div class="f"><label for="wlim"><span data-lang="nl">Herbouwwaarde per m² (Limburg-curve)</span><span data-lang="en">Rebuilding value per m² (Limburg curve)</span></label><span class="val" id="wlimv"></span><input type="range" id="wlim" min="1000" max="3000" step="1" value="1806"></div>
+          <div class="f"><label for="inb"><span data-lang="nl">Inboedelwaarde (huurder of eigenaar)</span><span data-lang="en">Contents value (tenant or owner)</span></label><span class="val" id="inbv"></span><input type="range" id="inb" min="10000" max="100000" step="500" value="45000"></div>
+          <div class="f"><label for="pinb"><span data-lang="nl">Inboedel beschadigd zodra water binnen is (pandspecifiek)</span><span data-lang="en">Contents damaged once water is inside (building-specific)</span></label><span class="val" id="pinbv"></span><input type="range" id="pinb" min="0" max="50" step="1" value="10"></div>
+          <div class="f"><label for="pinbd"><span data-lang="nl">Extra inboedelschade per cm waterdiepte (tot 30 cm, pandspecifiek)</span><span data-lang="en">Extra contents damage per cm of water depth (up to 30 cm, building-specific)</span></label><span class="val" id="pinbdv"></span><input type="range" id="pinbd" min="0" max="2" step="0.1" value="0.5"></div>
+          <div class="f"><label for="dkr"><span data-lang="nl">Kruipruimte leegpompen en drogen</span><span data-lang="en">Pumping out and drying the crawl space</span></label><span class="val" id="dkrv"></span><input type="range" id="dkr" min="0" max="5000" step="100" value="1500"></div>
+          <div class="f"><label for="dkel"><span data-lang="nl">Kelder onder water</span><span data-lang="en">Flooded basement</span></label><span class="val" id="dkelv"></span><input type="range" id="dkel" min="0" max="15000" step="500" value="5000"></div>
+          <div class="f"><label for="drio"><span data-lang="nl">Rioolwater via toilet of douche</span><span data-lang="en">Sewage via toilet or shower</span></label><span class="val" id="driov"></span><input type="range" id="drio" min="0" max="5000" step="100" value="1500"></div>
+          <div class="f"><label for="dinst"><span data-lang="nl">Vaste installaties vervangen</span><span data-lang="en">Replacing building services</span></label><span class="val" id="dinstv"></span><input type="range" id="dinst" min="0" max="10000" step="250" value="3000"></div>
+          <div class="f"><label for="cind"><span data-lang="nl">Indirect per keer (huurderving, huisvesting)</span><span data-lang="en">Indirect per event (lost rent, temporary housing)</span></label><span class="val" id="cindv"></span><input type="range" id="cind" min="0" max="10000" step="250" value="2500"></div>
+          <div class="own" id="own3"><div class="own-h"><span data-lang="nl">Eigen schadeposten</span><span data-lang="en">Own damage items</span></div><div id="ownlist"></div><button type="button" class="addbtn" id="addpost"><span data-lang="nl">+ Schadepost toevoegen</span><span data-lang="en">+ Add damage item</span></button></div>
+        </div>
+        <div class="col pr"><div class="col-t" data-t="proces"></div>
+          <div class="formula" data-lang="nl">h ≥ h_in   → + D_kruip
+h ≥ 10     → + D_riool *
+h ≥ h_kel  → + D_kelder
+h ≥ h_bin  → + D_opstal(h − h_bin) + D_inst
+             + D_inboedel(h − h_bin)
+             + D_ind
+h ≥ drempel → + eigen posten
+* gemengd riool zonder klep
+
+D_opstal(x), x = cm boven h_bin (stap 2):
+ pandspecifiek  A·(c_vast + c_diep·min(x,30))
+ WSS            A·271·f_WSS(x)
+ Limburg        A·W·min(1, 0,238 + 0,015·√x)
+
+D_inboedel(x), I = inboedelwaarde:
+ pandspecifiek  I·min(1, p_vast + p_diep·min(x,30))
+ WSS            zit in de €271/m²
+ Limburg        I·min(1, 0,446 + 0,0155·√x)</div>
+          <div class="formula" data-lang="en">h ≥ h_inflow → + D_crawl
+h ≥ 10       → + D_sewage *
+h ≥ h_base   → + D_basement
+h ≥ h_in     → + D_structure(h − h_in) + D_serv
+               + D_contents(h − h_in)
+               + D_ind
+h ≥ threshold → + own items
+* combined sewer without valve
+
+D_structure(x), x = cm above h_in (step 2):
+ building-specific  A·(c_fixed + c_depth·min(x,30))
+ WSS                A·271·f_WSS(x)
+ Limburg            A·W·min(1, 0.238 + 0.015·√x)
+
+D_contents(x), I = contents value:
+ building-specific  I·min(1, p_fixed + p_depth·min(x,30))
+ WSS                included in the €271/m²
+ Limburg            I·min(1, 0.446 + 0.0155·√x)</div>
+          <p data-lang="nl">Meerdere curves geven een bandbreedte (gearceerd). De gekozen curve rekent door in stap 4 en 6; de andere geven de marge.</p>
+          <p data-lang="en">Several curves give a range (shaded). The chosen curve carries through to steps 4 and 6; the others give the margin.</p>
+          <div class="src" id="curvesrc"></div>
+        </div>
+        <div class="col out"><div class="col-t">Output · D(h)</div>
+          <svg class="ch" id="c3" viewBox="0 0 320 190" role="img" data-t-attr="aria-label:c3.label"></svg>
+          <div class="note" id="o3"></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 4 -->
+    <article class="step p2" id="s4">
+      <div class="step-h"><div class="n">4</div><div><h2><span data-lang="nl">Verwachte schadebedragen</span><span data-lang="en">Expected damage</span></h2><p><span data-lang="nl">Blootstelling × schadecurve: schade per bui en verwachte schade per jaar.</span><span data-lang="en">Exposure × damage curve: damage per event and expected annual damage.</span></p></div><button class="info" type="button" aria-expanded="false" aria-controls="s4" data-t-attr="title:info.titel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg><span data-t="info"></span></button></div>
+      <div class="ipo">
+        <div class="col in"><div class="col-t">Input</div>
+          <p style="margin:0;font-size:13.5px;color:var(--text2)"><span data-lang="nl">h(T) uit stap 1 en D(h) uit stap 3.</span><span data-lang="en">h(T) from step 1 and D(h) from step 3.</span></p>
+          <div class="f"><label for="t0"><span data-lang="nl">Lichtste bui zonder schade (1× per … jaar)</span><span data-lang="en">Lightest event without damage (once per … years)</span></label><span class="val" id="t0v"></span><input type="range" id="t0" min="10" max="90" step="5" value="50"></div>
+          <div class="src"><span data-lang="nl">Aanname nodig: onder de lichtste berekende bui loopt de schade naar nul.</span><span data-lang="en">Assumption needed: below the lightest calculated event, damage drops to zero.</span></div>
+        </div>
+        <div class="col pr"><div class="col-t" data-t="proces"></div>
+          <div class="formula">D(T) = D(h(T))
+EAD  = Σ (pᵢ − pᵢ₊₁)·(Dᵢ + Dᵢ₊₁)/2
+       + p_min · D_max        p = 1/T</div>
+          <p data-lang="nl">Waar FCAB een kwalitatieve klasse geeft, levert deze stap een bedrag per jaar.</p>
+          <p data-lang="en">Where FCAB gives a qualitative class, this step yields an amount per year.</p>
+        </div>
+        <div class="col out"><div class="col-t"><span data-lang="nl">Output · schade per bui en EAD</span><span data-lang="en">Output · damage per event and EAD</span></div>
+          <svg class="ch" id="c4" viewBox="0 0 320 160" role="img" data-t-attr="aria-label:c4.label"></svg>
+          <div class="legend" id="o4l" style="justify-content:center;margin:-2px 0 6px"></div>
+          <div class="big num" id="o4"></div>
+          <table class="tbl" id="t4" style="margin-top:8px"></table>
+        </div>
+      </div>
+    </article>
+
+    </section>
+    <section class="panel" id="ph-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+
+    <!-- STEP 5 -->
+    <article class="step p3" id="s5">
+      <div class="step-h"><div class="n">5</div><div><h2><span data-lang="nl">Maatregelen</span><span data-lang="en">Measures</span></h2><p><span data-lang="nl">Maatregelen uit de FCAB-3 maatregelentabel. Elke maatregel grijpt in op een kenmerk of parameter uit stap 1 tot 3.</span><span data-lang="en">Measures from the FCAB-3 table of measures. Each measure acts on a characteristic or parameter from steps 1 to 3.</span></p></div><button class="info" type="button" aria-expanded="false" aria-controls="s5" data-t-attr="title:info.titel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg><span data-t="info"></span></button></div>
+      <div class="ipo">
+        <div class="col in"><div class="col-t"><span data-lang="nl">Input · maatregelpakket</span><span data-lang="en">Input · package of measures</span></div>
+          <div id="mlist" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+        <div class="col pr"><div class="col-t" data-t="proces"></div>
+          <p data-lang="nl">FCAB-3 weegt maatregelen in volgorde: eerst niet-fysiek, dan gebied, dan gebouw. Het pakket past de kenmerken aan; daarmee rekenen we de FCAB-scores en de schadecurve opnieuw door.</p>
+          <p data-lang="en">FCAB-3 considers measures in order: first non-physical, then area, then building. The package adjusts the characteristics; with those we recalculate the FCAB scores and the damage curve.</p>
+          <div class="formula" id="f5"></div>
+        </div>
+        <div class="col out"><div class="col-t"><span data-lang="nl">Output · aangepaste kenmerken en scores</span><span data-lang="en">Output · adjusted characteristics and scores</span></div>
+          <table class="tbl" id="t5"></table>
+          <div class="fcab"><div class="fcab-t"><span class="tag">FCAB-2</span> <span data-lang="nl">klimaatrisicoscore na maatregelen</span><span data-lang="en">climate risk score after measures</span></div><div class="score" id="o5s"></div></div>
+          <div class="big num" id="o5"></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 6 -->
+    <article class="step p3" id="s6">
+      <div class="step-h"><div class="n">6</div><div><h2><span data-lang="nl">Aangepaste schadecurve en kosten-baten</span><span data-lang="en">Adjusted damage curve, costs and benefits</span></h2><p><span data-lang="nl">De vermeden schade is de baat; die zetten we af tegen de kosten van het pakket.</span><span data-lang="en">The avoided damage is the benefit; we weigh it against the costs of the package.</span></p></div><button class="info" type="button" aria-expanded="false" aria-controls="s6" data-t-attr="title:info.titel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg><span data-t="info"></span></button></div>
+      <div class="ipo">
+        <div class="col in"><div class="col-t">Input</div>
+          <div class="f"><label for="hor"><span data-lang="nl">Tijdshorizon</span><span data-lang="en">Time horizon</span></label><span class="val" id="horv"></span><input type="range" id="hor" min="10" max="100" step="5" value="30"></div>
+          <div class="f"><label><span data-lang="nl">Discontovoet</span><span data-lang="en">Discount rate</span></label><div class="seg" id="rate"><button type="button" class="on" data-v="0.0225">2,25%</button><button type="button" data-v="0.04">4%</button><button type="button" data-v="0.055">5,5%</button></div></div>
+          <div class="f"><label for="om"><span data-lang="nl">Onderhoud per jaar (% van investering)</span><span data-lang="en">Maintenance per year (% of investment)</span></label><span class="val" id="omv"></span><input type="range" id="om" min="0" max="5" step="0.5" value="1"></div>
+        </div>
+        <div class="col pr"><div class="col-t" data-t="proces"></div>
+          <div class="formula" data-lang="nl">ΔEAD     = EAD − EAD′
+CW_baten = ΔEAD · a(r, N)
+CW_kost  = I + I·o·a(r, N)
+NCW      = CW_baten − CW_kost
+a(r,N)   = (1 − (1+r)⁻ᴺ) / r</div>
+          <div class="formula" data-lang="en">ΔEAD      = EAD − EAD′
+PV_benef  = ΔEAD · a(r, N)
+PV_cost   = I + I·o·a(r, N)
+NPV       = PV_benef − PV_cost
+a(r,N)    = (1 − (1+r)⁻ᴺ) / r</div>
+          <p data-lang="nl">Restrisico na maatregelen: accepteren, verzekeren of beleggen bij derden (FCAB-3 risicohouding).</p>
+          <p data-lang="en">Residual risk after measures: accept, insure or transfer to third parties (FCAB-3 risk attitude).</p>
+        </div>
+        <div class="col out"><div class="col-t"><span data-lang="nl">Output · kosten en baten</span><span data-lang="en">Output · costs and benefits</span></div>
+          <svg class="ch" id="c6" viewBox="0 0 320 190" role="img" data-t-attr="aria-label:c6.label"></svg>
+          <table class="tbl" id="t6"></table>
+          <div id="o6"></div>
+        </div>
+      </div>
+    </article>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p><span data-lang="nl">Indicatief rekenvoorbeeld voor één woning. Bedragen, waterdieptes en kentallen zijn voorbeeldwaarden en worden in de pilotcasus bepaald.</span><span data-lang="en">Indicative calculation example for a single dwelling. Amounts, water depths and unit costs are example values to be determined in the pilot case.</span></p>
+    <div class="logos">
+      <img alt="Dutch Green Building Council" src="assets/img/afbeelding-02.png">
+      <img alt="TU Delft" src="assets/img/afbeelding-03.png">
+      <img alt="Climate Adaptation Services" src="assets/img/afbeelding-04.png">
+      <img alt="Haskoning" src="assets/img/afbeelding-05.png">
+    </div>
+  </footer>
+</div>
+
+<script src="data/teksten.js"></script>
+<script src="js/00-site.js"></script>
+<script src="data/maatregelen.js"></script>
+<script src="data/schadecurves.js"></script>
+<script src="data/standaard.js"></script>
+<script src="js/01-rekenkern.js"></script>
+<script src="js/02-pagina.js"></script>
+
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  const p=document.querySelector('.page'); /* de kaart scrolt, niet het venster (css/04-site.css) */
+  if(p.scrollTop>0) p.scrollTo({top:0,behavior:'smooth'});
+}));
+</script>
+<script src="js/03-script.js"></script>
+<script src="js/04-altijd-openen-op.js"></script>
+</body></html>

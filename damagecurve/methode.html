@@ -1,0 +1,325 @@
+<!doctype html><html lang="nl"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="css/01-stijl.css">
+<title>Methode · Rekenketen wateroverlast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/02-layout-vaste-sfeerfoto.css">
+<link rel="stylesheet" href="css/04-site.css">
+</head><body data-pagina="methode">
+<div class="bg-photo" aria-hidden="true"></div>
+<div class="page">
+  <header class="uhead" id="uhead"></header>
+  <!-- Methodebeschrijving, openbare versie van het document "Rekenketen wateroverlast: methodebeschrijving en keuzeregister".
+       Elke tekst staat er twee keer: data-lang="nl" en data-lang="en". Pas altijd beide aan. -->
+  <div class="mt">
+    <nav class="mt-toc" aria-label="Inhoud">
+      <a href="#doel"><span data-lang="nl">Doel en afbakening</span><span data-lang="en">Purpose and scope</span></a>
+      <a href="#opbouw"><span data-lang="nl">Opbouw</span><span data-lang="en">Structure</span></a>
+      <a href="#stappen"><span data-lang="nl">De zes stappen</span><span data-lang="en">The six steps</span></a>
+      <a href="#keuzes"><span data-lang="nl">Keuzes</span><span data-lang="en">Choices</span></a>
+      <a href="#niveaus"><span data-lang="nl">Detailniveaus</span><span data-lang="en">Levels of detail</span></a>
+      <a href="#onzekerheid"><span data-lang="nl">Onzekerheid en rapportage</span><span data-lang="en">Uncertainty and reporting</span></a>
+      <a href="#bronnen"><span data-lang="nl">Bronnen</span><span data-lang="en">Sources</span></a>
+    </nav>
+    <article class="mt-body">
+
+<!-- ================= DOEL ================= -->
+<h2 id="doel"><span data-lang="nl">Doel en afbakening</span><span data-lang="en">Purpose and scope</span></h2>
+<div data-lang="nl">
+  <p class="mt-lead">De rekenketen vertaalt waterdieptes en woningkenmerken naar euro's: de verwachte schade per jaar en de baten van maatregelen, altijd met een bandbreedte. Zo kan een woningcorporatie bepalen welke woningen risico lopen en welke maatregelen zich terugverdienen.</p>
+  <ul>
+    <li><b>Voor wie:</b> woningcorporaties, en adviseurs die de rekenketen voor hen toepassen.</li>
+    <li><b>Wel:</b> wateroverlast door hevige neerslag bij woningen; maatregelen aan het pand, en gebiedsmaatregelen die de waterdiepte verlagen.</li>
+    <li><b>Niet:</b> overstromingen vanuit rivieren of zee, slachtoffers, niet-woningen. Bergingen en niet-verhuurbare ruimtes vragen een aparte behandeling.</li>
+    <li><b>Relatie met FCAB:</b> FCAB-1 (omgeving) en FCAB-2 (gebouw) geven een kwalitatieve risicoklasse. Deze rekenketen gebruikt dezelfde kenmerken en maakt er een bedrag van; de maatregelen komen uit de FCAB-3-maatregelentabel.</li>
+  </ul>
+  <p>De methode staat los van het instrument. De rekentools op deze site zijn één uitvoering ervan; een adviesbureau of eigen script moet met deze beschrijving op hetzelfde getal uitkomen. De methode is in ontwikkeling en wordt samen met woningcorporaties getoetst.</p>
+</div>
+<div data-lang="en">
+  <p class="mt-lead">The damage chain translates water depths and dwelling characteristics into euros: the expected annual damage and the benefits of measures, always with a range. This lets a housing association determine which dwellings are at risk and which measures pay off.</p>
+  <ul>
+    <li><b>For whom:</b> housing associations, and the consultants who apply the damage chain for them.</li>
+    <li><b>In scope:</b> pluvial flooding of dwellings caused by extreme rainfall; measures on the building, and area measures that reduce the water depth.</li>
+    <li><b>Out of scope:</b> river or coastal flooding, casualties, non-residential buildings. Storage rooms and non-lettable spaces need separate treatment.</li>
+    <li><b>Relation to FCAB:</b> FCAB-1 (surroundings) and FCAB-2 (building) give a qualitative risk class. This damage chain uses the same characteristics and turns them into an amount; the measures come from the FCAB-3 table of measures.</li>
+  </ul>
+  <p>The method is independent of the instrument. The calculation tools on this site are one implementation; a consultancy or a custom script should arrive at the same figure using this description. The method is under development and is being tested together with housing associations.</p>
+</div>
+
+<!-- ================= OPBOUW ================= -->
+<h2 id="opbouw"><span data-lang="nl">Opbouw</span><span data-lang="en">Structure</span></h2>
+<p data-lang="nl">De keten heeft zes vaste stappen en wordt twee keer doorgerekend: zonder en met een maatregelpakket. Het verschil in verwachte schade per jaar is de baat.</p>
+<p data-lang="en">The chain has six fixed steps and is calculated twice: without and with a package of measures. The difference in expected annual damage is the benefit.</p>
+<figure class="mt-fig" style="margin-inline:0">
+  <svg viewBox="0 0 780 250" role="img" aria-labelledby="fig-t">
+    <title id="fig-t">Rekenketen in zes stappen / Damage chain in six steps</title>
+    <defs><marker id="pijl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text3)"/></marker></defs>
+    <g stroke="var(--border2)" fill="var(--cream)">
+      <rect x="4" y="40" width="120" height="78" rx="8"/><rect x="134" y="40" width="120" height="78" rx="8"/><rect x="264" y="40" width="120" height="78" rx="8"/>
+      <rect x="394" y="40" width="120" height="78" rx="8"/><rect x="524" y="40" width="120" height="78" rx="8" fill="var(--phase3-s)"/><rect x="654" y="40" width="120" height="78" rx="8" fill="var(--phase3-s)"/>
+    </g>
+    <g stroke="var(--text3)" stroke-width="1.4" marker-end="url(#pijl)">
+      <line x1="124" y1="79" x2="132" y2="79"/><line x1="254" y1="79" x2="262" y2="79"/><line x1="384" y1="79" x2="392" y2="79"/><line x1="514" y1="79" x2="522" y2="79"/><line x1="644" y1="79" x2="652" y2="79"/>
+    </g>
+    <path d="M584 118 V150 H194 V122" fill="none" stroke="var(--phase3)" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#pijl)"/>
+    <g text-anchor="middle">
+      <text class="k" x="64" y="66">1</text><text class="k" x="194" y="66">2</text><text class="k" x="324" y="66">3</text><text class="k" x="454" y="66">4</text><text class="k" x="584" y="66">5</text><text class="k" x="714" y="66">6</text>
+      <g data-lang="nl">
+        <text x="64" y="88">Blootstelling</text><text x="64" y="104" font-size="10.5">h(T) per bui</text>
+        <text x="194" y="88">Gebouw</text><text x="194" y="104" font-size="10.5">h_bin, gebouwscore</text>
+        <text x="324" y="88">Schadecurve</text><text x="324" y="104" font-size="10.5">D(h) per categorie</text>
+        <text x="454" y="88">Verwachte schade</text><text x="454" y="104" font-size="10.5">EAD per jaar</text>
+        <text x="584" y="88">Maatregelen</text><text x="584" y="104" font-size="10.5">pakket past 1–3 aan</text>
+        <text x="714" y="88">Kosten-baten</text><text x="714" y="104" font-size="10.5">ΔEAD, NCW</text>
+        <text x="390" y="168" font-size="11" style="fill:var(--phase3-t)">tweede doorrekening: stap 1–4 opnieuw, met het pakket</text>
+        <text x="390" y="22" font-size="10.5">eerste doorrekening: zonder maatregelen</text>
+      </g>
+      <g data-lang="en">
+        <text x="64" y="88">Exposure</text><text x="64" y="104" font-size="10.5">h(T) per event</text>
+        <text x="194" y="88">Building</text><text x="194" y="104" font-size="10.5">h_in, building score</text>
+        <text x="324" y="88">Damage curve</text><text x="324" y="104" font-size="10.5">D(h) per category</text>
+        <text x="454" y="88">Expected damage</text><text x="454" y="104" font-size="10.5">EAD per year</text>
+        <text x="584" y="88">Measures</text><text x="584" y="104" font-size="10.5">package adjusts 1–3</text>
+        <text x="714" y="88">Costs and benefits</text><text x="714" y="104" font-size="10.5">ΔEAD, NPV</text>
+        <text x="390" y="168" font-size="11" style="fill:var(--phase3-t)">second run: steps 1–4 again, with the package</text>
+        <text x="390" y="22" font-size="10.5">first run: without measures</text>
+      </g>
+    </g>
+    <rect x="4" y="192" width="772" height="48" rx="8" fill="var(--accent-s)" stroke="var(--accent-b)"/>
+    <g text-anchor="middle">
+      <text class="k" x="390" y="213" data-lang="nl">Keuzes K1–K11</text><text class="k" x="390" y="213" data-lang="en">Choices K1–K11</text>
+      <text x="390" y="230" font-size="11" data-lang="nl">waardegrondslag, schadecurve, inboedel, indirecte schade, perspectief, beslismaat … gelden voor beide doorrekeningen</text>
+      <text x="390" y="230" font-size="11" data-lang="en">valuation basis, damage curve, contents, indirect damage, perspective, decision rule … apply to both runs</text>
+    </g>
+  </svg>
+</figure>
+<p data-lang="nl">Stap 5 rekent niet zelf: het pakket past de invoer van stap 1 tot 3 aan, waarna stap 1 tot 4 opnieuw lopen. De keuzes gelden voor beide doorrekeningen gelijk.</p>
+<p data-lang="en">Step 5 does not calculate anything itself: the package adjusts the input of steps 1 to 3, after which steps 1 to 4 run again. The choices apply equally to both runs.</p>
+
+<!-- ================= STAPPEN ================= -->
+<h2 id="stappen"><span data-lang="nl">De zes stappen</span><span data-lang="en">The six steps</span></h2>
+<p data-lang="nl">Elke stap heeft vaste invoer, een vaste bewerking en een vaste uitkomst die de volgende stap gebruikt. Waar een stap een keuze bevat, verwijst die naar de <a href="#keuzes">keuzes</a> (K1, K2, …).</p>
+<p data-lang="en">Each step has fixed input, a fixed operation and a fixed output that the next step uses. Where a step involves a choice, it refers to the <a href="#keuzes">choices</a> (K1, K2, …).</p>
+
+<h3><span class="n">1</span><span data-lang="nl">Blootstelling</span><span data-lang="en">Exposure</span></h3>
+<div data-lang="nl">
+  <p>Hoeveel water staat er rond het pand bij drie buien: 1 keer per 100 jaar (70 mm in 1 uur), per 250 jaar (90 mm in 1 uur) en per 1000 jaar (155 mm in 2 uur)?</p>
+  <ul>
+    <li><b>Bewerking:</b> het 99e percentiel van de waterdiepte in een buffer van 0,5 m rond de BAG-pandcontour, plus een correctie uit een lokale toets (afschot, stoep, rooster).</li>
+    <li><b>Uitkomst:</b> waterdiepte h(T) per bui, in cm boven maaiveld, en de FCAB-1-omgevingsscore.</li>
+    <li><b>Afspraken:</b> de diepte is boven maaiveld; wat het pand bereikt, bepaalt stap 2. Onder de lichtste bui geen schade (K1).</li>
+    <li><b>Onzekerheid:</b> groot bij 0 tot 15 cm door de buffer en het hoogtemodel, maar kleiner dan die van stap 3.</li>
+  </ul>
+</div>
+<div data-lang="en">
+  <p>How much water is there around the building during three rain events: once every 100 years (70 mm in 1 hour), every 250 years (90 mm in 1 hour) and every 1000 years (155 mm in 2 hours)?</p>
+  <ul>
+    <li><b>Operation:</b> the 99th percentile of the water depth in a 0.5 m buffer around the building footprint (BAG), plus a correction from a local check (slope, kerb, grating).</li>
+    <li><b>Output:</b> water depth h(T) per event, in cm above ground level, and the FCAB-1 surroundings score.</li>
+    <li><b>Conventions:</b> the depth is above ground level; step 2 determines what reaches the building. No damage below the lightest event (K1).</li>
+    <li><b>Uncertainty:</b> large between 0 and 15 cm because of the buffer and the elevation model, but smaller than that of step 3.</li>
+  </ul>
+</div>
+
+<h3><span class="n">2</span><span data-lang="nl">Gebouwkenmerken</span><span data-lang="en">Building characteristics</span></h3>
+<div data-lang="nl">
+  <p>Bij welke waterdiepte bereikt water de woonruimte, en hoe kwetsbaar is het pand?</p>
+  <ul>
+    <li><b>Invoer:</b> hoogte van de ingang, het laagste overige instroompunt en waar dat heen leidt, vloeroppervlak begane grond, kruipruimte, kelder, rioolstelsel, bouwjaar en de plaats van de installaties.</li>
+    <li><b>Bewerking:</b> de laagste opening naar de woonruimte is bepalend: h_bin is de ingang of het lagere instroompunt, tenzij dat alleen naar kruipruimte of kelder leidt of is afgedicht. Een hoge drempel helpt dus niet zolang water via een lagere opening binnenkomt.</li>
+    <li><b>Uitkomst:</b> h_bin en de FCAB-2-gebouwscore.</li>
+    <li><b>Afspraken:</b> de corporatie levert de kenmerken, de gebruiker mag aanvullen (K2); een typologie is de standaard als pandgegevens ontbreken (K3). De WOZ-waarde is geen maat voor de schade.</li>
+  </ul>
+</div>
+<div data-lang="en">
+  <p>At what water depth does water reach the living space, and how vulnerable is the building?</p>
+  <ul>
+    <li><b>Input:</b> height of the entrance, the lowest other inflow point and where it leads, ground floor area, crawl space, basement, sewer system, year of construction and the location of building services.</li>
+    <li><b>Operation:</b> the lowest opening to the living space is decisive: h_in is the entrance or the lower inflow point, unless that only leads to a crawl space or basement, or has been sealed. A higher threshold therefore does not help as long as water enters through a lower opening.</li>
+    <li><b>Output:</b> h_in and the FCAB-2 building score.</li>
+    <li><b>Conventions:</b> the housing association supplies the characteristics, the user may add to them (K2); a building type is the default when building data are missing (K3). The WOZ (property tax) value is not a measure of damage.</li>
+  </ul>
+</div>
+
+<h3><span class="n">3</span><span data-lang="nl">Pandspecifieke schadecurve</span><span data-lang="en">Building-specific damage curve</span></h3>
+<div data-lang="nl">
+  <p>Vertaalt waterdiepte naar euro's, apart voor opstal, inboedel en indirecte schade. Dit is de stap met de grootste invloed op de uitkomst.</p>
+  <ul>
+    <li><b>Vaste posten bij hun eigen drempel:</b> kruipruimte, kelder, rioolwater, installaties.</li>
+    <li><b>Zodra water binnen is</b> (x = h − h_bin): opstal en inboedel volgens de gekozen curve (K4), plus indirecte schade per gebeurtenis (K8).</li>
+    <li><b>Waarde:</b> opstal op herbouw- of bouwkosten, inboedel op een inboedelwaarde (K5, K6).</li>
+    <li><b>Uitkomst:</b> D(h), per categorie, voor elke curve. Het verschil tussen de curves is de bandbreedte.</li>
+  </ul>
+  <div class="formula">D_opstal(x):   pandspecifiek  A · (c_vast + c_diep · min(x, 30))
+               WSS            A · 271 · f_WSS(x)
+               Limburg        A · W · min(1; 0,238 + 0,015 · √x)
+D_inboedel(x): pandspecifiek  I · min(1; p_vast + p_diep · min(x, 30))
+               WSS            zit in de €271/m²
+               Limburg        I · min(1; 0,446 + 0,0155 · √x)</div>
+</div>
+<div data-lang="en">
+  <p>Translates water depth into euros, separately for structure, contents and indirect damage. This is the step with the largest influence on the result.</p>
+  <ul>
+    <li><b>Fixed items, each at its own threshold:</b> crawl space, basement, sewage, building services.</li>
+    <li><b>Once water is inside</b> (x = h − h_in): structure and contents according to the chosen curve (K4), plus indirect damage per event (K8).</li>
+    <li><b>Value:</b> structure at rebuilding or construction cost, contents at a contents value (K5, K6).</li>
+    <li><b>Output:</b> D(h), per category, for each curve. The difference between the curves is the range.</li>
+  </ul>
+  <div class="formula">D_structure(x): building-specific  A · (c_fixed + c_depth · min(x, 30))
+                WSS                A · 271 · f_WSS(x)
+                Limburg            A · W · min(1, 0.238 + 0.015 · √x)
+D_contents(x):  building-specific  I · min(1, p_fixed + p_depth · min(x, 30))
+                WSS                included in the €271/m²
+                Limburg            I · min(1, 0.446 + 0.0155 · √x)</div>
+</div>
+
+<h3><span class="n">4</span><span data-lang="nl">Verwachte schade (EAD)</span><span data-lang="en">Expected annual damage (EAD)</span></h3>
+<div data-lang="nl">
+  <p>Combineert de schade per bui met de kans erop. De schade wordt geïntegreerd over de kansen p = 1/T met de trapeziumregel, niet afgelezen op één punt.</p>
+  <div class="formula">EAD = Σ (pᵢ − pᵢ₊₁) · (Dᵢ + Dᵢ₊₁) / 2  +  p_min · D_max        p = 1/T</div>
+  <ul><li><b>Uitkomst:</b> EAD per pand, per categorie en als bandbreedte; daarnaast de schade per bui. Voor een portefeuille ook opgeteld, zodat geconcentreerd risico zichtbaar wordt.</li></ul>
+</div>
+<div data-lang="en">
+  <p>Combines the damage per event with its probability. The damage is integrated over the probabilities p = 1/T using the trapezoidal rule, not read off at a single point.</p>
+  <div class="formula">EAD = Σ (pᵢ − pᵢ₊₁) · (Dᵢ + Dᵢ₊₁) / 2  +  p_min · D_max        p = 1/T</div>
+  <ul><li><b>Output:</b> EAD per building, per category and as a range; also the damage per event. For a portfolio also summed, so that concentrated risk becomes visible.</li></ul>
+</div>
+
+<h3><span class="n">5</span><span data-lang="nl">Maatregelen</span><span data-lang="en">Measures</span></h3>
+<div data-lang="nl">
+  <p>Een maatregelpakket past de kenmerken uit stap 1 tot 3 aan; daarna wordt alles opnieuw doorgerekend.</p>
+  <ul>
+    <li><b>Water buiten houden:</b> drempel, schot, instroompunten afdichten, terugslagklep. Verschuift of verhoogt h_bin.</li>
+    <li><b>Schade beperken:</b> installaties hoger, waterbestendige materialen. Verlaagt de curve.</li>
+    <li><b>Gebied:</b> wadi, waterplein, minder verharding. Verlaagt de waterdiepte; de kosten worden verdeeld over de woningen die profiteren (K10).</li>
+    <li><b>Kosten:</b> per pakket, inclusief onderhoud; totale kosten of meerkosten (K9).</li>
+  </ul>
+</div>
+<div data-lang="en">
+  <p>A package of measures adjusts the characteristics from steps 1 to 3; everything is then recalculated.</p>
+  <ul>
+    <li><b>Keeping water out:</b> threshold, flood barrier, sealing inflow points, non-return valve. Shifts or raises h_in.</li>
+    <li><b>Limiting damage:</b> raised building services, water-resistant materials. Lowers the curve.</li>
+    <li><b>Area:</b> swale, water square, less paving. Lowers the water depth; costs are shared among the dwellings that benefit (K10).</li>
+    <li><b>Costs:</b> per package, including maintenance; total costs or additional costs (K9).</li>
+  </ul>
+</div>
+
+<h3><span class="n">6</span><span data-lang="nl">Aangepaste curve en kosten-baten</span><span data-lang="en">Adjusted curve, costs and benefits</span></h3>
+<div data-lang="nl">
+  <p>De baat is het verschil in EAD zonder en met pakket, contant gemaakt over de tijdshorizon.</p>
+  <div class="formula">NCW = ΔEAD · a(r, N) − (I + I · o · a(r, N))
+a(r, N) = (1 − (1 + r)⁻ᴺ) / r</div>
+  <ul><li><b>Uitkomst:</b> vermeden schade per jaar (per categorie), netto contante waarde en baten/kosten, elk met bandbreedte. Beslismaat en perspectief: K11 en K7.</li></ul>
+</div>
+<div data-lang="en">
+  <p>The benefit is the difference in EAD without and with the package, discounted over the time horizon.</p>
+  <div class="formula">NPV = ΔEAD · a(r, N) − (I + I · o · a(r, N))
+a(r, N) = (1 − (1 + r)⁻ᴺ) / r</div>
+  <ul><li><b>Output:</b> avoided damage per year (per category), net present value and benefit/cost ratio, each with a range. Decision rule and perspective: K11 and K7.</li></ul>
+</div>
+
+<!-- ================= KEUZES ================= -->
+<h2 id="keuzes"><span data-lang="nl">Keuzes</span><span data-lang="en">Choices</span></h2>
+<p data-lang="nl">Elf keuzes bepalen de uitkomst meer dan de rekenregels zelf. Twee corporaties die anders kiezen, rekenen met dezelfde methode; deze lijst laat zien waar hun getallen uit elkaar lopen. Een aantal keuzes wordt nog met woningcorporaties afgestemd.</p>
+<p data-lang="en">Eleven choices determine the result more than the calculation rules themselves. Two housing associations that choose differently still use the same method; this list shows where their figures diverge. Several choices are still being agreed with housing associations.</p>
+<div class="tblw">
+<table class="tbl" data-lang="nl">
+  <tr><th>Nr</th><th>Keuze</th><th>Opties</th><th>Standaard in de tool</th><th>Waarom het ertoe doet</th></tr>
+  <tr><td>K1</td><td>Ondergrens blootstelling</td><td>geen schade onder de bui van 1/50 of van 1/100 jaar</td><td>1/50</td><td>Hoe lager de ondergrens, hoe hoger de EAD. Onder het laagste kaartscenario valt wateroverlast doorgaans onder de zorgplicht van de gemeente.</td></tr>
+  <tr><td>K2</td><td>Bron gebouwkenmerken</td><td>BAG, gegevens van de corporatie, invoer van de gebruiker</td><td>corporatie levert, gebruiker vult aan</td><td>Drempel en openingen bepalen of er überhaupt schade is; de BAG alleen is daarvoor te weinig.</td></tr>
+  <tr><td>K3</td><td>Detailniveau</td><td>screening, typologie, pandspecifiek</td><td>pandspecifiek (één woning), typologie (portefeuille)</td><td>Meer detail geeft een smallere bandbreedte; typologieën dekken het grootste deel van het bezit.</td></tr>
+  <tr><td>K4</td><td>Schadecurve</td><td>pandspecifiek, WaterSchadeSchatter (WSS), Limburg 2021</td><td>alle drie tonen, pandspecifiek centraal</td><td>De WSS past bij ondiep water, Limburg is empirisch; samen geven ze de bandbreedte.</td></tr>
+  <tr><td>K5</td><td>Waardegrondslag opstal</td><td>bouwkosten zonder onbeschadigbaar deel, herbouwwaarde, dagwaarde, vervangingswaarde, boekwaarde</td><td>kentallen (pandspecifiek), herbouwwaarde €1.806/m² (Limburg), €271/m² (WSS)</td><td>Schaalt de opstalschade evenredig. Bouwkosten, geen marktwaarde.</td></tr>
+  <tr><td>K6</td><td>Inboedel</td><td>meetellen of niet; inboedelwaarde</td><td>meetellen, €45.000</td><td>De inboedel is van de huurder en kan een flink deel van de schade zijn; daarom apart getoond.</td></tr>
+  <tr><td>K7</td><td>Perspectief</td><td>corporatie, huurder, maatschappij</td><td>alle posten samen</td><td>Bepaalt welke posten meetellen. Voor de corporatie alleen kan een maatregel minder rendabel lijken dan maatschappelijk.</td></tr>
+  <tr><td>K8</td><td>Indirecte schade</td><td>vaste post per gebeurtenis, of per post onderbouwd (gederfde huur, opvang, afhandeling, VvE, hinder, gezondheid)</td><td>vaste post €2.500</td><td>Telt bij elke gebeurtenis mee, ook bij weinig water. Een vaste factor op de directe schade is geen goede schatting.</td></tr>
+  <tr><td>K9</td><td>Kosten maatregelen</td><td>totale kosten, of meerkosten bij gepland onderhoud; onderhoud in % per jaar</td><td>totale kosten, 1% onderhoud</td><td>Groot effect: meeliften met gepland onderhoud maakt veel maatregelen een stuk goedkoper.</td></tr>
+  <tr><td>K10</td><td>Gebiedsmaatregelen</td><td>per woning doorrekenen, of apart op blok- of wijkniveau met kostenverdeling</td><td>waterdiepte −x cm per woning</td><td>Voorkomt dat baten dubbel worden geteld.</td></tr>
+  <tr><td>K11</td><td>Beslismaat</td><td>NCW ≥ 0, of baten/kosten ≥ drempel; discontovoet 2,25%, 4% of 5,5%; tijdshorizon</td><td>NCW, 2,25%, 30 jaar</td><td>Bepaalt welke pakketten doorgaan. Nederland rekent gewoonlijk met de laagste totale kosten.</td></tr>
+</table>
+<table class="tbl" data-lang="en">
+  <tr><th>No.</th><th>Choice</th><th>Options</th><th>Default in the tool</th><th>Why it matters</th></tr>
+  <tr><td>K1</td><td>Lower bound of exposure</td><td>no damage below the 1/50 or the 1/100 year event</td><td>1/50</td><td>The lower the bound, the higher the EAD. Below the lightest map scenario, flooding generally falls under the municipality's duty of care.</td></tr>
+  <tr><td>K2</td><td>Source of building characteristics</td><td>BAG, housing association data, user input</td><td>association supplies, user adds</td><td>Threshold and openings determine whether there is any damage at all; BAG alone is not enough for this.</td></tr>
+  <tr><td>K3</td><td>Level of detail</td><td>screening, building type, building-specific</td><td>building-specific (single dwelling), building type (portfolio)</td><td>More detail gives a narrower range; building types cover most of the housing stock.</td></tr>
+  <tr><td>K4</td><td>Damage curve</td><td>building-specific, WaterSchadeSchatter (WSS), Limburg 2021</td><td>show all three, building-specific central</td><td>WSS suits shallow water, Limburg is empirical; together they give the range.</td></tr>
+  <tr><td>K5</td><td>Valuation basis for structure</td><td>construction cost excluding undamageable parts, rebuilding value, depreciated value, replacement value, book value</td><td>unit costs (building-specific), rebuilding value €1,806/m² (Limburg), €271/m² (WSS)</td><td>Scales the structural damage proportionally. Construction cost, not market value.</td></tr>
+  <tr><td>K6</td><td>Contents</td><td>include or not; contents value</td><td>include, €45,000</td><td>Contents belong to the tenant and can be a large share of the damage; therefore shown separately.</td></tr>
+  <tr><td>K7</td><td>Perspective</td><td>housing association, tenant, society</td><td>all items together</td><td>Determines which items count. For the association alone, a measure can seem less cost-effective than for society.</td></tr>
+  <tr><td>K8</td><td>Indirect damage</td><td>fixed amount per event, or substantiated per item (lost rent, temporary housing, claims handling, owners' association, nuisance, health)</td><td>fixed amount €2,500</td><td>Counts at every event, even with little water. A fixed factor on the direct damage is not a good estimate.</td></tr>
+  <tr><td>K9</td><td>Costs of measures</td><td>total costs, or additional costs during planned maintenance; maintenance in % per year</td><td>total costs, 1% maintenance</td><td>Large effect: combining with planned maintenance makes many measures much cheaper.</td></tr>
+  <tr><td>K10</td><td>Area measures</td><td>calculate per dwelling, or separately at block or neighbourhood level with cost sharing</td><td>water depth −x cm per dwelling</td><td>Prevents benefits from being counted twice.</td></tr>
+  <tr><td>K11</td><td>Decision rule</td><td>NPV ≥ 0, or benefit/cost ≥ threshold; discount rate 2.25%, 4% or 5.5%; time horizon</td><td>NPV, 2.25%, 30 years</td><td>Determines which packages go ahead. The Netherlands usually applies lowest total cost.</td></tr>
+</table>
+</div>
+
+<!-- ================= NIVEAUS ================= -->
+<h2 id="niveaus"><span data-lang="nl">Detailniveaus</span><span data-lang="en">Levels of detail</span></h2>
+<p data-lang="nl">Dezelfde zes stappen werken op drie niveaus; alleen de herkomst van de invoer verschilt. Een corporatie screent de hele portefeuille en rekent alleen de woningen met risico verder uit.</p>
+<p data-lang="en">The same six steps work at three levels; only the source of the input differs. A housing association screens its entire portfolio and only works out the dwellings at risk in more detail.</p>
+<div class="tblw">
+<table class="tbl" data-lang="nl">
+  <tr><th>Niveau</th><th>Voor</th><th>Blootstelling</th><th>Gebouwkenmerken</th><th>Schadecurve</th><th>Bandbreedte</th></tr>
+  <tr><td>Screening</td><td>hele portefeuille, prioriteren</td><td>landelijke kaarten, standaard buffer</td><td>BAG en standaardwaarden</td><td>alle curves</td><td>breed</td></tr>
+  <tr><td>Typologie</td><td>complexen en woningtypen</td><td>landelijke kaarten en lokale correctie</td><td>typologie (bouwvorm, bouwjaar, kruipruimte, materiaal), aangevuld door de corporatie</td><td>per typologie</td><td>middel</td></tr>
+  <tr><td>Pandspecifiek</td><td>woningen met risico, maatregelkeuze</td><td>lokale toets van afschot en drempels</td><td>gemeten drempel en openingen</td><td>met eigen kentallen</td><td>smalst</td></tr>
+</table>
+<table class="tbl" data-lang="en">
+  <tr><th>Level</th><th>For</th><th>Exposure</th><th>Building characteristics</th><th>Damage curve</th><th>Range</th></tr>
+  <tr><td>Screening</td><td>entire portfolio, prioritising</td><td>national maps, standard buffer</td><td>BAG and default values</td><td>all curves</td><td>wide</td></tr>
+  <tr><td>Building type</td><td>estates and dwelling types</td><td>national maps and local correction</td><td>building type (form, year, crawl space, material), supplemented by the association</td><td>per building type</td><td>medium</td></tr>
+  <tr><td>Building-specific</td><td>dwellings at risk, choice of measures</td><td>local check of slope and thresholds</td><td>measured threshold and openings</td><td>with own unit costs</td><td>narrowest</td></tr>
+</table>
+</div>
+<p data-lang="nl">Hoe ver je onderscheid maakt, hangt af van het doel: prioriteren binnen het bezit vraagt minder detail dan een zo goed mogelijke schadeschatting. Alleen kenmerken die een merkbaar verschil geven, worden onderscheiden. De <a href="portefeuille.html">portefeuilletool</a> werkt op typologieniveau, de <a href="pand.html">tool voor één woning</a> pandspecifiek.</p>
+<p data-lang="en">How far you differentiate depends on the purpose: prioritising within the stock needs less detail than the best possible damage estimate. Only characteristics that make a noticeable difference are distinguished. The <a href="portefeuille.html">portfolio tool</a> works at building-type level, the <a href="pand.html">single dwelling tool</a> building-specifically.</p>
+
+<!-- ================= ONZEKERHEID ================= -->
+<h2 id="onzekerheid"><span data-lang="nl">Onzekerheid en rapportage</span><span data-lang="en">Uncertainty and reporting</span></h2>
+<div data-lang="nl">
+  <p>Elke uitkomst wordt gerapporteerd als een centrale waarde met een bandbreedte, nooit als één getal. De onzekerheid uit stap 3 werkt door in de verwachte schade en in de baten.</p>
+  <ul>
+    <li><b>Grootste bron:</b> de schadecurve en de waarde van het pand. Alleen de keuze van schadefunctie kan de schade al met een factor 2 veranderen.</li>
+    <li><b>Kleinere bron:</b> de waterdiepte, vooral tussen 0 en 15 cm.</li>
+    <li><b>Nu in de bandbreedte:</b> de drie curves (K4). Nog niet: de waardegrondslag (K5) en de waterdiepte.</li>
+    <li><b>Per pand:</b> verwachte schade per categorie (opstal, inboedel, indirect), schade per bui, vermeden schade, netto contante waarde en baten/kosten, elk met bandbreedte, en de gekozen opties.</li>
+    <li><b>Per portefeuille:</b> dezelfde getallen opgeteld per typologie, complex of gebied.</li>
+  </ul>
+  <p class="mt-callout">Een conclusie is robuust als ze bij elke curve standhoudt, bijvoorbeeld "baten hoger dan kosten, met elke curve".</p>
+</div>
+<div data-lang="en">
+  <p>Every result is reported as a central value with a range, never as a single figure. The uncertainty from step 3 carries through into the expected damage and the benefits.</p>
+  <ul>
+    <li><b>Largest source:</b> the damage curve and the value of the building. The choice of damage function alone can change the damage by a factor of 2.</li>
+    <li><b>Smaller source:</b> the water depth, especially between 0 and 15 cm.</li>
+    <li><b>Currently in the range:</b> the three curves (K4). Not yet: the valuation basis (K5) and the water depth.</li>
+    <li><b>Per building:</b> expected damage per category (structure, contents, indirect), damage per event, avoided damage, net present value and benefit/cost ratio, each with a range, and the chosen options.</li>
+    <li><b>Per portfolio:</b> the same figures summed per building type, estate or area.</li>
+  </ul>
+  <p class="mt-callout">A conclusion is robust if it holds for every curve, for example "benefits exceed costs, with every curve".</p>
+</div>
+
+<!-- ================= BRONNEN ================= -->
+<h2 id="bronnen"><span data-lang="nl">Bronnen</span><span data-lang="en">Sources</span></h2>
+<ul>
+  <li><a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2022WR034192">Endendijk e.a. (2023), Flood vulnerability models and household flood damage mitigation measures, Water Resources Research 59(8)</a></li>
+  <li><a href="https://research.vu.nl/ws/portalfiles/portal/418666600/digitale%20versie%20proefschrift%20thijs%20endendijk%20-%20685e57f31e505.pdf">Endendijk (2025), <span data-lang="nl">proefschrift VU Amsterdam, hoofdstuk 4</span><span data-lang="en">PhD thesis VU Amsterdam, chapter 4</span></a></li>
+  <li><a href="https://www.stowa.nl/sites/default/files/assets/PUBLICATIES/Publicaties%202024/STOWA-2024-14-Vergelijking-WSS-SSM.pdf">STOWA 2024-14, <span data-lang="nl">Vergelijking WaterSchadeSchatter en SSM</span><span data-lang="en">Comparison of WaterSchadeSchatter and SSM</span></a></li>
+  <li><a href="https://fcab.eu/methodiek">FCAB, Framework for Climate Adaptive Buildings</a></li>
+</ul>
+
+    </article>
+  </div>
+  <footer class="foot">
+    <p><span data-lang="nl">Methode in ontwikkeling. Bedragen en kentallen in de tools zijn voorbeeldwaarden.</span><span data-lang="en">Method under development. Amounts and unit costs in the tools are example values.</span></p>
+    <div class="logos">
+      <img alt="Dutch Green Building Council" src="assets/img/afbeelding-02.png">
+      <img alt="TU Delft" src="assets/img/afbeelding-03.png">
+      <img alt="Climate Adaptation Services" src="assets/img/afbeelding-04.png">
+      <img alt="Haskoning" src="assets/img/afbeelding-05.png">
+    </div>
+  </footer>
+</div>
+<script src="data/teksten.js"></script>
+<script src="js/00-site.js"></script>
+</body></html>

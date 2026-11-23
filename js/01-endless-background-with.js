@@ -11,43 +11,39 @@
      ========================================================= */
   var bgScene = $('bg-scene'), driftLayer = $('drift-layer');
   var panelCount = 1, MAX_PANELS = 600;
+  /* Flat colours from the Stanbox style guide (no gradients). Mostly light cubes,
+     now and then one with a coral side. */
   var PALETTES = [
-    { top:["#ffffff","#f3f5f6"], front:["#f5f7f8","#d8dde0"], side:["#e9edef","#cfd5d9"] },
-    { top:["#eaf3ff","#dceaff"], front:["#dfeaff","#c3d9fb"], side:["#c9dcf9","#aecaf3"] },
-    { top:["#e9f8ef","#dff5e7"], front:["#d8f1e1","#c6ead3"], side:["#c3ead1","#a9ddbd"] },
-    { top:["#fbf1dc","#f6e6c4"], front:["#f3dfb5","#e8c98c"], side:["#e6c582","#d9ae63"] }   /* sand */
+    { top:"#FFFFFF", front:"#FBE3D2", side:"#F7C9A9" },
+    { top:"#FFFFFF", front:"#FBE3D2", side:"#F7C9A9" },
+    { top:"#FBE3D2", front:"#FFFFFF", side:"#FBE3D2" },
+    { top:"#FBE3D2", front:"#E5603F", side:"#C9452A" }
   ];
-  var DOT_COLORS = ["#3ca87c","#55b783","#e1b468","#cb994c","#4c84b0","#3f6f99","#5f95ef"];
-  var DIAMOND_COLORS = ["#e1b468","#cb994c","#5f95ef"];
+  var DOT_COLORS = ["#C9452A","#E5603F","#1A1A1A"];
+  var DIAMOND_COLORS = ["#E5603F","#C9452A"];
   function n0(v){ return v.toFixed(0); } function n1(v){ return v.toFixed(1); }
-  function gradDefs(id, p){
-    return '<linearGradient id="'+id+'-front" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.front[0]+'"/><stop offset="1" stop-color="'+p.front[1]+'"/></linearGradient>'+
-           '<linearGradient id="'+id+'-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+p.top[0]+'"/><stop offset="1" stop-color="'+p.top[1]+'"/></linearGradient>'+
-           '<linearGradient id="'+id+'-side" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.side[0]+'"/><stop offset="1" stop-color="'+p.side[1]+'"/></linearGradient>';
-  }
-  function cube(cx, topY, hw, hh, h, id){
+  function cube(cx, topY, hw, hh, h, p){
     var lx=cx-hw, ly=topY+hh, rx=cx+hw, ry=topY+hh, bx=cx, by=topY+2*hh;
-    return '<path d="M'+n0(lx)+' '+n0(ly)+'L'+n0(cx)+' '+n0(topY)+'L'+n0(rx)+' '+n0(ry)+'L'+n0(bx)+' '+n0(by)+'Z" fill="url(#'+id+'-top)"/>'+
-           '<path d="M'+n0(lx)+' '+n0(ly)+'V'+n0(ly+h)+'L'+n0(bx)+' '+n0(by+h)+'V'+n0(by)+'Z" fill="url(#'+id+'-front)"/>'+
-           '<path d="M'+n0(bx)+' '+n0(by)+'V'+n0(by+h)+'L'+n0(rx)+' '+n0(ry+h)+'V'+n0(ry)+'Z" fill="url(#'+id+'-side)"/>';
+    return '<path d="M'+n0(lx)+' '+n0(ly)+'L'+n0(cx)+' '+n0(topY)+'L'+n0(rx)+' '+n0(ry)+'L'+n0(bx)+' '+n0(by)+'Z" class="face" fill="'+p.top+'"/>'+
+           '<path d="M'+n0(lx)+' '+n0(ly)+'V'+n0(ly+h)+'L'+n0(bx)+' '+n0(by+h)+'V'+n0(by)+'Z" class="face" fill="'+p.front+'"/>'+
+           '<path d="M'+n0(bx)+' '+n0(by)+'V'+n0(by+h)+'L'+n0(rx)+' '+n0(ry+h)+'V'+n0(ry)+'Z" class="face" fill="'+p.side+'"/>';
   }
   function buildPanel(index){
-    var W=1536, H=Math.round(W*(window.innerHeight/window.innerWidth)), defs='', body='';
+    var W=1536, H=Math.round(W*(window.innerHeight/window.innerWidth)), body='';
     var nC=Math.floor(rand(2,4.999));
     for(var i=0;i<nC;i++){
-      var id='pg'+index+'-'+i; defs+=gradDefs(id, pick(PALETTES));
       var hw=rand(45,85);
-      body+='<g class="cluster" style="animation-name:'+(i%2?'floatB':'floatA')+';animation-duration:'+n1(rand(6,11))+'s;animation-delay:-'+n1(rand(0,8))+'s;">'+cube(rand(.1,.9)*W, rand(.1,.6)*H, hw, hw*rand(.42,.52), hw*rand(1.1,1.6), id)+'</g>';
+      body+='<g class="cluster" style="animation-name:'+(i%2?'floatB':'floatA')+';animation-duration:'+n1(rand(6,11))+'s;animation-delay:-'+n1(rand(0,8))+'s;">'+cube(rand(.1,.9)*W, rand(.1,.6)*H, hw, hw*rand(.42,.52), hw*rand(1.1,1.6), pick(PALETTES))+'</g>';
     }
     var g=''; for(var k=0;k<Math.floor(rand(4,8));k++){ var x1=rand(0,W), y1=rand(0,H); g+='<path d="M'+n0(x1)+' '+n0(y1)+'L'+n0(x1+rand(-260,260))+' '+n0(y1+rand(80,220))+'"/>'; }
-    body+='<g class="grid-lines" fill="none" stroke="#b7c9da" stroke-width="1" opacity=".5">'+g+'</g>';
+    body+='<g class="grid-lines" fill="none" stroke="#1A1A1A" stroke-width="1" opacity=".14">'+g+'</g>';
     var d=''; for(var m=0;m<Math.floor(rand(3,6));m++){ var dx=rand(0,W), dy=rand(0,H*.6); d+='<path d="M'+n0(dx)+' '+n0(dy)+'V'+n0(dy+rand(120,260))+'"/>'; }
-    body+='<g class="dash-lines" fill="none" stroke="#9bb5ca" stroke-width="1" stroke-dasharray="6 7" opacity=".42">'+d+'</g>';
+    body+='<g class="dash-lines" fill="none" stroke="#1A1A1A" stroke-width="1" stroke-dasharray="6 7" opacity=".08">'+d+'</g>';
     for(var q=0;q<Math.floor(rand(4,8));q++) body+='<circle class="dot" style="animation-duration:'+n1(rand(4.5,7.4))+'s;animation-delay:-'+n1(rand(0,4))+'s" cx="'+n0(rand(.12,.88)*W)+'" cy="'+n0(rand(.15,.85)*H)+'" r="'+n1(rand(1.8,3.4))+'" fill="'+pick(DOT_COLORS)+'"/>';
     if(Math.random()<.7){ var px=rand(.32,.68)*W, py=rand(.2,.8)*H, s=rand(7,11);
       body+='<path class="diamond" style="animation-delay:-'+n1(rand(0,3))+'s;transform-origin:'+n0(px)+'px '+n0(py)+'px" d="M'+n0(px-s)+' '+n0(py)+'L'+n0(px)+' '+n0(py-s*.7)+'L'+n0(px+s)+' '+n0(py)+'L'+n0(px)+' '+n0(py+s*.7)+'Z" fill="'+pick(DIAMOND_COLORS)+'"/>'; }
     var el=document.createElement('div'); el.className='bg-panel';
-    el.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice"><defs>'+defs+'</defs><g class="scene-drift" style="animation-duration:'+n0(rand(34,52))+'s;animation-delay:-'+n0(rand(0,20))+'s;">'+body+'</g></svg>';
+    el.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice"><g class="scene-drift" style="animation-duration:'+n0(rand(34,52))+'s;animation-delay:-'+n0(rand(0,20))+'s;">'+body+'</g></svg>';
     return el;
   }
 
@@ -69,17 +65,31 @@
     var pool = TOOLS.filter(function(x){ return x !== lastDrift; });
     return pick(pool);
   }
-  function maybeDrift(index){
-    if(index < 1 || Math.random() > .62) return;
+  /* Onderbrekingen (wereldbol, datalandschap, stad) en het zongebouwtje: daar mag geen tool overheen. */
+  /* ---------- waar tools (en zongebouwtjes) mogen komen ----------
+     Visuals (wereldbol, datalandschap, stad): daar komt niets overheen.
+     Tussen twee visuals: vaste indeling met twee tools en een zongebouwtje (indelenTussenruimtes).
+     Na de laatste visual: af en toe een tool, met ruimte ertussen, en heel soms een zongebouwtje. */
+  function visuals(){
+    return [].map.call(document.querySelectorAll('.wereld, .visual'), function(w){
+      var top = w.getBoundingClientRect().top + window.scrollY;
+      return [top, top + w.offsetHeight];
+    }).sort(function(a, b){ return a[0] - b[0]; });
+  }
+  function eindeVisuals(){ return visuals().reduce(function(m, b){ return Math.max(m, b[1]); }, 0); }
+  var KAART_H = function(){ return window.innerWidth < 700 ? 190 : 240; };
+  var laatsteKaart = -1e9, laatsteZon = -1e9;
+
+  function maakDrift(top, links){
     var t = nextDriftTool(); lastDrift = t;
-    var vh = window.innerHeight, vw = window.innerWidth;
+    var vw = window.innerWidth;
     var card = document.createElement('button');
     card.type = 'button'; card.className = 'drift';
     card.setAttribute('aria-label', 'Open ' + t.name);
     var w = vw < 700 ? 150 : 190;
-    var side = Math.random() < .5 ? rand(.06, .3) : rand(.62, .86);
+    var side = links ? rand(.06, .26) : rand(.62, .84);
     card.style.left = Math.max(12, Math.min(vw - w - 12, side * vw)) + 'px';
-    card.style.top = (index * vh + rand(.15, .7) * vh) + 'px';
+    card.style.top = top + 'px';
     card.style.setProperty('--rot', rand(-4, 4).toFixed(1) + 'deg');
     card.style.setProperty('--dur', rand(5, 8).toFixed(1) + 's');
     card.style.setProperty('--delay', (-rand(0, 5)).toFixed(1) + 's');
@@ -88,6 +98,39 @@
     card.addEventListener('click', function(){ openBox(card.getBoundingClientRect(), t); });
     driftLayer.appendChild(card);
     if(driftIO) driftIO.observe(card); else card.classList.add('in');
+    laatsteKaart = Math.max(laatsteKaart, top);
+  }
+  function maakZon(top, links){
+    if(!window.maakZongebouw) return;
+    window.maakZongebouw(top, links ? 'links' : 'rechts');
+    laatsteZon = Math.max(laatsteZon, top);
+  }
+
+  /* tussen elke twee visuals: tool – zongebouwtje (andere kant) – tool, op ruime afstand */
+  function indelenTussenruimtes(){
+    var v = visuals();
+    for(var i = 0; i < v.length - 1; i++){
+      var van = v[i][1], tot = v[i+1][0], L = tot - van;
+      if(L < KAART_H() * 3) continue;
+      var links = Math.random() < .5;
+      maakDrift(van + L * .12, links);
+      maakZon(van + L * .5 - 105, !links);
+      maakDrift(van + L * .88 - KAART_H(), links);
+    }
+  }
+
+  /* na de laatste visual: per achtergrondscherm */
+  function maybeDrift(index){
+    if(index < 1) return;
+    var vh = window.innerHeight, start = index * vh;
+    if(start < eindeVisuals() + vh * .3) return;   /* daarvoor zorgt indelenTussenruimtes */
+    var top = start + rand(.15, .6) * vh;
+    if(top - laatsteKaart < vh * 1.1) return;      /* ruimte tussen de tools */
+    if(Math.random() < .12 && top - laatsteZon > vh * 4 && top - laatsteKaart > vh * 1.4){
+      maakZon(top, Math.random() < .5); return;   /* heel soms een zongebouwtje */
+    }
+    if(Math.random() > .7) return;
+    maakDrift(top, Math.random() < .5);
   }
   function appendPanels(n){
     for(var i=0;i<n && panelCount<MAX_PANELS;i++){ bgScene.appendChild(buildPanel(panelCount)); maybeDrift(panelCount); panelCount++; }
@@ -102,6 +145,14 @@
     });
   }, { passive:true });
   appendPanels(3);
+  /* De visuals maken de pagina lang: maak de achtergrond (en de tools) meteen tot voorbij de
+     laatste visual aan, anders blijven de stukken ertussen leeg. Na het laden, zodat ook het
+     zongebouwtje (js/06-…) al zijn plek heeft. */
+  window.addEventListener('load', function(){
+    indelenTussenruimtes();
+    var eind = eindeVisuals() + window.innerHeight * 2;
+    while(panelCount * window.innerHeight < eind && panelCount < MAX_PANELS) appendPanels(1);
+  });
 
   /* =========================================================
      2. The sandbox: wanders as you scroll, opens into all tools
@@ -119,7 +170,8 @@
   function wanderPos(){
     var t = window.scrollY, vw = window.innerWidth, vh = window.innerHeight;
     var minL = 16, maxL = Math.max(minL, vw - BOX_W - 16);
-    var minT = Math.min(300, vh * .42), maxT = Math.max(minT, vh - BOX_H - 90);
+    var heroBottom = document.querySelector(".hero").getBoundingClientRect().bottom + 24;   /* niet over de introtekst */
+    var minT = Math.min(Math.max(Math.min(300, vh * .42), heroBottom), vh - BOX_H - 24), maxT = Math.max(minT, vh - BOX_H - 90);
     var xN = (rx(t) - rx0) / 2, yN = (ry(t) - ry0) / 2;
     return { x: minL + ((xN + 1) / 2) * (maxL - minL), y: minT + Math.max(0, Math.min(1, .2 + yN * .5)) * (maxT - minT) };
   }
@@ -163,6 +215,7 @@
     if(expanded){ if(tool) openTool(tool); return; }
     if(tool && tool.modal){ openDialog(); return; }
     expanded = true;
+    zetVast(inside, null); zetVast(frame, null);   /* voor als je snel na het sluiten weer opent */
     document.documentElement.classList.add('no-scroll'); document.body.classList.add('no-scroll');
     var from = fromRect ? { left:fromRect.left, top:fromRect.top, width:fromRect.width, height:fromRect.height }
                         : { left:lastX, top:lastY, width:BOX_W, height:BOX_H };
@@ -174,18 +227,30 @@
       if(tool) openTool(tool); else { inside.classList.add('active'); }
     });
   }
+  /* Sluiten: alles gebeurt tegelijk met het krimpen (rand, duinen, schaduw via CSS-overgangen),
+     de inhoud houdt zijn maat zodat er tijdens het krimpen niets opnieuw wordt opgemaakt,
+     en de tool wordt pas na afloop afgesloten. */
+  function zetVast(el, r){
+    if(r){ el.style.right = el.style.bottom = 'auto'; el.style.width = r.width + 'px'; el.style.height = r.height + 'px'; }
+    else { el.style.right = el.style.bottom = el.style.width = el.style.height = ''; }
+  }
   function closeBox(){
-    if(!expanded) return;
-    iframe.src = 'about:blank'; frame.classList.remove('active','loaded'); inside.classList.remove('active');
-    controls.classList.remove('show'); backdrop.classList.remove('open');
-    currentTool = null;
+    if(!expanded || animating) return;
     var from = openRect();
+    zetVast(inside, from); zetVast(frame, from);
+    frame.classList.remove('active','loaded'); inside.classList.remove('active');
+    controls.classList.remove('show'); backdrop.classList.remove('open');
+    box.classList.add('closing'); box.classList.remove('expanded');
+    currentTool = null;
     var p = wanderPos(); lastX = p.x; lastY = p.y;
     var to = { left:lastX, top:lastY, width:BOX_W, height:BOX_H };
     animateBox(from, to, function(){
-      expanded = false; box.classList.remove('expanded');
+      /* zwaardere opruimklussen pas als alles stil staat */
+      setTimeout(function(){ if(expanded) return; iframe.src = 'about:blank'; zetVast(inside, null); zetVast(frame, null); }, 250);
+      expanded = false;
       document.documentElement.classList.remove('no-scroll'); document.body.classList.remove('no-scroll');
       box.focus({ preventScroll:true });
+      box.classList.remove('closing');
     });
   }
   box.addEventListener('click', function(e){ if(!expanded && !animating) openBox(null, null); });

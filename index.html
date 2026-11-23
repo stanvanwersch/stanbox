@@ -6,13 +6,27 @@
 <title>Stanbox</title>
 <meta name="description" content="Stanbox is a personal sandbox for experiments with data, AI, visualisations and tools.">
 <meta name="theme-color" content="#FBE3D2">
-<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=20261123b">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=20261123c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/01-stijl.css?v=20261123b">
+<link rel="stylesheet" href="css/01-stijl.css?v=20261123c">
+<script src="js/00-intro-vooraf.js?v=20261123c"></script>
 </head>
 <body>
+
+<!-- kort startscherm: de vlakken van het beeldmerk schuiven rond de S in elkaar (js/07-intro.js) -->
+<div class="intro" id="intro" aria-hidden="true">
+  <svg viewBox="-35 -35 170 170" focusable="false">
+    <defs>
+      <clipPath id="intro-boven"><path d="M -200 -200 H 300 V 39 H 55 A 15 15 0 0 0 40 54 V 58.5 A 15 15 0 0 1 25 73.5 H -200 Z"/></clipPath>
+      <clipPath id="intro-onder"><path d="M 300 300 H -200 V 73.5 H 25 A 15 15 0 0 0 40 58.5 V 54 A 15 15 0 0 1 55 39 H 300 Z"/></clipPath>
+    </defs>
+    <g clip-path="url(#intro-boven)"><rect class="intro-zwart" x="0" y="0" width="82.5" height="68.5" rx="15"/></g>
+    <g clip-path="url(#intro-onder)"><rect class="intro-koraal" x="15.5" y="44" width="84.5" height="56" rx="15"/></g>
+    <path class="intro-s" d="M 140 39 H 55 A 15 15 0 0 0 40 54 V 58.5 A 15 15 0 0 1 25 73.5 H -40"/>
+  </svg>
+</div>
 
 <div class="bg-scene" id="bg-scene" aria-hidden="true">
   <div class="bg-panel"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
@@ -213,12 +227,13 @@
   </div>
 </div>
 
-<script src="data/tools.js?v=20261123b"></script>
-<script src="js/01-endless-background-with.js?v=20261123b"></script>
-<script src="js/02-sandbox-logo.js?v=20261123b"></script>
-<script src="js/03-wereldbol.js?v=20261123b"></script>
-<script src="js/04-stad.js?v=20261123b"></script>
-<script src="js/05-datalandschap.js?v=20261123b"></script>
-<script src="js/06-zongebouw.js?v=20261123b"></script>
+<script src="data/tools.js?v=20261123c"></script>
+<script src="js/01-endless-background-with.js?v=20261123c"></script>
+<script src="js/02-sandbox-logo.js?v=20261123c"></script>
+<script src="js/03-wereldbol.js?v=20261123c"></script>
+<script src="js/04-stad.js?v=20261123c"></script>
+<script src="js/05-datalandschap.js?v=20261123c"></script>
+<script src="js/06-zongebouw.js?v=20261123c"></script>
+<script src="js/07-intro.js?v=20261123c"></script>
 </body>
 </html>

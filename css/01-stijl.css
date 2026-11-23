@@ -19,6 +19,18 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 .no-scroll{overflow:hidden;}
+
+/* ---------- kort startscherm (js/00-intro-vooraf.js, js/07-intro.js) ---------- */
+.intro{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--perzik-licht);transition:opacity .5s ease;
+  animation:introNood .5s 4s forwards;}   /* vangnet: verdwijnt ook als het script niet loopt */
+.intro svg{width:min(240px,50vw);height:auto;}
+.intro-zwart{fill:var(--zwart);opacity:0;}   /* het script laat ze verschijnen */
+.intro-koraal{fill:var(--koraal);opacity:0;}
+.intro-s{fill:none;stroke:var(--perzik-licht);stroke-width:10;}
+html.intro-actief{overflow:hidden;}
+html.intro-klaar .intro{display:none;}   /* al gezien deze sessie: meteen weg, zonder flits */
+html.intro-weg .intro{opacity:0;pointer-events:none;}   /* einde van de animatie: vervagen */
+@keyframes introNood{to{opacity:0;visibility:hidden;}}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
 :focus-visible{outline:2px solid var(--zwart);outline-offset:3px;border-radius:8px;}
 

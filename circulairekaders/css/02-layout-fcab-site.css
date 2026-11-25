@@ -682,3 +682,75 @@ body{background:#fff}
 .dimg{display:block;margin:0 -4px;cursor:zoom-in}
 .dimg[hidden]{display:none}
 .dimg img{display:block;width:100%;height:auto}
+
+/* ---------- BREEAM-NL (data/breeam.js) ---------- */
+.brb{height:38px;min-width:38px;padding:0 10px;border:1px solid var(--accent);border-radius:4px;background:var(--white);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.brb img{height:12px;width:auto;display:block;opacity:.75}
+.brb:hover{background:var(--accent-s)}
+.brb:hover img{opacity:1}
+.brb[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-s)}
+.brb[aria-pressed="true"] img{opacity:1}
+.brb[hidden]{display:none}
+.brc{display:inline-block;font:700 10px/1 var(--sans);letter-spacing:.5px;text-transform:uppercase;color:#fff;background:#73c966;border-radius:5px 0 5px 0;padding:4px 6px 3px;white-space:nowrap;vertical-align:1px}
+.brl{display:flex;flex-direction:column;gap:4px}
+.brl .brls{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--text2)}
+.brl .brls span{display:inline-flex;align-items:center;gap:5px}
+.brl img,.brh img{height:9px;width:auto;align-self:flex-start;margin:2px 0}
+.brcodes{display:flex;flex-wrap:wrap;gap:4px;padding:0 20px 8px 20px;margin-top:-4px}
+.brs{display:flex;flex-direction:column;gap:6px}
+.brs+.brs{margin-top:6px}
+.brs>i{font-style:normal;font-size:10.5px;font-weight:600;letter-spacing:.3px;color:var(--text3)}
+.brs .bty{font-size:11.5px;font-weight:600;color:var(--text)}
+.bri{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 8px;align-items:baseline}
+.bri b{font-size:12.5px;font-weight:600;color:var(--text);letter-spacing:0;display:inline;margin:0}
+.bri p{grid-column:2;margin:0;font-size:12.5px;line-height:1.5;color:var(--text2)}
+.brn{font-size:12px;color:var(--text3);font-style:italic;margin:0}
+.brnote{font-size:11px;color:var(--text3);margin:4px 0 0;line-height:1.45}
+.ivbr .brh img{height:10px}
+.dbr{border-radius:6px;border:1px solid #d6d8e6;background:#f6f7fb;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.dbr[hidden]{display:none}
+.brh{display:flex;flex-direction:column;gap:6px}
+.brh img{height:12px}
+.brh b{font-size:12.5px;font-weight:600;color:var(--text)}
+.brsum{padding:14px 24px 4px;display:flex;flex-direction:column;gap:8px}
+.brsum .brh img{height:11px}
+.brsum .brh small{font-size:11.5px;color:var(--text3)}
+.brsum .brs .bri{grid-template-columns:auto minmax(0,1fr) auto}
+.brsum .bri em{font-style:normal;font-size:11.5px;color:var(--text3);font-variant-numeric:tabular-nums}
+.pv-br{margin-top:8px;font-size:8.5pt;color:var(--text2);line-height:1.45}
+.pv-br b{font-size:8pt;color:var(--text);font-weight:600}
+.pv-br .brc{font-size:7pt;padding:2px 4px}
+.pv-brsum{padding:14px 0 4px;break-inside:avoid;page-break-inside:avoid}
+.pv-brsum h2{font-size:12pt;margin:0 0 6px}
+.pv-brsum img{height:12px;margin-bottom:6px}
+.pv-brsum .brs{gap:4px}
+.pv-brsum .bri b,.pv-brsum .bri em{font-size:8.5pt}
+.pv-brsum .brnote{font-size:7.5pt}
+.pv-brsum .bri{grid-template-columns:auto minmax(0,1fr) auto}
+.pv-brsum .bri em,.brsum .bri em{font-style:normal;color:var(--text3)}
+.ci-br{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.brl>b,.brhd{display:block}
+
+/* CO2 met subscript (hx in js/02-script.js) */
+sub{font-size:.72em;line-height:0;vertical-align:-.22em}
+
+/* BREEAM-NL: alleen code en creditnaam, onder elkaar */
+.bty{font-size:11.5px;font-weight:600;color:var(--text);margin-top:4px}
+.bri{align-items:center}
+.bri b{line-height:1.35}
+.kvbr th small{display:block;font-weight:400;color:var(--text3)}
+.kvbr td{display:flex;flex-direction:column;gap:4px}
+.kvbr td .bri b{font-weight:500;font-size:13px}
+.pv-br{display:flex;flex-direction:column;gap:4px}
+.pv-br .brs{gap:3px}
+.pv-br .brs>i{font-size:7.5pt}
+.pv-br .bri b{font-size:8.5pt;font-weight:500}
+.inf-br{height:14px;width:auto;display:block;margin:2px 0 8px}
+
+/* Meer details: Waarom en Aandachtspunt zonder kader; BREEAM-NL boven de tabel */
+.dl .dsec{border:0;background:none;border-radius:0;padding:0 0 0 30px}
+.dl .dsec svg{left:0;top:2px}
+.dl .dsec[hidden]{display:none}
+.dl .dbr{border:0;background:none;border-radius:0;padding:4px 0 0;gap:10px}
+.dl .dbr .brs>i{font-size:12px;font-weight:600;color:var(--text);letter-spacing:0}
+.dl .dbr .bri b{font-weight:500;font-size:13px}

@@ -51,10 +51,10 @@ const T={
    lvx:{context:['Zonnestraling','Groene omgeving','Schaduw'],building:['Isolatie','Oriëntatie en indeling','Zonwering'],system:['Samenstelling van installatieproducten'],product:['Bijv. een warmtepomp, ventilatiekanaal of radiator'],component:['Onderdelen in producten, bijv. een motor']},
    h4:'Voor wie?',p4:'Welk schaalniveau het meest relevant is, verschilt per gebruiker.',
    who:[['Installatieadviseurs','naar verwachting vooral het systeem- en productniveau.',['system','product']],['HVAC-fabrikanten','met name het componentniveau.',['component']],['Architecten','waarschijnlijk het gebouw- en contextniveau.',['building','context']],['Vastgoedeigenaren','alle schaalniveaus kunnen relevant zijn.',['*']]],
-   src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',toConcept:'Maak er een concept van',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',foldF:'Filter inklappen',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Aandachtspunt'],none:'Geen interventies bij deze filters.',
+   src:'De gegevens in dit overzicht zijn verzameld door middel van interviews met experts met kennis en ervaring op het gebied van HVAC en de circulaire economie. Het overzicht wordt regelmatig bijgewerkt.'},cart:'Selectie',cartEb:'Ontwerpkader circulaire klimaatinstallaties',name:'Ontwerpkader circulaire klimaatinstallaties',add:'Toevoegen aan selectie',added:'In je selectie',addAria:'Toevoegen aan mijn selectie',rmAria:'Verwijderen uit mijn selectie',csv:'Download CSV',print:'Opslaan als PDF',toConcept:'Maak er een concept van',busy:'PDF maken…',pdfName:'mijn-selectie-circulaire-klimaatinstallaties.pdf',pg2:'Pagina',fTitle:'Filter',foldF:'Filter inklappen',hideP:'Paneel naar rechts schuiven',showP:'Paneel tonen',clearF:'Wissen',view:'Weergave',kCt:'Categorie',csvH:['Maatregel','Categorie','R-strategie / niveau','Component','Functie','Schaalniveau','Toepassing','Doel','Waarom dit helpt','Aandachtspunt','BREEAM-NL'],none:'Geen interventies bij deze filters.',
   allParts:'Alle onderdelen',interventions:'interventies',results:'Zoekresultaten',noResults:'Geen interventies gevonden.',
   tagM:'materiaal',tagE:'energie',lgLv:'schaalniveau',lgW:'bekend neveneffect',
-  why:'Waarom dit helpt',watch:'Let op',noWhy:'Nog niet beschreven in het kader.',noNeg:'Geen neveneffecten genoemd in de interviews. Dat betekent niet dat ze er niet zijn.',
+  why:'Waarom dit helpt',watch:'Aandachtspunt',brIh:'BREEAM-NL',brIp:'BREEAM-NL is de Nederlandse beoordelingsmethode voor de duurzaamheid van gebouwen, beheerd door Dutch Green Building Council. Een gebouw verdient punten met credits in categorieën als energie, gezondheid en materialen. Het totaal bepaalt het certificeringsniveau, van Pass tot Outstanding. Er zijn aparte schema’s voor nieuwbouw en renovatie en voor bestaande gebouwen in gebruik (In-Use). Zet de knop BREEAM-NL aan om bij elke interventie te zien aan welke credits ze kan bijdragen. Dat is indicatief: of een credit wordt toegekend, bepaalt de assessor.',brT:'Relatie met BREEAM-NL',brOn:'Toon de relatie met BREEAM-NL',brOff:'Verberg de relatie met BREEAM-NL',brNone:'Geen directe relatie met BREEAM-NL gevonden.',brNote:'Indicatief: de interventie kan bijdragen aan deze credits. Of een credit wordt toegekend, bepaalt de assessor.',brNb:'Nieuwbouw en renovatie',brIu:'In-Use',brSel:'Bijdrage aan BREEAM-NL',brSelS:'Credits waaraan je selectie mogelijk bijdraagt (aantal interventies)',brCsv:'BREEAM-NL',noWhy:'Nog niet beschreven in het kader.',noNeg:'Geen neveneffecten genoemd in de interviews. Dat betekent niet dat ze er niet zijn.',
   kFn:'Functie',kLv:'Schaalniveau',kCo:'Component',kSt:'R-strategie',kCat:'Categorie',kAp:'Toepassing',kGo:'Doel',notSpec:'Niet gespecificeerd',and:' en ',
   rooms:{r:['Zolder','Slaapkamer','Woonkamer'],c:['Kantoorvloer']},
   src:'Interventies verzameld in zeven semigestructureerde interviews met acht installatieprofessionals en geordend met een analytisch model van R-strategieën (Potting, 2017), FODAR-componenten en schaalniveaus. Effectiviteit en neveneffecten zijn nog niet per project geëvalueerd. Ontwikkeld door TU Delft en Dutch Green Building Council.'
@@ -87,10 +87,10 @@ const T={
    lvx:{context:['Solar radiation','Green surroundings','Shade'],building:['Insulation','Orientation and layout','Sun shading'],system:['Composition of installation products'],product:['E.g. a heat pump, ventilation duct or radiator'],component:['Parts within products, e.g. a motor']},
    h4:'Who is it for?',p4:'Which scale level is most relevant differs per stakeholder.',
    who:[['Installation consultants','the system and product level are expected to be the most relevant.',['system','product']],['HVAC manufacturers','the component level is expected to be the most relevant.',['component']],['Architects','the building and contextual level probably offer the most relevant insights.',['building','context']],['Property owners','all levels could be relevant.',['*']]],
-   src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'Selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',toConcept:'Turn into a concept',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',foldF:'Collapse filter',hideP:'Slide panel to the right',showP:'Show panel',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Consideration'],none:'No interventions match these filters.',
+   src:'The data in this overview is collected through interviews with experts with a background related to HVAC and circular economy and will be updated on a regular basis.'},cart:'Selection',cartEb:'Circular HVAC Design Framework',name:'Circular HVAC Design Framework',add:'Add to selection',added:'In your selection',addAria:'Add to my selection',rmAria:'Remove from my selection',csv:'Download CSV',print:'Save as PDF',toConcept:'Turn into a concept',busy:'Creating PDF…',pdfName:'my-selection-circular-hvac.pdf',pg2:'Page',fTitle:'Filter',foldF:'Collapse filter',hideP:'Slide panel to the right',showP:'Show panel',clearF:'Clear',view:'View',kCt:'Category',csvH:['Intervention','Category','R-strategy / level','Component','Function','Scale level','Applicability','Goal','Why this helps','Consideration','BREEAM-NL'],none:'No interventions match these filters.',
   allParts:'All parts',interventions:'interventions',results:'Search results',noResults:'No interventions found.',
   tagM:'material',tagE:'energy',lgLv:'scale level',lgW:'known side-effect',
-  why:'Why this helps',watch:'Watch out for',noWhy:'Not yet described in the framework.',noNeg:'No side-effects recorded in the interviews. That does not mean there are none.',
+  why:'Why this helps',watch:'Consideration',brIh:'BREEAM-NL',brIp:'BREEAM-NL is the Dutch method for assessing the sustainability of buildings, managed by the Dutch Green Building Council. A building earns points through credits in categories such as energy, health and materials. The total determines the certification level, from Pass to Outstanding. There are separate schemes for new construction and renovation and for existing buildings in use (In-Use). Turn on the BREEAM-NL button to see which credits each intervention can contribute to. This is indicative: whether a credit is awarded is up to the assessor.',brT:'Relation with BREEAM-NL',brOn:'Show the relation with BREEAM-NL',brOff:'Hide the relation with BREEAM-NL',brNone:'No direct relation with BREEAM-NL found.',brNote:'Indicative: the intervention can contribute to these credits. Whether a credit is awarded is up to the assessor.',brNb:'New construction and renovation',brIu:'In-Use',brSel:'Contribution to BREEAM-NL',brSelS:'Credits your selection may contribute to (number of interventions)',brCsv:'BREEAM-NL',noWhy:'Not yet described in the framework.',noNeg:'No side-effects recorded in the interviews. That does not mean there are none.',
   kFn:'Function',kLv:'Scale level',kCo:'Component',kSt:'R-strategy',kCat:'Category',kAp:'Applicability',kGo:'Goal',notSpec:'Not specified',and:' and ',
   rooms:{r:['Attic','Bedroom','Living room'],c:['Office floor']},
   src:'Interventions collected in seven semi-structured interviews with eight HVAC practitioners and structured with an analytical model of R-strategies (Potting, 2017), FODAR components and scale levels. Effectiveness and side-effects have not yet been evaluated per project. Developed by TU Delft and Dutch Green Building Council.'
@@ -100,8 +100,8 @@ const T={
 /* state */
 const ALL={l:['context','building','system','product','component'],g:['m','e']};
 const S={sideMin:(()=>{try{return localStorage.getItem('chvac-okside')==='1';}catch(e){return false;}})(),mode:'3d',ta:'all',tf:'all',tab:'systems',lang:'nl',b:'r',f:null,h:null,q:'',l:new Set(),g:new Set()};
-try{const s=JSON.parse(localStorage.getItem('chvac-v')||'null'); if(s){if(s.lang==='en'||s.lang==='nl')S.lang=s.lang;}}catch(e){}
-const save=()=>{try{localStorage.setItem('chvac-v',JSON.stringify({lang:S.lang}));}catch(e){}};
+try{const s=JSON.parse(localStorage.getItem('chvac-v')||'null'); if(s){if(s.lang==='en'||s.lang==='nl')S.lang=s.lang; S.br=!!s.br;}}catch(e){}
+const save=()=>{try{localStorage.setItem('chvac-v',JSON.stringify({lang:S.lang,br:!!S.br}));}catch(e){}};
 const L=()=>T[S.lang];
 const tx=(it,k)=>S.lang==='nl'?(it[k+'2']||it[k]):it[k];
 
@@ -162,7 +162,7 @@ function draw(){
   document.documentElement.lang=S.lang; document.title=t.name;
   if(window.UH) UH.sync('ok');
   $('q').placeholder=t.search; $('q').setAttribute('aria-label',t.search); $('qx').setAttribute('aria-label',t.clear);
-  cartBtn(); $('infoL').textContent=t.info; if(infoDlg&&infoDlg.open) renderInfo(); $('lang').textContent=t.langBtn; $('lang').title=t.langTitle; $('lang').setAttribute('aria-label',t.langTitle);
+  cartBtn(); $('infoL').textContent=t.info; brBtnUpd(); if(infoDlg&&infoDlg.open) renderInfo(); $('lang').textContent=t.langBtn; $('lang').title=t.langTitle; $('lang').setAttribute('aria-label',t.langTitle);
   $('dlg-x').setAttribute('aria-label',t.close); $('dlg-wl').textContent=t.why; $('dlg-nl').textContent=t.watch;
   let h=`<header class="phead">${LOGOS()}<div class="ptxt"><div class="pname">${t.name}</div><h1>${t.h1}</h1></div></header>`;
   if(S.mode==='table'){ drawTableShell(h); return; }
@@ -187,7 +187,7 @@ const TPAGES=[
  {id:'demand',rows:['d_context','d_building'],cols:['heating','cooling','ventilation'],colKey:'FN',rowHead:'level',pick:(it,r,c)=>it.s===r&&it.f===c},
  {id:'guidelines',rows:['all'],cols:['g_design','g_org'],colKey:'ST',pick:(it,r,c)=>it.s===c}];
 const TREG=[];
-function setApp(h){ const sb=document.querySelector('.search'), mv=[$('cartBtn'),$('infoBtn'),$('lang'),$('beta')], foc=document.activeElement===$('q');
+function setApp(h){ const sb=document.querySelector('.search'), mv=[$('cartBtn'),$('infoBtn'),$('brBtn'),$('lang'),$('beta')].filter(Boolean), foc=document.activeElement===$('q');
   $('head').appendChild(sb); mv.forEach(x=>$('head').appendChild(x)); $('app').innerHTML=h; const slot=$('sslot');
   if(slot){ slot.appendChild(sb); slot.after(...mv); } sb.hidden=!slot; mv.forEach(x=>x.hidden=!slot); if(foc&&slot) $('q').focus(); slideSeg(); }
 const LOGOS=()=>`<div class="plogos">${document.querySelector('.logos').innerHTML}</div>`;
@@ -245,7 +245,7 @@ function drawTable(){
   let h=`<div class="tw"><table class="mx${p.cols.length<4?' single':''}"><thead><tr>${head?`<th class="rh">${t[p.rowHead]}</th>`:''}${p.cols.map(c=>`<th>${lab(c)}</th>`).join('')}</tr></thead><tbody>`;
   p.rows.forEach(r=>{ h+=`<tr>${head?`<th scope="row">${t.ST[r]}</th>`:''}`; p.cols.forEach(c=>{ const gs=group(vis.filter(it=>p.pick(it,r,c)));
     h+=`<td data-label="${esc(lab(c))}"${gs.length?'':' class="e"'}><div class="cell">${gs.length?gs.map(g=>{const id=TREG.push(g)-1, on=CART.has(g.t);
-      return `<div class="trow${on?' in':''}"><button type="button" class="tiv" data-t="${id}"><span class="tx">${esc(tx(g.src,'t'))}</span></button>${addBtn('tap',id,on)}</div>`;}).join(''):'<div class="empty">—</div>'}</div></td>`; }); h+='</tr>'; });
+      return `<div class="trow${on?' in':''}"><button type="button" class="tiv" data-t="${id}"><span class="tx">${hx(tx(g.src,'t'))}</span></button>${addBtn('tap',id,on)}</div>`;}).join(''):'<div class="empty">—</div>'}</div></td>`; }); h+='</tr>'; });
   h+=`</tbody></table></div>`;
   $('tbody').innerHTML=h; side();
 }
@@ -273,6 +273,52 @@ function update(){ if(S.mode==='table'){ drawTable(); return; }
   panel(); side(); okGrip();
 }
 
+/* ---------- BREEAM-NL (data/breeam.js, gegenereerd door breeam.py) ----------
+   Per interventie en gebouwtype (r woning, c utiliteit) de credits voor twee schema's:
+   nb = Nieuwbouw en renovatie, iu = In-Use. Indicatief: "kan bijdragen aan". */
+const hx=s=>esc(s).replace(/CO2/g,'CO<sub>2</sub>'); // weergave: CO2 met subscript
+const BR=window.CHVAC_BREEAM||null;
+const brTx=x=>x?(S.lang==='nl'?(x.nl||x.en):x.en):'';
+const brOf=(t,b)=>(BR&&BR.items[t]&&BR.items[t][b])||{};
+const brName=(b,s,k)=>brTx(BR&&BR.credits[b+s]&&BR.credits[b+s][k]);
+const brSch=(b,s)=>brTx(BR.schemas[b][s]);
+function brTypes(as){ const set=new Set(as); if(S.mode!=='table'&&S.b&&set.has(S.b)) return [S.b]; if(S.mode==='table'&&S.ta!=='all'&&set.has(S.ta)) return [S.ta]; return ['r','c'].filter(b=>set.has(b)); }
+function brBtnUpd(){ const b=$('brBtn'); if(!b) return; const t=L(); b.setAttribute('aria-pressed',String(!!S.br)); b.title=S.br?t.brOff:t.brOn; b.setAttribute('aria-label',b.title); }
+function brCodes(t,b){ if(!BR) return ''; const o=brOf(t,b), ks=[...new Set([...(o.nb||[]),...(o.iu||[])].map(x=>x.k))]; return ks.length?`<div class="brcodes">${ks.map(k=>`<span class="brc">${k}</span>`).join('')}</div>`:''; }
+// één credit: label + naam (de uitleg uit het Design Framework tonen we bewust niet)
+const brItem=(b,s,k,extra='')=>`<div class="bri"><span class="brc">${k}</span><b>${hx(brName(b,s,k))}</b>${extra}</div>`;
+// relatie per gebouwtype en schema; bij meer gebouwtypes eerst het gebouwtype als kopje
+function brFull(t,types,compact){ if(!BR||!types.length) return ''; const tt=L(); let h='';
+  types.forEach(b=>{ const o=brOf(t,b); let hb='';
+    ['nb','iu'].forEach(s=>{ const l=o[s]||[]; if(l.length) hb+=`<div class="brs"><i>${hx(brSch(b,s))}</i>`+l.map(x=>brItem(b,s,x.k)).join('')+`</div>`; });
+    if(hb) h+=(types.length>1?`<div class="bty">${tt.B[b][0]}</div>`:'')+hb; });
+  if(!h) return '';
+  return (compact?`<div class="brh"><img alt="BREEAM-NL" src="${BR.logo}"></div>`:'')+h; }
+// selectie: creditcodes per interventie
+function brMeta(r){ if(!BR) return ''; const ks=new Set(); brTypes(r.a.flatMap(d=>d.a)).forEach(b=>(brOf(r.t,b).nb||[]).forEach(x=>ks.add(x.k))); return ks.size?`<div class="ci-m ci-br">${[...ks].sort().map(k=>`<span class="brc">${k}</span>`).join(' ')}</div>`:''; }
+// selectie en pdf: welke credits raakt de hele selectie (met aantal interventies)
+function brSum(rows,pdf){ if(!BR||!rows.length) return ''; const tt=L();
+  const types=['r','c'].filter(b=>rows.some(r=>r.a.some(d=>d.a.includes(b)))); let h='';
+  types.forEach(b=>{ let hb='';
+    ['nb','iu'].forEach(s=>{ const cnt={};
+      rows.forEach(r=>{ if(!r.a.some(d=>d.a.includes(b))) return; (brOf(r.t,b)[s]||[]).forEach(x=>{ cnt[x.k]=(cnt[x.k]||0)+1; }); });
+      const ks=Object.keys(cnt).sort(); if(!ks.length) return;
+      hb+=`<div class="brs"><i>${hx(brSch(b,s))}</i>`+ks.map(k=>brItem(b,s,k,`<em>${cnt[k]}×</em>`)).join('')+`</div>`; });
+    if(hb) h+=(types.length>1?`<div class="bty">${tt.B[b][0]}</div>`:'')+hb; });
+  if(!h) return '';
+  if(pdf) return `<section class="pv-brsum"><img alt="BREEAM-NL" src="${BR.logo}"><h2>${tt.brSel}</h2><p class="brnote">${tt.brSelS}</p>${h}<p class="brnote">${tt.brNote}</p></section>`;
+  return `<div class="grp-t">${tt.brSel}</div><div class="brsum"><div class="brh"><img alt="BREEAM-NL" src="${BR.logo}"><small>${tt.brSelS}</small></div>${h}<p class="brnote">${tt.brNote}</p></div>`; }
+// pdf: per interventie, credits onder elkaar
+function brPdf(r){ if(!BR) return ''; const types=brTypes(r.a.flatMap(d=>d.a)), tt=L(); let h='';
+  types.forEach(b=>{ let hb='';
+    ['nb','iu'].forEach(s=>{ const l=brOf(r.t,b)[s]||[]; if(l.length) hb+=`<div class="brs"><i>${hx(brSch(b,s))}</i>`+l.map(x=>brItem(b,s,x.k)).join('')+`</div>`; });
+    if(hb) h+=(types.length>1?`<div class="bty">${tt.B[b][0]}</div>`:'')+hb; });
+  return h?`<div class="pv-br">${h}</div>`:''; }
+// csv: platte tekst
+function brPlain(r){ if(!BR) return ''; const types=brTypes(r.a.flatMap(d=>d.a)), out=[];
+  types.forEach(b=>['nb','iu'].forEach(s=>{ const l=brOf(r.t,b)[s]||[]; if(l.length) out.push(brSch(b,s)+': '+l.map(x=>x.k+' '+brName(b,s,x.k)).join('; ')); }));
+  return out.join(' | '); }
+
 function ivHTML(g,showFn){
   const t=L(), id=REG.push(g)-1;
   const lv=lvSort(g.ls).map(l=>`<span class="ct lv" title="${t.LV[l]}">${RN[l]}</span>`).join('');
@@ -280,10 +326,11 @@ function ivHTML(g,showFn){
   const fn=showFn?[...g.fs].map(f=>`<span class="ct fn f-${f}">${t.FN[f]}</span>`).join(''):'';
   const fk=fxOf(g.t), pin=S.pin===g.t;
   let ex='';
-  if(pin){ const w=tx(g.src,'w'), n=tx(g.src,'n');
-    ex=`<div class="ivx">${w?`<div><b>${t.why}</b><p>${esc(w)}</p></div>`:''}${n?`<div><b>${t.watch}</b><p>${esc(n)}</p></div>`:''}<button type="button" class="more" data-more="${id}">${t.more}</button></div>`; }
+  if(pin&&S.br&&BR){ ex=`<div class="ivx ivbr">${brFull(g.t,[S.b],true)}<button type="button" class="more" data-more="${id}">${t.more}</button></div>`; }
+  else if(pin){ const w=tx(g.src,'w'), n=tx(g.src,'n');
+    ex=`<div class="ivx">${w?`<div><b>${t.why}</b><p>${hx(w)}</p></div>`:''}${n?`<div><b>${t.watch}</b><p>${hx(n)}</p></div>`:''}<button type="button" class="more" data-more="${id}">${t.more}</button></div>`; }
   const on=CART.has(g.t);
-  return `<div class="ivr${pin?' pin':''}${on?' in':''}" data-fx="${fk||''}"><div class="ivrow"><button type="button" class="iv" data-i="${id}" aria-expanded="${pin}"><span>${esc(tx(g.src,'t'))}</span></button>${addBtn('ap',id,on)}</div>${ex}</div>`;
+  return `<div class="ivr${pin?' pin':''}${on?' in':''}" data-fx="${fk||''}"><div class="ivrow"><button type="button" class="iv" data-i="${id}" aria-expanded="${pin}"><span>${hx(tx(g.src,'t'))}</span></button>${addBtn('ap',id,on)}</div>${!pin&&S.br?brCodes(g.t,S.b):''}${ex}</div>`;
 }
 const legend=t=>`<div class="legend"><span><span class="ct lv">III</span>${t.lgLv}</span><span><span class="ct m">${t.tagM}</span><span class="ct e">${t.tagE}</span></span><span><span class="ct w">!</span>${t.lgW}</span></div>`;
 
@@ -295,7 +342,7 @@ function panel(){
     const q=S.q.toLowerCase();
     const res=DATA.filter(it=>it.a.includes(S.b)&&passF(it)&&matchQ(it));
     const gs=group(res);
-    p.innerHTML=`<div class="ph"><div><div class="eb">${t.B[S.b][0]}</div><h2>${t.results}</h2><p>${gs.length} ${t.interventions}</p></div></div><div class="pb">${
+    p.innerHTML=`<div class="ph"><div><h2>${t.results}</h2><p>${gs.length} ${t.interventions}</p></div></div><div class="pb">${
       gs.length?HK.map(k=>{const sub=gs.filter(g=>inHot(g.src,k)); return sub.length?`<div class="grp-t">${t.H[k][0]}</div>`+sub.map(g=>ivHTML(g,true)).join(''):'';}).join(''):`<div class="empty">${t.noResults}</div>`}</div>`;
     p.dataset.mode='search'; p.hidden=false; place(); return;
   }
@@ -314,7 +361,7 @@ function panel(){
   const keys=S.h==='gnl'?['g_design','g_org']:S.h==='ctx'?['d_context']:S.h==='bld'?['d_building']:RS;
   const gs=group(items);
   let body=keys.map(s=>{const sub=gs.filter(g=>g.s===s); return sub.length?`<div class="grp-t">${t.ST[s]}</div>`+sub.map(g=>ivHTML(g,false)).join(''):'';}).join('');
-  p.innerHTML=`<div class="ph"><div><div class="eb">${eb}</div><h2>${t.H[S.h][0]}</h2><p>${gs.length} ${t.interventions}</p></div>${close}</div><div class="pb">${body||`<div class="empty">${t.none}</div>`}</div>`;
+  p.innerHTML=`<div class="ph"><div><h2>${t.H[S.h][0]}</h2><p>${gs.length} ${t.interventions}</p></div>${close}</div><div class="pb">${body||`<div class="empty">${t.none}</div>`}</div>`;
   const pk=S.b+S.f+S.h; const keep=pk===PANELKEY?p.scrollTop:0; PANELKEY=pk;
   p.dataset.mode=S.h==='gnl'?'gnl':'mk'; p.hidden=false; p.scrollTop=keep; place();
 }
@@ -371,6 +418,7 @@ document.addEventListener('click',e=>{
 });
 if($('home')) $('home').addEventListener('click',()=>{S.mode='3d';S.b='r';S.f=null;S.l.clear();S.g.clear();S.h=null;S.q='';S.qa=null;$('q').value='';$('qx').hidden=true;draw();});
 $('lang').addEventListener('click',()=>{S.lang=S.lang==='nl'?'en':'nl'; save(); draw();});
+if($('brBtn')){ if(!BR) $('brBtn').remove(); else { $('brBtn').querySelector('img').src=BR.logo; brBtnUpd(); $('brBtn').addEventListener('click',()=>{ S.br=!S.br; save(); brBtnUpd(); if(S.b||S.mode==='table') update(); }); } }
 $('q').addEventListener('input',e=>{S.qa=null; S.q=e.target.value.trim(); $('qx').hidden=!S.q; if(S.mode==='table') drawTable(); else if(S.q&&!S.b){S.b='r'; draw();} else if(S.b) update();});
 $('qx').addEventListener('click',()=>{$('q').value='';S.q='';S.qa=null;$('qx').hidden=true;if(S.b||S.mode==='table')update();$('q').focus();});
 
@@ -391,7 +439,7 @@ function renderCart(){
     return `<div class="grp-t">${t.pg[p.id]} <span>${sub.length}</span></div>`+sub.map(r=>{ const id=CREG.push(r)-1;
       const fs=[...new Set(r.a.map(d=>d.f))].map(f=>t.FN[f]).join(', '), as=[...new Set(r.a.flatMap(d=>d.a))].sort().map(b=>t.B[b][0]).join(', ');
       const cat=r.g.c&&r.g.c!=='gen_all'&&RS.includes(r.g.s)?`${t.ST[r.g.s]}, ${t.CO[r.g.c]}`:t.ST[r.g.s];
-      return `<div class="ci"><div class="ci-c"><button type="button" class="ci-t" data-copen="${id}">${esc(tx(r.g.src,'t'))}</button><div class="ci-m">${esc(cat)}</div><div class="ci-m">${esc(fs)}</div><div class="ci-m">${esc(as)}</div></div><button type="button" class="ci-x" data-crm="${id}" aria-label="${t.rmAria}" title="${t.rmAria}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`; }).join(''); }).join('');
+      return `<div class="ci"><div class="ci-c"><button type="button" class="ci-t" data-copen="${id}">${hx(tx(r.g.src,'t'))}</button><div class="ci-m">${esc(cat)}</div><div class="ci-m">${esc(fs)}</div><div class="ci-m">${esc(as)}</div>${brMeta(r)}</div><button type="button" class="ci-x" data-crm="${id}" aria-label="${t.rmAria}" title="${t.rmAria}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`; }).join(''); }).join('')+brSum(rows,false);
   $('cart-f').innerHTML=(window.EV&&EV.addConcept?`<button type="button" class="cbtn pri" id="ctoev">${t.toConcept}</button>`:'')+`<button type="button" class="cbtn" id="cprint">${t.print}</button><button type="button" class="cbtn" id="ccsv">${t.csv}</button><button type="button" class="clr" id="clr">${t.clearAll}</button>`;
 }
 let CARTRET=null;
@@ -404,7 +452,7 @@ function cartCSV(){
   const t=L(), q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
   const lines=[t.csvH.map(q).join(';')].concat(cartRows().map(r=>{ const g=r.g, a=r.a;
     const fs=[...new Set(a.map(d=>t.FN[d.f]))].join(', '), ls=lvSort(new Set(a.map(d=>d.l))).map(l=>t.LV[l]).join(', '), as=[...new Set(a.flatMap(d=>d.a))].sort().map(x=>t.AP[x]).join(', '), gl=[...new Set(a.flatMap(d=>d.g))].map(x=>t.GO[x]).join(t.and);
-    return [tx(g.src,'t'),t.pg[pgOf(g.s)],t.ST[g.s],t.CO[g.c]||'',fs,ls,as,gl,tx(g.src,'w')||'',tx(g.src,'n')||''].map(q).join(';'); }));
+    return [tx(g.src,'t'),t.pg[pgOf(g.s)],t.ST[g.s],t.CO[g.c]||'',fs,ls,as,gl,tx(g.src,'w')||'',tx(g.src,'n')||'',brPlain(r)].map(q).join(';'); }));
   const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   okSave((S.lang==='nl'?'mijn-selectie-circulaire-klimaatinstallaties':'my-selection-circular-hvac')+'.csv',blob);
 }
@@ -421,14 +469,15 @@ function cartDoc(){
       const kv=[[t.kFn,fs.map(f=>t.FN[f]).join(', ')],[t.kLv,ls.map(l=>t.LV[l]).join(', ')],[t.kAp,as.map(x=>t.AP[x]).join(', ')]];
       if(gl.length) kv.push([t.kGo,gl.map(x=>t.GO[x]).join(t.and)]);
       return `<article class="pv-it"><div class="pv-c">
-        <div class="pv-eb">${esc(cat)}</div><h3>${esc(tx(g.src,'t'))}</h3>
+        <div class="pv-eb">${esc(cat)}</div><h3>${hx(tx(g.src,'t'))}</h3>
         <dl class="pv-kv">${kv.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-        ${w||ng?`<div class="pv-notes">${w?`<div class="pv-pos"><b>${t.why}</b>${esc(w)}</div>`:''}${ng?`<div class="pv-neg"><b>${t.watch}</b>${esc(ng)}</div>`:''}</div>`:''}
+        ${w||ng?`<div class="pv-notes">${w?`<div class="pv-pos"><b>${t.why}</b>${hx(w)}</div>`:''}${ng?`<div class="pv-neg"><b>${t.watch}</b>${hx(ng)}</div>`:''}</div>`:''}
+        ${brPdf(r)}
       </div></article>`; }).join('')+`</section>`; }).join('');
   const d=document.createElement('div'); d.className='pvdoc'; d.lang=S.lang;
   d.innerHTML=`<header class="pv-top"><span></span><div class="pv-name">${t.name}</div><div class="pv-logos">${logos}</div></header>
     <div class="pv-hero"><div class="pv-date">${date}</div><h1>${t.cart}</h1><p>${nl?'Circulaire interventies voor klimaatinstallaties':'Circular interventions for HVAC systems'}</p></div>
-    ${body}<footer class="pv-foot">${t.src}</footer>`;
+    ${body}${brSum(rows,true)}<footer class="pv-foot">${t.src}</footer>`;
   return d;
 }
 let H2P=null;
@@ -464,6 +513,7 @@ function renderInfo(){
       <div class="inf-grid">${ALL.l.map(k=>`<div class="inf-card lv"><div class="inf-l">${RNx[k]}</div><div class="inf-img"><img src="${IIC[k]}" alt=""></div><b>${t.LV[k]}</b><ul>${N.lvx[k].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}</div></section>
     <section class="inf-s"><h3>${N.h4}</h3><p>${N.p4}</p>
       <div class="inf-who">${N.who.map(([r,txt,lv])=>`<div class="inf-w"><b>${r}</b><span>${txt}</span></div>`).join('')}</div></section>
+    ${BR?`<section class="inf-s"><h3>${t.brIh}</h3><img class="inf-br" alt="BREEAM-NL" src="${BR.logo}"><p>${t.brIp}</p></section>`:''}
     <p class="inf-src">${N.src}</p>`;
 }
 const infoDlg=$('info');
@@ -485,15 +535,16 @@ function openDlg(g){
   const t=L(), it=g.src; DLG=g;
   const strat=t.ST[g.s];
   $('dlg-e').textContent=g.c&&g.c!=='gen_all'?`${strat}, ${t.CO[g.c]}`:strat;
-  $('dlg-t').textContent=tx(it,'t');
+  $('dlg-t').innerHTML=hx(tx(it,'t'));
   { const im=$('dlg-img'), src=(window.CHVAC_IMG||{})[g.t]; im.hidden=!src; if(src){ im.href=src; const i=im.firstChild; i.src=src; i.alt=tx(it,'t'); } }
   const a=DATA.filter(x=>x.t===g.t); const fs=new Set(a.map(x=>x.f)), ls=new Set(a.map(x=>x.l)), as=new Set(a.flatMap(x=>x.a)), gl=new Set(a.flatMap(x=>x.g));
   if($('dlg-m')) $('dlg-m').innerHTML=lvSort(ls).map(l=>`<span class="ct lv">${RN[l]}, ${t.LV[l]}</span>`).join('')+(gl.has('m')?`<span class="ct m">${t.tagM}</span>`:'')+(gl.has('e')?`<span class="ct e">${t.tagE}</span>`:'');
   const w=tx(it,'w'), n=tx(it,'n');
-  $('dlg-w').textContent=w||t.noWhy; $('dlg-w').className=w?'':'na';
-  $('dlg-n').textContent=n||t.noNeg; $('dlg-n').className=n?'':'na';
+  $('dlg-w').innerHTML=hx(w||''); $('dlg-w').parentNode.hidden=!w;
+  $('dlg-n').innerHTML=hx(n||''); $('dlg-n').parentNode.hidden=!n;
   const rows=[[t.kFn,[...fs].map(f=>t.FN[f]).join(', ')],[t.kLv,lvSort(ls).map(l=>t.LV[l]).join(', ')],[t.kCo,t.CO[g.c]],
     [/^[dg]_/.test(g.s)?t.kCat:t.kSt,strat],[t.kAp,[...as].sort().map(x=>t.AP[x]).join(', ')],[t.kGo,[...gl].map(x=>t.GO[x]).join(t.and)||t.notSpec]];
+  { const bx=$('dlg-br'), h=BR?brFull(g.t,brTypes(a.flatMap(x=>x.a)),false):''; bx.innerHTML=h; bx.hidden=!h; }
   $('dlg-kv').innerHTML=rows.map(([k,v])=>`<tr><th scope="row">${k}</th><td>${esc(v)}</td></tr>`).join('');
   dlgAp();
   if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');

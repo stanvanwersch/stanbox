@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Meetlat | Stanbox</title>
+<meta name="description" content="Load a floor plan or photo, calibrate on a known dimension and measure lines and areas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/01-stijl.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <a class="logo-link" href="https://stanbox.nl" target="_top" title="To stanbox.nl">
+      <span class="logo-sb"><svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true"><path fill="var(--stanbox-blok-1,currentColor)" d="M 15 0 H 67.5 A 15 15 0 0 1 82.5 15 V 34 H 55 A 20 20 0 0 0 35 54 V 58.5 A 10 10 0 0 1 25 68.5 H 15 A 15 15 0 0 1 0 53.5 V 15 A 15 15 0 0 1 15 0 Z"/><path fill="var(--stanbox-blok-2,currentColor)" d="M 55 44 H 85 A 15 15 0 0 1 100 59 V 85 A 15 15 0 0 1 85 100 H 30.5 A 15 15 0 0 1 15.5 85 V 78.5 H 25 A 20 20 0 0 0 45 58.5 V 54 A 10 10 0 0 1 55 44 Z"/></svg><h1 class="logo-woord">Meetlat</h1></span>
+    </a>
+    <span class="sep" aria-hidden="true"></span>
+    <p class="logo-sub">Load an image, calibrate and measure lines and areas</p>
+  </header>
+
+  <div class="layout">
+    <main class="stage-pane">
+      <div class="canvas-wrap empty" id="canvasWrap">
+        <div class="empty-state" id="emptyState">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg></div>
+          <h2>No image loaded yet</h2>
+          <p>Load a floor plan or photo to start measuring</p>
+          <label class="btn primary" for="fileInput">Choose image</label>
+        </div>
+        <canvas id="stage" hidden></canvas>
+        <div class="title-block" id="titleBlock" hidden></div>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <h2>Image</h2>
+      <div class="tool-upload">
+        <label class="btn primary btn-block" for="fileInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Load image</label>
+        <input type="file" id="fileInput" accept="image/*">
+      </div>
+      <p class="voorbeeld-note" id="exampleNote" hidden><strong>Example.</strong> A floor plan of 10.4 by 6.4 m, already calibrated. Load your own floor plan or photo to start.</p>
+
+      <h2>Tools</h2>
+      <div class="tool-grid">
+        <button type="button" class="btn" id="btnCalibrate" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg>Calibrate</button>
+        <button type="button" class="btn" id="btnLine" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6" fill="currentColor"/><circle cx="19" cy="5" r="1.6" fill="currentColor"/></svg>Measure line</button>
+        <button type="button" class="btn" id="btnArea" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 18L7 6l12 2-2 11z"/></svg>Measure area</button>
+        <button type="button" class="btn" id="btnExport" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>Export</button>
+      </div>
+      <div class="draw-hint" id="drawHint" hidden></div>
+
+      <h2>Calibration</h2>
+      <div class="calib-box" id="calibBox">
+        <span class="status-dot" id="calibDot"></span><span id="calibText">Not calibrated yet, measuring in pixels</span>
+      </div>
+
+      <h2>Measurements</h2>
+      <ul class="measure-list" id="measureList"></ul>
+      <p class="empty-list" id="emptyList">No lines or areas drawn yet.</p>
+      <div class="sidebar-footer"><button type="button" class="btn btn-block subtle" id="btnClearAll" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Clear all</button></div>
+    </aside>
+  </div>
+</div>
+
+<div class="overlay" id="calibModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="calibTitle">
+    <h3 id="calibTitle">Calibrate</h3>
+    <p>What is the real length of the line you just drew?</p>
+    <div class="modal-row">
+      <input type="number" class="inp" id="calibValue" min="0" step="any" placeholder="e.g. 80" aria-label="Length">
+      <select class="inp" id="calibUnit" aria-label="Unit">
+        <option value="mm">mm</option>
+        <option value="cm" selected>cm</option>
+        <option value="m">m</option>
+        <option value="inch">inch</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn" id="calibCancel">Cancel</button>
+      <button type="button" class="btn primary" id="calibConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="data/01-voorbeeld.js"></script>
+<script src="js/01-meetlat.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* Meetlat in de Stanbox-huisstijl (stanbox.nl/STIJLGIDS.md): perzik, zwart, koraal; Stack Sans Headline
+   voor koppen, Inter voor de rest; vlak, zonder verlopen of zware schaduwen. Eén wit paneel op perzik-licht
+   met een kopregel, links het tekenvlak en rechts het gereedschap. */
+:root{
+  /* huisstijl */
+  --zwart:#1A1A1A; --perzik:#F7C9A9; --perzik-licht:#FBE3D2; --koraal:#C9452A; --koraal-fel:#E5603F; --wit:#FFFFFF;
+  --vlak:#FEF4EC;
+  --font-kop:"Stack Sans Headline",system-ui,sans-serif; --font-tekst:"Inter",system-ui,sans-serif;
+  /* afgeleid (tinten van zwart en perzik, zoals in de SRI Tool) */
+  --text:var(--zwart); --text2:#4D4D4D; --text3:#7A7A7A;
+  --border:#F1E1D5; --border2:#E3C9B6;
+  --r:12px; --r-sm:8px;
+  color-scheme:light;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%;background:var(--perzik-licht);color:var(--text)}
+body{font-family:var(--font-tekst);font-size:16px;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+button,select,input{font-family:var(--font-tekst);font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--koraal);outline-offset:2px}
+h1,h2,h3{font-family:var(--font-kop);font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+p{color:var(--text2)}
+
+/* ---- logo (stijlgids: beeldmerk links, woord in Stack Sans Headline, ruimte 0.3em) */
+.logo-sb{display:inline-flex;align-items:center;gap:.3em;line-height:1}
+.logo-mark{width:1em;height:1em;flex:none;--stanbox-blok-1:var(--zwart);--stanbox-blok-2:var(--koraal)}
+.logo-woord{font-family:var(--font-kop);font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--zwart)}
+
+/* ---- opbouw */
+.page{max-width:1400px;margin:0 auto;background:var(--wit);border-radius:var(--r);overflow:hidden;
+  min-height:calc(100vh - 32px);display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:14px;padding:16px 30px;border-bottom:1px solid var(--border)}
+/* op verzoek van Stan: beeldmerk met de toolnaam (Meetlat) in plaats van het woord stanbox */
+.logo-link{display:inline-flex;align-items:center;font-size:26px;padding:4px 0;text-decoration:none;border-radius:var(--r-sm)}
+.logo-link h1.logo-woord{font-size:inherit;margin:0}
+.topbar .sep{width:1px;align-self:stretch;background:var(--border2);margin:6px 2px}
+.logo-sub{font-size:14px;line-height:1.4;color:var(--text3);min-width:0}
+
+.layout{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:0}
+.stage-pane{padding:20px;min-width:0;display:flex}
+.sidebar{border-left:1px solid var(--border);padding:20px 22px;display:flex;flex-direction:column;min-width:0}
+.sidebar h2{font-size:15px;margin:0 0 10px}
+.sidebar h2:not(:first-child){margin-top:20px}
+
+/* ---- knoppen en invoer (stijlgids: primair zwart met perzik, secundair met zwarte rand van 1.5 px) */
+.btn{border:1.5px solid var(--zwart);background:transparent;color:var(--zwart);font-size:14px;font-weight:600;line-height:1.3;
+  padding:8px 14px;border-radius:var(--r-sm);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+.btn:hover{border-color:var(--koraal);color:var(--koraal)}
+.btn.primary,.btn.active{background:var(--zwart);border-color:var(--zwart);color:var(--perzik)}
+.btn.primary:hover,.btn.active:hover{background:#000;border-color:#000;color:var(--perzik-licht)}
+.btn.subtle{border-color:var(--border2);color:var(--text2)}
+.btn.subtle:hover{border-color:var(--koraal);color:var(--koraal)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.btn[disabled]:hover{border-color:var(--zwart);color:var(--zwart)}
+.btn.primary[disabled]:hover{background:var(--zwart);color:var(--perzik)}
+.btn.subtle[disabled]:hover{border-color:var(--border2);color:var(--text2)}
+.btn-block{width:100%}
+input[type=file]{display:none}
+.inp{font-size:15px;padding:8px 10px;border:1px solid var(--border2);border-radius:var(--r-sm);background:var(--wit);color:var(--text)}
+.inp:focus{border-color:var(--zwart);outline:none}
+
+
+/* ---- tekenvlak */
+.canvas-wrap{position:relative;flex:1;background:var(--vlak);border-radius:var(--r);display:flex;align-items:center;justify-content:center;
+  min-height:max(460px, calc(100vh - 200px));overflow:hidden}
+.canvas-wrap.empty{padding:50px 20px}
+#stage{max-width:100%;max-height:calc(100vh - 200px);width:auto;height:auto;display:block;cursor:crosshair;touch-action:none;
+  box-shadow:0 0 0 1px var(--border2)}
+.empty-state{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;max-width:360px}
+.empty-state .ico{width:64px;height:64px;border-radius:var(--r);background:var(--perzik-licht);color:var(--zwart);
+  display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.empty-state .ico svg{width:30px;height:30px}
+.empty-state h2{font-size:20px}
+.empty-state p{font-size:15px}
+.empty-state .btn{margin-top:14px}
+
+/* stempel rechtsonder, zoals op een bouwtekening (donkere variant: perzik op zwart) */
+.title-block{position:absolute;right:12px;bottom:12px;background:var(--zwart);color:var(--perzik-licht);font-size:11.5px;line-height:1.55;
+  border-radius:var(--r-sm);padding:8px 12px;pointer-events:none;font-variant-numeric:tabular-nums}
+.title-block .row{display:flex;gap:12px;justify-content:space-between}
+.title-block .label{color:var(--perzik)}
+
+/* ---- zijbalk */
+.voorbeeld-note{margin-top:10px;font-size:13.5px;line-height:1.5;color:var(--text2);background:var(--vlak);border-radius:var(--r);padding:10px 14px}
+.voorbeeld-note strong{color:var(--text);font-weight:600}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tool-grid .btn{padding:8px 8px}
+.draw-hint{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;background:var(--perzik-licht);border-radius:var(--r);
+  padding:10px 14px;font-size:13.5px;line-height:1.5;color:var(--text)}
+.draw-hint strong{font-weight:600}
+.draw-hint .hint-txt{flex-basis:100%}
+.draw-hint .btn{font-size:13px;padding:5px 10px}
+
+.calib-box{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;font-size:13.5px;color:var(--text2)}
+.calib-box.set{background:var(--perzik-licht);border-color:var(--perzik-licht);color:var(--text)}
+.status-dot{width:9px;height:9px;border-radius:50%;background:var(--koraal);flex-shrink:0}
+.status-dot.on{background:var(--zwart)}
+
+.measure-list{list-style:none;flex:0 1 auto;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.measure-list li{border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.measure-list li:hover{border-color:var(--border2);background:var(--vlak)}
+.m-top{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0;box-shadow:0 0 0 1px var(--zwart)}
+.m-type{font-size:12px;color:var(--text3);flex-shrink:0}
+.m-name{flex:1;min-width:0;background:transparent;border:0;border-bottom:1px solid transparent;color:var(--text);font-size:14px;font-weight:600;padding:2px 0}
+.m-name:focus{outline:none;border-bottom-color:var(--koraal)}
+.m-del{background:none;border:0;color:var(--text3);cursor:pointer;padding:3px;flex-shrink:0;border-radius:6px;display:flex;align-items:center}
+.m-del svg{width:15px;height:15px}
+.m-del:hover{color:var(--koraal);background:var(--perzik-licht)}
+.m-value{font-size:15px;font-weight:600;color:var(--text);margin-left:20px;font-variant-numeric:tabular-nums}
+.m-value .sec{color:var(--text3);font-weight:400;font-size:12.5px}
+.empty-list{font-size:13.5px;color:var(--text3);padding:4px 2px}
+.sidebar-footer{margin-top:auto;padding-top:16px}
+
+/* ---- kalibratievenster */
+.overlay{position:fixed;inset:0;background:rgba(26,26,26,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{background:var(--wit);border-radius:var(--r);padding:26px 28px;width:360px;max-width:100%}
+.modal h3{font-size:20px;margin-bottom:4px}
+.modal p{font-size:15px;margin-bottom:16px}
+.modal-row{display:flex;gap:8px;margin-bottom:18px}
+.modal-row input{flex:1;min-width:0}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* ---- brede schermen: alles past op één scherm, alleen de lijst met metingen scrollt (zoals het origineel) */
+@media (min-width:881px){
+  .page{height:calc(100vh - 32px);min-height:520px}
+  .layout{grid-template-rows:minmax(0,1fr)}
+  .stage-pane{min-height:0}
+  .canvas-wrap{min-height:0}
+  #stage{max-height:100%}
+  .sidebar{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+  .measure-list:not(:empty){min-height:150px}
+}
+
+/* ---- smalle schermen */
+@media (max-width:880px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{border-left:0;border-top:1px solid var(--border)}
+  .stage-pane{padding:16px}
+  .canvas-wrap{min-height:360px}
+  #stage{max-height:70vh}
+}
+@media (max-width:640px){
+  .topbar{padding:14px 16px}
+  .logo-link{font-size:22px}
+  .topbar{flex-wrap:wrap;row-gap:4px}
+  .topbar .sep{display:none}
+  .logo-sub{flex-basis:100%;font-size:13.5px}
+  .sidebar{padding:16px}
+}

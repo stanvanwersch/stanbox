@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 128 128">
+  <!-- Tabbladlogo: beeldmerk met koraal accent (op verzoek van Stan), met ruimte eromheen zodat het iets kleiner oogt.
+       Donkere browsermodus: eerste blok perzik, tweede koraal-fel (variant 'Donker' uit de stijlgids). -->
+  <style>
+    .b1{fill:#1A1A1A}.b2{fill:#C9452A}
+    @media (prefers-color-scheme:dark){.b1{fill:#F7C9A9}.b2{fill:#E5603F}}
+  </style>
+  <path class="b1" d="M 15 0 H 67.5 A 15 15 0 0 1 82.5 15 V 34 H 55 A 20 20 0 0 0 35 54 V 58.5 A 10 10 0 0 1 25 68.5 H 15 A 15 15 0 0 1 0 53.5 V 15 A 15 15 0 0 1 15 0 Z"/>
+  <path class="b2" d="M 55 44 H 85 A 15 15 0 0 1 100 59 V 85 A 15 15 0 0 1 85 100 H 30.5 A 15 15 0 0 1 15.5 85 V 78.5 H 25 A 20 20 0 0 0 45 58.5 V 54 A 10 10 0 0 1 55 44 Z"/>
+</svg>

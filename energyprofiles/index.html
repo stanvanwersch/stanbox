@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Energy Profiles | Stanbox</title>
+<meta name="description" content="Elektriciteit per gemeente en buurt, uur voor uur: afname, teruglevering en pieken op de kaart.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="css/01-stijl.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+<div class="scherm">
+  <aside class="paneel" id="paneel">
+    <header class="kop">
+      <a class="logo-link" href="https://stanbox.nl" target="_top" title="Naar stanbox.nl">
+        <span class="logo-sb"><svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true"><path fill="var(--stanbox-blok-1,currentColor)" d="M 15 0 H 67.5 A 15 15 0 0 1 82.5 15 V 34 H 55 A 20 20 0 0 0 35 54 V 58.5 A 10 10 0 0 1 25 68.5 H 15 A 15 15 0 0 1 0 53.5 V 15 A 15 15 0 0 1 15 0 Z"/><path fill="var(--stanbox-blok-2,currentColor)" d="M 55 44 H 85 A 15 15 0 0 1 100 59 V 85 A 15 15 0 0 1 85 100 H 30.5 A 15 15 0 0 1 15.5 85 V 78.5 H 25 A 20 20 0 0 0 45 58.5 V 54 A 10 10 0 0 1 55 44 Z"/></svg><h1 class="logo-woord" data-t="titel">Energy Profiles</h1></span>
+      </a>
+      <div class="taal">
+        <button type="button" class="ikoon-knop" id="taalKnop" aria-haspopup="menu" aria-expanded="false" aria-label="Taal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></button>
+        <div class="taal-menu" id="taalMenu" role="menu" hidden>
+          <button type="button" role="menuitemradio" data-taal="nl" lang="nl">Nederlands</button>
+          <button type="button" role="menuitemradio" data-taal="en" lang="en">English</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="gebied-kop" id="gebiedKop"></div>
+    <div class="gebied" id="gebied"></div>
+    <div class="greep" id="greep" role="separator" aria-orientation="vertical" tabindex="0"></div>
+  </aside>
+
+  <main class="kaart-vak">
+    <div id="kaart" aria-label="Kaart"></div>
+
+    <div class="zoek">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input type="search" class="inp" id="zoekVeld" autocomplete="off" spellcheck="false" placeholder="Zoek een gemeente of buurt" data-t-ph="zoek">
+      <ul class="zoek-lijst" id="zoekLijst" role="listbox" hidden></ul>
+      <div class="kaart-hint" id="kaartHint"></div>
+    </div>
+
+    <div class="kaart-laag">
+      <select class="inp" id="laagKeuze" aria-label="Kaartlaag"></select>
+      <p class="laag-moment" id="laagMoment"></p>
+      <div class="legenda" id="legenda"></div>
+      <p class="laag-uitleg" id="laagUitleg"></p>
+    </div>
+
+    <button type="button" class="vergelijk-knop" id="vergelijkKnop" hidden></button>
+
+    <div class="tijdlijn" id="tijdlijn">
+      <button type="button" class="speel" id="speelKnop" aria-label="Afspelen"><svg class="i-speel" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l10.5-6.5z"/></svg><svg class="i-pauze" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+      <div class="tijd-midden">
+        <div class="tijd-boven">
+          <span class="tijd-label" id="tijdLabel"></span>
+          <span class="tijd-sub" id="tijdSub"></span>
+        </div>
+        <div class="tijd-as" id="tijdAs" role="slider" tabindex="0" aria-label="Maand en uur" aria-valuemin="0" aria-valuemax="311">
+          <div class="tijd-maanden" id="tijdMaanden"></div>
+          <div class="tijd-lijn"><span class="tijd-maand" id="tijdMaand"></span><span class="tijd-uur" id="tijdUur"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="laden" id="laden" hidden><span class="laden-stip"></span><span data-t="laden">Buurten laden</span></div>
+
+    <section class="groot" id="groot" hidden aria-labelledby="grootTitel">
+      <div class="groot-kop">
+        <div>
+          <h2 id="grootTitel"></h2>
+          <p class="groot-sub" id="grootSub"></p>
+        </div>
+        <button type="button" class="ikoon-knop" id="grootSluit" aria-label="Sluiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="groot-inhoud" id="grootInhoud"></div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="data/01-teksten.js"></script>
+<script src="data/02-gemeenten.js"></script>
+<script src="data/03-zoekindex.js"></script>
+<script src="js/01-opmaak.js"></script>
+<script src="js/02-grafieken.js"></script>
+<script src="js/03-kaart.js"></script>
+<script src="js/04-paneel.js"></script>
+<script src="js/05-vergelijken.js"></script>
+<script src="js/06-start.js"></script>
+</body>
+</html>

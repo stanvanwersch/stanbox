@@ -50,7 +50,7 @@
   /* A tool washes up roughly every one and a half screens. The first ones come in a
      fixed order (FIRST_DRIFTS, by tool id); after that they are random, never the
      same one twice in a row. */
-  var FIRST_DRIFTS = ['ontwerpkader', 'energie', 'damagecurve', 'sri', 'wateroverlast', 'watercalculator'];
+  var FIRST_DRIFTS = ['energyprofiles', 'ontwerpkader', 'energie', 'damagecurve', 'sri', 'wateroverlast', 'watercalculator'];
   var driftCount = 0, lastDrift = null, driftIO = null;
   if(!reduced && 'IntersectionObserver' in window){
     driftIO = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); driftIO.unobserve(e.target); } }); }, { threshold:.2 });

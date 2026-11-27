@@ -9,7 +9,8 @@ var TOOLS = [
   {"id": "energie", "name": "Paris Proof Dashboard", "desc": "Energy performance based on the WEii (actual energy intensity indicator)", "url": "https://stanbox.nl/energie"},
   {"id": "ontwerpkader", "name": "Circular Design Framework", "desc": "Designing circular climate installations in building renovations", "url": "https://stanbox.nl/ontwerpkader"},
   {"id": "wateroverlast", "name": "FCAB Extreme Rainfall", "desc": "FCAB scores for flooding caused by short, extreme rainfall", "url": "https://stanbox.nl/wateroverlast"},
-  {"id": "sri", "name": "Smart Readiness Indicator", "desc": "How well a building’s technology supports its users, saves energy and responds to the grid", "url": "https://stanbox.nl/sri"}
+  {"id": "sri", "name": "Smart Readiness Indicator", "desc": "How well a building’s technology supports its users, saves energy and responds to the grid", "url": "https://stanbox.nl/sri"},
+  {"id": "energyprofiles", "name": "Energy Profiles", "desc": "Electricity per municipality and neighbourhood, hour by hour", "url": "https://stanbox.nl/energyprofiles"}
 ];
 
 /* Afbeelding per tool-id (bestanden in assets/img/). */
@@ -23,6 +24,7 @@ var IMAGES = {
   "energie": "assets/img/energie.webp",
   "ontwerpkader": "assets/img/ontwerpkader.webp",
   "wateroverlast": "assets/img/wateroverlast.webp",
-  "sri": "assets/img/sri.webp"
+  "sri": "assets/img/sri.webp",
+  "energyprofiles": "assets/img/energyprofiles.webp"
 };
 var GEBOUW_LOGO = "assets/img/gebouw-logo.webp";

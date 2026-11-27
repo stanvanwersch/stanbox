@@ -71,6 +71,7 @@
     const l = SK.laagDef(laagId);
     if (v == null) return SK.t('geenData');
     if (l.id === 'nu') return SK.getal(Math.abs(v), 0) + '% ' + (v < 0 ? SK.t('teruglevering') : SK.t('afname'));
+    if (l.dynamisch) return SK.waardeOpmaak(v, l.soort);
     if (l.id === 'tlp') return SK.getal(v, 1) + '%';
     if (l.id === 'pf' || l.id === 'gl') return SK.getal(v, 2);
     return SK.getal(v, 0) + (l.eenheid === 'uur' ? (SK.taal === 'nl' ? ' uur' : ' h') : l.eenheid);
@@ -92,9 +93,36 @@
   const AF = ['#FFFFFF', '#F7C9A9', '#E5603F', '#C9452A'].map(hex);
   const TL = ['#FFFFFF', '#C8C2BD', '#7A7A7A', '#1A1A1A'].map(hex);
 
-  SK.kleur = function (v, laagId) {
+  /* schaal voor kentallen met absolute waarden: 5e tot 95e percentiel van de gebieden in beeld, logaritmisch */
+  const domeinen = {};
+  SK.niveau = () => (SK.gemeente && SK.buurten[SK.gemeente.id] ? 'buurt' : 'gem');
+  SK.domein = function (laagId, niveau) {
+    niveau = niveau || SK.niveau();
+    const sleutel = laagId + '|' + niveau + '|' + (niveau === 'buurt' ? SK.gemeente.id : '');
+    if (domeinen[sleutel]) return domeinen[sleutel];
+    const lijst = niveau === 'buurt' ? SK.buurten[SK.gemeente.id] : window.SK_GEMEENTEN;
+    const w = lijst.map(g => g.s && g.s[laagId]).filter(x => x > 0).sort((a, b) => a - b);
+    if (!w.length) return (domeinen[sleutel] = [1, 10]);
+    let mn = w[Math.floor(0.05 * (w.length - 1))], mx = w[Math.ceil(0.95 * (w.length - 1))];
+    if (mx <= mn) mx = mn * 10;
+    return (domeinen[sleutel] = [mn, mx]);
+  };
+  SK.waardeOpmaak = function (v, soort) {
+    let g, e;
+    if (soort === 'mwh') [g, e] = SK.mwh(v);
+    else if (soort === 'kw') [g, e] = SK.kw(v);
+    else [g, e] = SK.m3(v);
+    return g + ' ' + e;
+  };
+
+  SK.kleur = function (v, laagId, niveau) {
     if (v == null) return null;
     const l = SK.laagDef(laagId);
+    if (l.dynamisch) {
+      if (v <= 0) return verloop(EEN, 0);
+      const [mn, mx] = SK.domein(l.id, niveau);
+      return verloop(EEN, (Math.log(v) - Math.log(mn)) / (Math.log(mx) - Math.log(mn)));
+    }
     if (l.schaal === 'twee') {
       const t = v / (v >= 0 ? l.max : -l.min);
       return v >= 0 ? verloop(AF, t) : verloop(TL, -t);

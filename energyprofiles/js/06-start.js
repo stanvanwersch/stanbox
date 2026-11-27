@@ -30,12 +30,57 @@
     SK.vergelijkKnopBijwerken();
   }
 
+  /* ---- kentallen van het gekozen gebied in het kader van de kaartlaag; een kental met een kaartlaag is aan te klikken */
+  SK.laagKentallen = function () {
+    const vak = $('laagKentallen');
+    vak.innerHTML = '';
+    const geb = SK.huidig();
+    let dicht = false;
+    try { dicht = localStorage.getItem('sk-kentallen') === 'dicht'; } catch (e) { /* geen opslag */ }
+    const kop = SK.el('button', 'lk-kop');
+    kop.type = 'button';
+    kop.setAttribute('aria-expanded', String(!dicht));
+    kop.title = dicht ? SK.t('uitklappen') : SK.t('inklappen');
+    kop.appendChild(SK.el('span', null, SK.t('kentallenVan')(SK.gemeente ? geb.naam : SK.t('nederland'))));
+    const pijl = SK.el('span', 'lk-pijl');
+    pijl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    kop.appendChild(pijl);
+    kop.addEventListener('click', () => {
+      try { localStorage.setItem('sk-kentallen', dicht ? 'open' : 'dicht'); } catch (e) { /* geen opslag */ }
+      SK.laagKentallen();
+    });
+    vak.appendChild(kop);
+    vak.classList.toggle('dicht', dicht);
+    const ul = SK.el('ul');
+    window.SK_KENTALLEN.forEach(def => {
+      const wv = SK.kentalWaarde(def, geb.s || {});
+      if (!wv) return;
+      const li = SK.el('li');
+      li.title = def[SK.taal][1];
+      const naam = SK.el('span', 'lk-naam', def[SK.taal][0]);
+      const w = SK.el('span', 'lk-waarde', wv[0]);
+      if (wv[1]) w.appendChild(SK.el('small', null, wv[1]));
+      if (def.laag) {
+        const b = SK.el('button', 'lk-knop' + (SK.laag === def.laag ? ' aan' : ''));
+        b.type = 'button';
+        b.title = SK.t('kentalOpKaart');
+        b.setAttribute('aria-pressed', SK.laag === def.laag);
+        b.appendChild(naam); b.appendChild(w);
+        b.addEventListener('click', () => SK.zetLaag(def.laag));
+        li.appendChild(b);
+      } else { li.appendChild(naam); li.appendChild(w); }
+      ul.appendChild(li);
+    });
+    vak.appendChild(ul);
+  };
+
   /* ---- kaartlaag: welk moment, legenda en uitleg */
   SK.laagTekst = function () {
     const l = SK.laagDef();
     $('laagMoment').textContent = l.tijd ? SK.uurTekst() + ', ' + (SK.gemiddeld ? SK.t('jaargemiddelde') : SK.t('maanden')[SK.maand]) : '';
     $('laagMoment').hidden = !l.tijd;
   };
+  SK.legenda = legenda;
   function legenda() {
     const l = SK.laagDef();
     $('laagUitleg').textContent = l[SK.taal].uitleg;
@@ -47,7 +92,11 @@
     const getal = v => (l.id === 'pf' || l.id === 'gl' ? SK.getal(v, 1) : SK.getal(v, 0)) + (l.eenheid === '%' ? '%' : '');
     const rij = SK.el('div', 'rij');
     if (l.schaal === 'twee') ['100%', '0', '100%'].forEach(t => rij.appendChild(SK.el('span', null, t)));
-    else {
+    else if (l.dynamisch) {
+      const [mn, mx] = SK.domein(l.id);
+      rij.appendChild(SK.el('span', null, SK.waardeOpmaak(mn, l.soort)));
+      rij.appendChild(SK.el('span', null, SK.waardeOpmaak(mx, l.soort)));
+    } else {
       rij.appendChild(SK.el('span', null, getal(l.omgekeerd ? l.max : l.min)));
       rij.appendChild(SK.el('span', null, getal(l.omgekeerd ? l.min : l.max) + (l.eenheid === 'uur' ? (SK.taal === 'nl' ? ' uur' : ' h') : '')));
     }
@@ -199,11 +248,13 @@
     taalKoppelen();
     SK.paneel();
 
-    $('laagKeuze').addEventListener('change', e => {
-      SK.laag = e.target.value;
+    SK.zetLaag = function (id) {
+      SK.laag = id;
+      $('laagKeuze').value = id;
       if (SK.laag !== 'nu') speel(false);
       legenda(); SK.tijdlijn(); SK.kaartBijwerken(); SK.paneel(true);
-    });
+    };
+    $('laagKeuze').addEventListener('change', e => SK.zetLaag(e.target.value));
     $('speelKnop').addEventListener('click', () => speel(!speler));
     $('grootSluit').addEventListener('click', SK.grootDicht);
     $('vergelijkKnop').addEventListener('click', () => SK.grootOpen('vergelijk'));

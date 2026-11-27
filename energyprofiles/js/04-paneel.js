@@ -111,7 +111,7 @@
     const l1 = SK.el('label', null, SK.t('soortKeuze'));
     const s1 = SK.el('select', 'inp');
     const namen = SK.t('soorten');
-    ['netto', 'afname', 'tl', 'gas'].forEach(id => { const o = SK.el('option', null, namen[id]); o.value = id; s1.appendChild(o); });
+    ['netto', 'beide', 'afname', 'tl', 'gas'].forEach(id => { const o = SK.el('option', null, namen[id]); o.value = id; s1.appendChild(o); });
     s1.value = SK.soort;
     s1.addEventListener('change', () => SK.zetSoort(s1.value));
     l1.appendChild(s1);
@@ -139,6 +139,7 @@
     return d;
   }
   function noot() {
+    if (SK.soort === 'beide') return SK.el('p', 'noot', SK.t('nootBeide'));
     if (SK.soort === 'afname') return SK.el('p', 'noot', SK.t('nootAfname'));
     if (SK.soort === 'tl') return SK.el('p', 'noot', SK.t('nootTl'));
     return null;
@@ -215,6 +216,8 @@
     g.appendChild(SK.el('p', 'bron', SK.t('bron')));
     g.scrollTop = houdScroll ? scroll : 0;
     $('kaartHint').textContent = SK.gemeente ? SK.t('hintGemeente') : SK.t('hint');
+    if (SK.laagKentallen) SK.laagKentallen();
+    if (SK.legenda && SK.laagDef().dynamisch) SK.legenda();
     if (!$('groot').hidden) SK.grootTekenen();
   };
 

@@ -22,7 +22,7 @@
 
   function stijlGemeente(geb) {
     const gekozen = SK.gemeente && SK.gemeente.id === geb.id;
-    const kleur = SK.kleur(SK.waarde(geb));
+    const kleur = SK.kleur(SK.waarde(geb), null, 'gem');
     if (gekozen) return { stroke: true, color: '#1A1A1A', weight: 2.5, fill: false, fillOpacity: 0 };
     return {
       stroke: true, color: '#FFFFFF', weight: SK.gemeente ? 0.6 : 0.8, opacity: 1,
@@ -31,7 +31,7 @@
   }
   function stijlBuurt(geb) {
     const gekozen = SK.buurt && SK.buurt.id === geb.id;
-    const kleur = SK.laagDef().alleenGemeente ? null : SK.kleur(SK.waarde(geb));
+    const kleur = SK.laagDef().alleenGemeente ? null : SK.kleur(SK.waarde(geb), null, 'buurt');
     return {
       stroke: true, color: gekozen ? '#1A1A1A' : '#FFFFFF', weight: gekozen ? 3 : 0.7, opacity: 1,
       fill: true, fillColor: kleur || '#FFFFFF', fillOpacity: kleur ? 0.9 : 0.55
@@ -57,8 +57,8 @@
     L.control.zoom({ position: 'topright' }).addTo(kaart);
     kaart.attributionControl.setPrefix(false);
     L.tileLayer(TEGELS, { maxZoom: 19, attribution: '© <a href="https://www.kadaster.nl">Kadaster</a> (PDOK), CBS' }).addTo(kaart);
-    kaart.createPane('buurten').style.zIndex = 420;
-    kaart.createPane('gemeenteRand').style.zIndex = 430;
+    // gemeenten en buurten op één tekenvlak: een apart vlak voor de buurten bleef na het verlaten van een gemeente
+    // over de hele kaart liggen en ving dan alle klikken op (gemeenten waren niet meer aan te klikken)
     kaart.fitBounds(NL_GRENS, nlRand());
 
     gemLaag = L.geoJSON({ type: 'FeatureCollection', features: window.SK_GEMEENTEN.map(g => feature(g, 'gemeente')) }, {
@@ -95,7 +95,6 @@
     if (!code || !SK.buurten[code]) return;
     const items = SK.buurten[code].filter(b => b.g);
     buurtLaag = L.geoJSON({ type: 'FeatureCollection', features: items.map(b => feature(b, 'buurt')) }, {
-      pane: 'buurten',
       style: f => stijlBuurt(f.geb),
       onEachFeature: (f, laag) => {
         buurtLagen[f.geb.id] = laag;

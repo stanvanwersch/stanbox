@@ -70,7 +70,8 @@ select.inp{cursor:pointer}
 /* ---- keuzes in het paneel: twee dropdowns naast elkaar */
 .keuzes{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-bottom:8px}
 .keuzes label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--text3);min-width:0}
-.keuzes select{font-size:14px;font-weight:600;padding:6px 8px;width:100%}
+.keuzes select{font-size:13.5px;font-weight:500;padding:6px 28px 6px 9px;width:100%}
+.keuzes.enkel{grid-template-columns:minmax(0,220px)}
 
 /* ---- gebied: kop met terugpijl */
 .gebied-kop{display:flex;align-items:center;gap:6px;padding:10px 22px 10px;border-bottom:1px solid var(--border)}
@@ -308,3 +309,33 @@ select.inp{cursor:pointer}
 .lk-knop.aan .lk-waarde small{color:var(--perzik-licht)}
 .lk-knop.aan:hover .lk-naam{color:var(--wit)}
 @media (max-width:820px){.laag-kentallen{display:none}}
+
+/* dropdowns: licht en rustig; een dun eigen pijltje, geen zware rand */
+select.inp{-webkit-appearance:none;appearance:none;border:1px solid var(--border);border-radius:var(--r-sm);background-color:var(--wit);
+  color:var(--text);font-weight:500;line-height:1.3;padding:7px 30px 7px 11px;cursor:pointer;transition:background-color .12s,border-color .12s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237A7A7A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center;background-size:13px}
+select.inp:hover{background-color:var(--vlak);border-color:var(--border)}
+select.inp:focus{border-color:var(--border2);outline:none}
+select.inp:focus-visible{outline:2px solid var(--koraal);outline-offset:1px}
+select.inp:disabled{color:var(--text3);cursor:not-allowed;background-color:var(--wit)}
+/* kaartlaag: de keuze als kopje, zonder rand */
+.kaart-laag select.inp{border-color:transparent;background-color:transparent;font-family:var(--font-kop);font-weight:600;letter-spacing:-.01em;
+  font-size:15px;padding:6px 30px 6px 4px}
+.kaart-laag select.inp:hover{background-color:var(--vlak)}
+
+/* venster van de kaartlaag inklapbaar met een greep onderaan (geen tweede pijltje naast de dropdown) */
+.laag-rij{display:flex;align-items:center}
+.laag-rij select{flex:1;min-width:0}
+.laag-klap{display:flex;align-items:center;justify-content:center;width:100%;height:14px;margin:6px 0 -6px;border:0;background:none;cursor:pointer;border-radius:6px}
+.laag-klap-streep{width:36px;height:4px;border-radius:2px;background:var(--border2);transition:background .12s,width .12s}
+.laag-klap:hover .laag-klap-streep{background:var(--koraal);width:44px}
+.kaart-laag.dicht>:not(.laag-rij):not(.laag-klap){display:none}
+.kaart-laag.dicht .laag-klap{margin-top:2px}
+
+/* uitzoomen naar de wereldbol en het sterrenstelsel (js/07-heelal.js) */
+.heelal{position:absolute;inset:0;width:100%;height:100%;z-index:1095;display:block;background:var(--zwart)}
+.heelal-terug{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:1096;border:1px solid rgba(247,201,169,.5);
+  background:transparent;color:var(--perzik);border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:500;cursor:pointer}
+.heelal-terug:hover{border-color:var(--perzik);color:var(--perzik-licht)}
+body.in-heelal .kaart-laag,body.in-heelal .zoek,body.in-heelal .tijdlijn,body.in-heelal .vergelijk-knop{opacity:0;pointer-events:none;transition:opacity .2s}

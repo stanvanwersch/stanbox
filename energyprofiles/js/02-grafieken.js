@@ -123,6 +123,10 @@
      Onder: kleurschaal met de grootste teruglevering en afname. Hoogste afname en teruglevering hebben een rand. */
   SK.jaarbeeld = function (p, opties) {
     opties = opties || {};
+    // alleen afname: het deel boven nul; alleen teruglevering: het deel onder nul (blijft negatief, dus grijs)
+    const soortJ = SK.soort === 'afname' || SK.soort === 'tl' ? SK.soort : 'netto';
+    if (soortJ === 'afname') p = p.map(v => Math.max(0, v));
+    else if (soortJ === 'tl') p = p.map(v => Math.min(0, v));
     const groot = !!opties.groot;
     const B = opties.b || 396, L = groot ? 40 : 30, R = groot ? 70 : 46, T = 22, O = groot ? 64 : 58;
     const RH = opties.h ? Math.max(10, (opties.h - T - O) / 12) : Math.max(12, B / 33);
@@ -131,7 +135,7 @@
     let maxAf = 0, maxTl = 0, iAf = -1, iTl = -1;
     p.forEach((v, i) => { if (v > maxAf) { maxAf = v; iAf = i; } if (-v > maxTl) { maxTl = -v; iTl = i; } });
     const kwT = w => { const [g, e] = SK.kw(Math.abs(w)); return g + ' ' + e; };
-    const soortV = v => (v < 0 ? SK.t('teruglevering') : SK.t('afname'));
+    const soortV = v => (soortJ === 'tl' || (soortJ === 'netto' && v < 0) ? SK.t('teruglevering') : SK.t('afname'));
     const celTekst = (m, u) => {
       const v = p[m * 24 + u];
       return SK.t('maanden')[m] + ' ' + String(u).padStart(2, '0') + ':00: ' + kwT(v) + ' ' + soortV(v);
@@ -176,11 +180,12 @@
     const ly = Y0 + 26, lb = Math.min(260, B - L - R);
     const grad = 'g' + Math.random().toString(36).slice(2);
     const lg = s('linearGradient', { id: grad }, s('defs', {}, svg));
-    for (let i = 0; i <= 10; i++) s('stop', { offset: (i * 10) + '%', 'stop-color': SK.kleurTwee(i / 5 - 1) }, lg);
+    const van = soortJ === 'afname' ? 0 : -1, tot = soortJ === 'tl' ? 0 : 1;
+    for (let i = 0; i <= 10; i++) s('stop', { offset: (i * 10) + '%', 'stop-color': SK.kleurTwee(van + (tot - van) * i / 10) }, lg);
     s('rect', { x: L, y: ly, width: lb, height: 8, rx: 2, fill: 'url(#' + grad + ')' }, svg);
-    s('text', { x: L, y: ly + 21 }, svg).textContent = (maxTl ? kwT(maxTl) + ' ' : '') + SK.t('teruglevering');
-    s('text', { x: L + lb / 2, y: ly + 21, 'text-anchor': 'middle' }, svg).textContent = '0';
-    s('text', { x: L + lb, y: ly + 21, 'text-anchor': 'end' }, svg).textContent = kwT(maxAf) + ' ' + SK.t('afname');
+    s('text', { x: L, y: ly + 21 }, svg).textContent = soortJ === 'afname' ? '0' : kwT(maxTl) + ' ' + SK.t('teruglevering');
+    if (soortJ === 'netto') s('text', { x: L + lb / 2, y: ly + 21, 'text-anchor': 'middle' }, svg).textContent = '0';
+    s('text', { x: L + lb, y: ly + 21, 'text-anchor': 'end' }, svg).textContent = soortJ === 'tl' ? '0' : kwT(maxAf) + ' ' + SK.t('afname');
     if (L + lb + 170 < B) {
       const kx = L + lb + 20;
       s('rect', { x: kx, y: ly - 1, width: 10, height: 10, class: 'jb-max-af' }, svg);

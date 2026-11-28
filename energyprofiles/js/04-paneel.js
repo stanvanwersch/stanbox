@@ -128,6 +128,21 @@
     return rij;
   }
 
+  /* soort voor het jaarbeeld: netto, alleen afname of alleen teruglevering (zelfde keuze als bij het dagprofiel) */
+  function jaarKeuze() {
+    const rij = SK.el('div', 'keuzes enkel');
+    const l = SK.el('label');
+    const s = SK.el('select', 'inp');
+    s.setAttribute('aria-label', SK.t('soortKeuze'));
+    const namen = SK.t('soorten');
+    ['netto', 'afname', 'tl'].forEach(id => { const o = SK.el('option', null, namen[id]); o.value = id; s.appendChild(o); });
+    s.value = SK.soort === 'afname' || SK.soort === 'tl' ? SK.soort : 'netto';
+    s.addEventListener('change', () => SK.zetSoort(s.value));
+    l.appendChild(s);
+    rij.appendChild(l);
+    return rij;
+  }
+
   function gasVak(geb) {
     const d = SK.el('div', 'leeg-grafiek');
     if (geb.s && geb.s.gas != null) {
@@ -191,7 +206,9 @@
     // jaarbeeld
     if (geb.p) {
       const j = blok(SK.t('jaarbeeld'), SK.t('jaarbeeldUitleg'), vergrootKnop('jaar'));
+      j.appendChild(jaarKeuze());
       j.appendChild(SK.jaarbeeld(geb.p, { b: B }));
+      if (SK.soort === 'afname' || SK.soort === 'tl') j.appendChild(noot());
       g.appendChild(j);
     }
 
@@ -235,6 +252,7 @@
     if (grootWat === 'jaar') {
       $('grootTitel').textContent = SK.t('jaarbeeld') + ': ' + naam;
       $('grootSub').textContent = SK.t('jaarbeeldUitleg');
+      inh.appendChild(jaarKeuze());
       const vak = SK.el('div', 'grafiek-vak');
       inh.appendChild(vak);
       if (!geb.p) { vak.appendChild(SK.el('p', 'melding', SK.t('geenProfiel'))); return; }

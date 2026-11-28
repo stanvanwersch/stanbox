@@ -15,6 +15,7 @@
     buurten: {}        // geladen buurten per gemeentecode
   };
 
+  SK.DATAVERSIE = '20261128i';   // ophogen als de buurtbestanden (data/buurten) opnieuw gebouwd zijn
   try { const t = localStorage.getItem('sk-taal'); if (t === 'en' || t === 'nl') SK.taal = t; } catch (e) { /* geen opslag */ }
 
   SK.t = function (sleutel) { return window.SK_TEKST[SK.taal][sleutel]; };

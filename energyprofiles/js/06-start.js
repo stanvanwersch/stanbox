@@ -28,6 +28,8 @@
     tm.appendChild(SK.el('span', null, SK.t('gemiddeld')));
     SK.t('mnd').forEach(m => tm.appendChild(SK.el('span', null, m)));
     SK.vergelijkKnopBijwerken();
+    if (SK.kaderTekst) SK.kaderTekst();
+    if (SK.heelalTekst) SK.heelalTekst();
   }
 
   /* ---- kentallen van het gekozen gebied in het kader van de kaartlaag; een kental met een kaartlaag is aan te klikken */
@@ -234,6 +236,26 @@
     }));
   }
 
+  /* venster van de kaartlaag in- en uitklappen; alleen de keuze van de laag blijft staan */
+  function kaderKoppelen() {
+    const kader = document.querySelector('.kaart-laag'), knop = $('laagKlap');
+    const zet = dicht => {
+      kader.classList.toggle('dicht', dicht);
+      knop.setAttribute('aria-expanded', String(!dicht));
+      const t = dicht ? SK.t('uitklappen') : SK.t('inklappen');
+      knop.setAttribute('aria-label', t); knop.title = t;
+    };
+    let dicht = false;
+    try { dicht = localStorage.getItem('sk-kader') === 'dicht'; } catch (e) { /* geen opslag */ }
+    zet(dicht);
+    knop.addEventListener('click', () => {
+      dicht = !kader.classList.contains('dicht');
+      zet(dicht);
+      try { localStorage.setItem('sk-kader', dicht ? 'dicht' : 'open'); } catch (e) { /* geen opslag */ }
+    });
+    SK.kaderTekst = () => zet(kader.classList.contains('dicht'));
+  }
+
   function start() {
     if (!window.L) { document.getElementById('kaart').textContent = 'De kaart kon niet laden (Leaflet).'; return; }
     // altijd op Nederland beginnen, ook als er nog een oud adres (#GM...) in de adresregel staat
@@ -246,6 +268,7 @@
     SK.tijdlijn();
     tijdAsKoppelen();
     taalKoppelen();
+    kaderKoppelen();
     SK.paneel();
 
     SK.zetLaag = function (id) {
